@@ -9,11 +9,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class GraphCommand extends CommandBase {
+public class GraphCommand extends Command {
 
   private GraphCommandNode m_rootNode = null;
   private GraphCommandNode m_currentNode = null;
