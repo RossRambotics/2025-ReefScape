@@ -114,6 +114,7 @@ public class Robot extends TimedRobot {
         RobotContainer.m_armBase.simulationInit();
         RobotContainer.m_armExtension.simulationInit();
         RobotContainer.m_wrist.simulationInit();
+        RobotContainer.m_intake.simulationInit();
     }
 
     @Override
@@ -121,6 +122,7 @@ public class Robot extends TimedRobot {
         RobotContainer.m_armBase.simulationPeriodic();
         RobotContainer.m_armExtension.simulationPeriodic();
         RobotContainer.m_wrist.simulationPeriodic();
+        RobotContainer.m_intake.simulationPeriodic();
         PhysicsSim.getInstance().run();
 
     }

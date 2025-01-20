@@ -22,6 +22,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Wrist;
 
 public class RobotContainer {
@@ -30,6 +31,7 @@ public class RobotContainer {
     final static public ArmExtension m_armExtension = new ArmExtension();
     final static public Wrist m_wrist = new Wrist();
     final static public Mechanisms m_mechanisms = new Mechanisms();
+    final static public Intake m_intake = new Intake();
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second

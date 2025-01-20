@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
  */
 public class Mechanisms {
     double HEIGHT = 2; // Controls the height of the mech2d SmartDashboard
-    double WIDTH = 1; // Controls the height of the mech2d SmartDashboard
+    double WIDTH = 2; // Controls the height of the mech2d SmartDashboard
 
     Mechanism2d mech = new Mechanism2d(WIDTH, HEIGHT);
     // Velocity
@@ -58,6 +58,44 @@ public class Mechanisms {
             .append(new MechanismLigament2d("wrist", 0.15, 90, 10,
                     new Color8Bit(Color.kHotPink)));
 
+    MechanismLigament2d intakeL = mech.getRoot("intakeLpivot", 1.0, 1.25)
+            .append(new MechanismLigament2d("rollerL", .2, 0, 0, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeLside1 = intakeL
+            .append(new MechanismLigament2d("intakeLside1", 0.15307, 112.5, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeLside2 = intakeLside1
+            .append(new MechanismLigament2d("intakeLside2", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeLside3 = intakeLside2
+            .append(new MechanismLigament2d("intakeLside3", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeLside4 = intakeLside3
+            .append(new MechanismLigament2d("intakeLside4", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeLside5 = intakeLside4
+            .append(new MechanismLigament2d("intakeLide5", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeLside6 = intakeLside5
+            .append(new MechanismLigament2d("intakeLside6", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeLside7 = intakeLside6
+            .append(new MechanismLigament2d("intakeLside7", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeLside8 = intakeLside7
+            .append(new MechanismLigament2d("intakeLside8", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+
+    MechanismLigament2d intakeR = mech.getRoot("intakeRpivot", 1.5, 1.25)
+            .append(new MechanismLigament2d("rollerL", .2, 0, 0, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeRside1 = intakeR
+            .append(new MechanismLigament2d("intakeRside1", 0.15307, 112.5, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeRside2 = intakeRside1
+            .append(new MechanismLigament2d("intakeRside2", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeRside3 = intakeRside2
+            .append(new MechanismLigament2d("intakeRside3", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeRside4 = intakeRside3
+            .append(new MechanismLigament2d("intakeRside4", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeRside5 = intakeRside4
+            .append(new MechanismLigament2d("intakeRide5", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeRside6 = intakeRside5
+            .append(new MechanismLigament2d("intakeRside6", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeRside7 = intakeRside6
+            .append(new MechanismLigament2d("intakeRside7", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+    MechanismLigament2d intakeRside8 = intakeRside7
+            .append(new MechanismLigament2d("intakeRside8", 0.15307, 45, 6, new Color8Bit(Color.kAliceBlue)));
+
     /**
      * Runs the mech2d widget in GUI.
      *
@@ -80,5 +118,10 @@ public class Mechanisms {
 
     public void updateWrist(StatusSignal<Angle> position, StatusSignal<AngularVelocity> velocity) {
         wrist.setAngle(position.getValue().in(Degrees) + 90);
+    }
+
+    public void updateIntake(StatusSignal<Angle> positionL, StatusSignal<Angle> positionR) {
+        intakeL.setAngle(positionL.getValue().in(Degrees));
+        intakeR.setAngle(positionR.getValue().in(Degrees));
     }
 }
