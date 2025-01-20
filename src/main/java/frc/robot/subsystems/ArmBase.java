@@ -63,9 +63,9 @@ public class ArmBase extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 5; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 1; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
-        slot0.kD = 1.0; // A velocity error of 1 rps results in 0.5 V output
+        slot0.kD = 50.0; // A velocity error of 1 rps results in 0.5 V output
 
         m_GE_PID_kS = Shuffleboard.getTab("ArmBase").add("ArmBase_kS", slot0.kS).getEntry();
         m_GE_PID_kV = Shuffleboard.getTab("ArmBase").add("ArmBase_kV", slot0.kV).getEntry();
@@ -89,7 +89,6 @@ public class ArmBase extends SubsystemBase {
             // hi
 
         }
-        this.setGoal(90);
     }
 
     private void setGoal(double degrees) {
