@@ -45,6 +45,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -93,8 +94,13 @@ public class RobotContainer {
         // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        // reset the field-centric heading on back press
+        joystick.back().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        joystick.leftBumper()
+                .whileTrue(drivetrain.applyRequest(() -> robotDrive.withVelocityX(0).withVelocityY(0.25)));
+        joystick.rightBumper()
+                .whileTrue(drivetrain.applyRequest(() -> robotDrive.withVelocityX(0).withVelocityY(-0.25)));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
