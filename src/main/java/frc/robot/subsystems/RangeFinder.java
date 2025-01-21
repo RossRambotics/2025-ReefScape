@@ -31,6 +31,10 @@ public class RangeFinder extends SubsystemBase {
     private GenericEntry m_GE_bRange4 = null;
     private GenericEntry m_GE_bRange5 = null;
     private GenericEntry m_GE_distRange1 = null;
+    private GenericEntry m_GE_distRange2 = null;
+    private GenericEntry m_GE_distRange3 = null;
+    private GenericEntry m_GE_distRange4 = null;
+    private GenericEntry m_GE_distRange5 = null;
 
     // private CANrange drive1 = new CANrange(1);
     // private CANrange drive2 = new CANrange(3);
@@ -54,6 +58,18 @@ public class RangeFinder extends SubsystemBase {
                 .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
         m_GE_distRange1 = Shuffleboard.getTab("RangeFinder").add("range_dist1", 0)
                 .withPosition(3, 2)
+                .getEntry();
+        m_GE_distRange2 = Shuffleboard.getTab("RangeFinder").add("range_dist2", 0)
+                .withPosition(1, 2)
+                .getEntry();
+        m_GE_distRange3 = Shuffleboard.getTab("RangeFinder").add("range_dist3", 0)
+                .withPosition(5, 2)
+                .getEntry();
+        m_GE_distRange4 = Shuffleboard.getTab("RangeFinder").add("range_dist4", 0)
+                .withPosition(2, 2)
+                .getEntry();
+        m_GE_distRange5 = Shuffleboard.getTab("RangeFinder").add("range_dist5", 0)
+                .withPosition(4, 2)
                 .getEntry();
 
     }
@@ -82,12 +98,35 @@ public class RangeFinder extends SubsystemBase {
 
         m_bRange2 = m_range2.getIsDetected().getValue();
         m_GE_bRange2.setBoolean(m_bRange2);
+        if (m_bRange2) {
+            m_GE_distRange2.setDouble(m_range2.getDistance().getValueAsDouble());
+        } else {
+            m_GE_distRange2.setDouble(0.0);
+        }
+
         m_bRange3 = m_range3.getIsDetected().getValue();
         m_GE_bRange3.setBoolean(m_bRange3);
+        if (m_bRange3) {
+            m_GE_distRange3.setDouble(m_range3.getDistance().getValueAsDouble());
+        } else {
+            m_GE_distRange3.setDouble(0.0);
+        }
+
         m_bRange4 = m_range4.getIsDetected().getValue();
         m_GE_bRange4.setBoolean(m_bRange4);
+        if (m_bRange4) {
+            m_GE_distRange4.setDouble(m_range4.getDistance().getValueAsDouble());
+        } else {
+            m_GE_distRange4.setDouble(0.0);
+        }
+
         m_bRange5 = m_range5.getIsDetected().getValue();
         m_GE_bRange5.setBoolean(m_bRange5);
+        if (m_bRange5) {
+            m_GE_distRange5.setDouble(m_range5.getDistance().getValueAsDouble());
+        } else {
+            m_GE_distRange5.setDouble(0.0);
+        }
 
         double v = 0.0;
         double vFast = 0.25;
