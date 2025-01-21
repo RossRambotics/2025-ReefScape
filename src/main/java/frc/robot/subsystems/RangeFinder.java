@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix6.configs.FovParamsConfigs;
 import com.ctre.phoenix6.configs.ProximityParamsConfigs;
 import com.ctre.phoenix6.hardware.CANrange;
 
@@ -47,19 +48,28 @@ public class RangeFinder extends SubsystemBase {
         var tof = new ProximityParamsConfigs()
                 .withProximityThreshold(0.9)
                 .withProximityHysteresis(0.05);
+        var fov = new FovParamsConfigs()
+                .withFOVRangeX(6.75) // 6.75 is the minimum FOV value
+                .withFOVRangeY(6.75); // 27.0 is the maximum FOV value
+
         cfg.apply(tof);
+        cfg.apply(fov);
 
         cfg = m_range2.getConfigurator();
         cfg.apply(tof);
+        cfg.apply(fov);
 
         cfg = m_range3.getConfigurator();
         cfg.apply(tof);
+        cfg.apply(fov);
 
         cfg = m_range4.getConfigurator();
         cfg.apply(tof);
+        cfg.apply(fov);
 
         cfg = m_range5.getConfigurator();
         cfg.apply(tof);
+        cfg.apply(fov);
 
         m_GE_bRange1 = Shuffleboard.getTab("RangeFinder").add("range_b1", m_bRange1)
                 .withPosition(3, 1)
