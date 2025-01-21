@@ -5,92 +5,133 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.FloatSubscriber;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.CANrange;
 
 public class RangeFinder extends SubsystemBase {
-  private CANrange range1 = new CANrange(22);
-  private CANrange range2 = new CANrange(23);
-  private CANrange range3 = new CANrange(24);
-  private CANrange range4 = new CANrange(25);
-  private CANrange range5 = new CANrange(26);
-  private double m_velocity = 0.0;
-  // private CANrange drive1 = new CANrange(1);
-  // private CANrange drive2 = new CANrange(3);
+    private CANrange m_range1 = new CANrange(23);
+    private CANrange m_range2 = new CANrange(10);
+    private CANrange m_range3 = new CANrange(12);
+    private CANrange m_range4 = new CANrange(14);
+    private CANrange m_range5 = new CANrange(22);
+    private double m_velocity = 0.0;
 
-  /** Creates a new RangeFinder. */
-  public RangeFinder() {
-  }
+    private boolean m_bRange1 = false;
+    private boolean m_bRange2 = false;
+    private boolean m_bRange3 = true;
+    private boolean m_bRange4 = false;
+    private boolean m_bRange5 = true;
+    private GenericEntry m_GE_bRange1 = null;
+    private GenericEntry m_GE_bRange2 = null;
+    private GenericEntry m_GE_bRange3 = null;
+    private GenericEntry m_GE_bRange4 = null;
+    private GenericEntry m_GE_bRange5 = null;
+    private GenericEntry m_GE_distRange1 = null;
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    System.out.println("range1... found target: " + range1.getIsDetected()
-        + " distance: " + range1.getDistance());
-    System.out.println("range2... found target: " + range2.getIsDetected()
-        + " distance: " + range2.getDistance());
-    System.out.println("range3... found target: " + range3.getIsDetected()
-        + " distance: " + range3.getDistance());
-    System.out.println("range4... found target: " + range4.getIsDetected()
-        + " distance: " + range4.getDistance());
-    System.out.println("range5... found target: " + range5.getIsDetected()
-        + " distance: " + range5.getDistance());
+    // private CANrange drive1 = new CANrange(1);
+    // private CANrange drive2 = new CANrange(3);
 
-    // boolean b1 = range1.getIsDetected().getValue();
-    // boolean b2 = range2.getIsDetected().getValue();
-    // boolean b3 = range3.getIsDetected().getValue();
-    // boolean b4 = range4.getIsDetected().getValue();
-    // boolean b5 = range5.getIsDetected().getValue();
+    /** Creates a new RangeFinder. */
+    public RangeFinder() {
+        m_GE_bRange1 = Shuffleboard.getTab("RangeFinder").add("range_b1", m_bRange1)
+                .withPosition(3, 1)
+                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        m_GE_bRange2 = Shuffleboard.getTab("RangeFinder").add("range_b2", m_bRange2)
+                .withPosition(1, 1)
+                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        m_GE_bRange3 = Shuffleboard.getTab("RangeFinder").add("range_b3", m_bRange3)
+                .withPosition(5, 1)
+                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        m_GE_bRange4 = Shuffleboard.getTab("RangeFinder").add("range_b4", m_bRange4)
+                .withPosition(2, 1)
+                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        m_GE_bRange5 = Shuffleboard.getTab("RangeFinder").add("range_b5", m_bRange5)
+                .withPosition(4, 1)
+                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        m_GE_distRange1 = Shuffleboard.getTab("RangeFinder").add("range_dist1", 0)
+                .withPosition(3, 2)
+                .getEntry();
 
-    boolean b1 = false;
-    boolean b2 = false;
-    boolean b3 = true;
-    boolean b4 = false;
-    boolean b5 = true;
-
-    double v = 0.0;
-    double vFast = 0.25;
-    double vSlow = 0.15;
-    double vMedium = 0.2;
-
-    if (b2 && b4 && !b3 && !b5) {
-      // medium right
-      v = -vMedium;
-      System.out.println("medium right");
-    } else if (!b2 && b4 && !b3 && !b5) {
-      // slow right
-      v = -vSlow;
-      System.out.println("slow right");
-    } else if (b2 && !b4 && !b3 && !b5) {
-      // fast right
-      v = -vFast;
-      System.out.println("fast right");
-    } else if (b3 && b5 && !b2 && !b4) {
-      // medium left
-      v = vMedium;
-      System.out.println("medium left");
-    } else if (!b3 && b5 && !b2 && !b4) {
-      // slow left
-      v = vSlow;
-      System.out.println("slow left");
-    } else if (b3 && !b5 && !b2 && !b4) {
-      // fast left
-      v = vFast;
-      System.out.println("fast left");
-    } else if (b1 && !b2 && !b4 && !b3 && !b5) {
-      // stay
-      v = 0.0;
-      System.out.println("stay");
-    } else {
-      // lost
-      System.out.println("lost");
-      v = 0.0;
     }
-    System.out.println("v: " + Double.toString(v));
-    m_velocity = v;
-  }
 
-  public double getVelocity() {
-    return m_velocity;
-  }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        System.out.println("range1... found target: " + m_range1.getIsDetected()
+                + " distance: " + m_range1.getDistance());
+        System.out.println("range2... found target: " + m_range2.getIsDetected()
+                + " distance: " + m_range2.getDistance());
+        System.out.println("range3... found target: " + m_range3.getIsDetected()
+                + " distance: " + m_range3.getDistance());
+        System.out.println("range4... found target: " + m_range4.getIsDetected()
+                + " distance: " + m_range4.getDistance());
+        System.out.println("range5... found target: " + m_range5.getIsDetected()
+                + " distance: " + m_range5.getDistance());
+
+        m_bRange1 = m_range1.getIsDetected().getValue();
+        m_GE_bRange1.setBoolean(m_bRange1);
+        if (m_bRange1) {
+            m_GE_distRange1.setDouble(m_range1.getDistance().getValueAsDouble());
+        } else {
+            m_GE_distRange1.setDouble(0.0);
+        }
+
+        m_bRange2 = m_range2.getIsDetected().getValue();
+        m_GE_bRange2.setBoolean(m_bRange2);
+        m_bRange3 = m_range3.getIsDetected().getValue();
+        m_GE_bRange3.setBoolean(m_bRange3);
+        m_bRange4 = m_range4.getIsDetected().getValue();
+        m_GE_bRange4.setBoolean(m_bRange4);
+        m_bRange5 = m_range5.getIsDetected().getValue();
+        m_GE_bRange5.setBoolean(m_bRange5);
+
+        double v = 0.0;
+        double vFast = 0.25;
+        double vSlow = 0.15;
+        double vMedium = 0.2;
+
+        if (m_bRange2 && m_bRange4 && !m_bRange3 && !m_bRange5) {
+            // medium right
+            v = -vMedium;
+            System.out.println("medium right");
+        } else if (!m_bRange2 && m_bRange4 && !m_bRange3 && !m_bRange5) {
+            // slow right
+            v = -vSlow;
+            System.out.println("slow right");
+        } else if (m_bRange2 && !m_bRange4 && !m_bRange3 && !m_bRange5) {
+            // fast right
+            v = -vFast;
+            System.out.println("fast right");
+        } else if (m_bRange3 && m_bRange5 && !m_bRange2 && !m_bRange4) {
+            // medium left
+            v = vMedium;
+            System.out.println("medium left");
+        } else if (!m_bRange3 && m_bRange5 && !m_bRange2 && !m_bRange4) {
+            // slow left
+            v = vSlow;
+            System.out.println("slow left");
+        } else if (m_bRange3 && !m_bRange5 && !m_bRange2 && !m_bRange4) {
+            // fast left
+            v = vFast;
+            System.out.println("fast left");
+        } else if (m_bRange1 && !m_bRange2 && !m_bRange4 && !m_bRange3 && !m_bRange5) {
+            // stay
+            v = 0.0;
+            System.out.println("stay");
+        } else {
+            // lost
+            System.out.println("lost");
+            v = 0.0;
+        }
+        System.out.println("v: " + Double.toString(v));
+        m_velocity = v;
+    }
+
+    public double getVelocity() {
+        return m_velocity;
+    }
 }
