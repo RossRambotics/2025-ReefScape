@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.ctre.phoenix6.configs.ProximityParamsConfigs;
 import com.ctre.phoenix6.hardware.CANrange;
 
 public class RangeFinder extends SubsystemBase {
@@ -41,6 +43,24 @@ public class RangeFinder extends SubsystemBase {
 
     /** Creates a new RangeFinder. */
     public RangeFinder() {
+        var cfg = m_range1.getConfigurator();
+        var tof = new ProximityParamsConfigs()
+                .withProximityThreshold(0.9)
+                .withProximityHysteresis(0.05);
+        cfg.apply(tof);
+
+        cfg = m_range2.getConfigurator();
+        cfg.apply(tof);
+
+        cfg = m_range3.getConfigurator();
+        cfg.apply(tof);
+
+        cfg = m_range4.getConfigurator();
+        cfg.apply(tof);
+
+        cfg = m_range5.getConfigurator();
+        cfg.apply(tof);
+
         m_GE_bRange1 = Shuffleboard.getTab("RangeFinder").add("range_b1", m_bRange1)
                 .withPosition(3, 1)
                 .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
@@ -77,16 +97,16 @@ public class RangeFinder extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        System.out.println("range1... found target: " + m_range1.getIsDetected()
-                + " distance: " + m_range1.getDistance());
-        System.out.println("range2... found target: " + m_range2.getIsDetected()
-                + " distance: " + m_range2.getDistance());
-        System.out.println("range3... found target: " + m_range3.getIsDetected()
-                + " distance: " + m_range3.getDistance());
-        System.out.println("range4... found target: " + m_range4.getIsDetected()
-                + " distance: " + m_range4.getDistance());
-        System.out.println("range5... found target: " + m_range5.getIsDetected()
-                + " distance: " + m_range5.getDistance());
+        // System.out.println("range1... found target: " + m_range1.getIsDetected()
+        // + " distance: " + m_range1.getDistance());
+        // System.out.println("range2... found target: " + m_range2.getIsDetected()
+        // + " distance: " + m_range2.getDistance());
+        // System.out.println("range3... found target: " + m_range3.getIsDetected()
+        // + " distance: " + m_range3.getDistance());
+        // System.out.println("range4... found target: " + m_range4.getIsDetected()
+        // + " distance: " + m_range4.getDistance());
+        // System.out.println("range5... found target: " + m_range5.getIsDetected()
+        // + " distance: " + m_range5.getDistance());
 
         m_bRange1 = m_range1.getIsDetected().getValue();
         m_GE_bRange1.setBoolean(m_bRange1);
