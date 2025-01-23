@@ -179,13 +179,13 @@ public class Intake extends SubsystemBase {
         PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
         PhysicsSim.getInstance().addTalonFX(m_RightMotor, 0.1);
 
-        Shuffleboard.getTab("Stop").add(this.getStopCommand());
-        Shuffleboard.getTab("Idle").add(this.getIdleCommand());
+        Shuffleboard.getTab("Intake").add(this.getStopCommand());
+        Shuffleboard.getTab("Intake").add(this.getIdleCommand());
         Shuffleboard.getTab("Intake").add(this.getIntakeCommand());
-        Shuffleboard.getTab("Outtake").add(this.getOuttakeCommand());
-        Shuffleboard.getTab("Unclog").add(this.getUnclogCommand());
-        Shuffleboard.getTab("Fastshoot").add(this.getFastshootCommand());
-        Shuffleboard.getTab("Slowshoot").add(this.getSlowshootCommand());
+        Shuffleboard.getTab("Intake").add(this.getOuttakeCommand());
+        Shuffleboard.getTab("Intake").add(this.getUnclogCommand());
+        Shuffleboard.getTab("Intake").add(this.getFastshootCommand());
+        Shuffleboard.getTab("Intake").add(this.getSlowshootCommand());
 
     }
 
