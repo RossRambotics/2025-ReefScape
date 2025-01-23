@@ -36,18 +36,21 @@ public class ArmController extends SubsystemBase {
 
     }
 
+    private void initialize() {
+        A = m_armGraph.new GraphCommandNode("StartNode",
+                ArmController.getArmCommand(Degrees.of(0),
+                        Meters.of(0),
+                        Degrees.of(-90)),
+                null,
+                null);
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         if (m_isFirstTime) {
             m_isFirstTime = false;
-
-            A = m_armGraph.new GraphCommandNode("StartNode",
-                    ArmController.getArmCommand(Degrees.of(0),
-                            Meters.of(0),
-                            Degrees.of(-90)),
-                    null,
-                    null);
+            this.initialize();
         }
 
         // send data to the SmartDashboard
