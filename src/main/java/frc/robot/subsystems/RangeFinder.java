@@ -166,37 +166,29 @@ public class RangeFinder extends SubsystemBase {
         if (m_bRange2 && m_bRange4 && !m_bRange3 && !m_bRange5) {
             // medium right
             v = -vMedium;
-            System.out.println("medium right");
         } else if (!m_bRange2 && m_bRange4 && !m_bRange3 && !m_bRange5) {
             // slow right
             v = -vSlow;
-            System.out.println("slow right");
         } else if (m_bRange2 && !m_bRange4 && !m_bRange3 && !m_bRange5) {
             // fast right
             v = -vFast;
-            System.out.println("fast right");
         } else if (m_bRange3 && m_bRange5 && !m_bRange2 && !m_bRange4) {
             // medium left
             v = vMedium;
-            System.out.println("medium left");
         } else if (!m_bRange3 && m_bRange5 && !m_bRange2 && !m_bRange4) {
             // slow left
             v = vSlow;
-            System.out.println("slow left");
         } else if (m_bRange3 && !m_bRange5 && !m_bRange2 && !m_bRange4) {
             // fast left
             v = vFast;
-            System.out.println("fast left");
         } else if (m_bRange1 && !m_bRange2 && !m_bRange4 && !m_bRange3 && !m_bRange5) {
             // stay
             v = 0.0;
-            System.out.println("stay");
         } else {
             // lost
-            System.out.println("lost");
             v = 0.0;
         }
-        System.out.println("v: " + Double.toString(v));
+        // System.out.println("v: " + Double.toString(v));
         m_velocity = v;
     }
 
