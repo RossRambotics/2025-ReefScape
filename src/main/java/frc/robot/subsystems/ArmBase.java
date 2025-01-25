@@ -105,7 +105,7 @@ public class ArmBase extends SubsystemBase {
     }
 
     private Angle getError() {
-        Angle goal = Degrees.of(m_GE_Goal.getDouble(0));
+        Angle goal = Degrees.of(m_goal);
         Angle current = m_LeftMotor.getPosition().getValue();
         Angle error = goal.minus(current);
         return error;

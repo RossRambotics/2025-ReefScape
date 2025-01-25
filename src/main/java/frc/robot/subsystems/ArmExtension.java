@@ -17,9 +17,13 @@ import com.ctre.phoenix6.controls.Follower;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+
 import static edu.wpi.first.units.Units.*;
 
 public class ArmExtension extends SubsystemBase {
@@ -37,6 +41,7 @@ public class ArmExtension extends SubsystemBase {
     private GenericEntry m_GE_Position = null;
     private GenericEntry m_GE_Velocity = null;
     private GenericEntry m_GE_Goal = null;
+    private Distance m_goal;
 
     /** Creates a new ArmPivot. */
     public ArmExtension() {
@@ -89,8 +94,32 @@ public class ArmExtension extends SubsystemBase {
     }
 
     private void setGoal(double meters) {
-        m_LeftMotor.setControl(m_mmReq.withPosition(meters).withSlot(0));
+        // TODO Convert meters to rotations
+        double rotations = meters / (0.051 * Math.PI);
+        m_LeftMotor.setControl(m_mmReq.withPosition(rotations).withSlot(0));
         m_GE_Goal.setDouble(meters);
+        m_goal = Meters.of(meters);
+    }
+
+    private Distance getPosition() {
+        Angle current = m_LeftMotor.getPosition().getValue();
+        Distance dist = Meters.of(current.in(Degree) / 360.0 * 0.051 * Math.PI);
+        return dist;
+    }
+
+    private Distance getError() {
+        Distance dist = getPosition();
+        Distance error = m_goal.minus(dist);
+        return error;
+    }
+
+    public Command getWaitUntilErrorLessThan(Distance meters) {
+        return new WaitUntilCommand(() -> {
+            Distance error = getError();
+            if (error.baseUnitMagnitude() <= meters.baseUnitMagnitude())
+                return true;
+            return false;
+        });
     }
 
     public Command getSetGoalCommand(double meters) {
@@ -134,7 +163,7 @@ public class ArmExtension extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
-        m_GE_Position.setDouble(m_LeftMotor.getPosition().getValueAsDouble());
-        RobotContainer.m_mechanisms.updateExt(m_LeftMotor.getPosition(), m_LeftMotor.getVelocity());
+        m_GE_Position.setDouble(this.getPosition().in(Meter));
+        RobotContainer.m_mechanisms.updateExt(this.getPosition(), m_LeftMotor.getVelocity());
     }
 }

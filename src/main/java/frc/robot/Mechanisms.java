@@ -6,6 +6,7 @@ import com.ctre.phoenix6.StatusSignal;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -112,8 +113,8 @@ public class Mechanisms {
         SmartDashboard.putData("mech2d", mech); // Creates mech2d in SmartDashboard
     }
 
-    public void updateExt(StatusSignal<Angle> position, StatusSignal<AngularVelocity> velocity) {
-        armExt.setLength(position.getValue().magnitude() / 3);
+    public void updateExt(Distance position, StatusSignal<AngularVelocity> velocity) {
+        armExt.setLength(position.magnitude() / 3);
     }
 
     public void updateWrist(StatusSignal<Angle> position, StatusSignal<AngularVelocity> velocity) {

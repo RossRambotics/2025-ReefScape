@@ -48,7 +48,8 @@ public class ArmController extends SubsystemBase {
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(0),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(70.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(70.0)))
+                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThan(Meters.of(0.5))),
                 null,
                 new PrintCommand("Node_Alignment is done"));
         Back_L4 = m_armGraph.new GraphCommandNode("Back_L4",
