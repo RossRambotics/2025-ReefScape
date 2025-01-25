@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.ArmControl;
 
-import static edu.wpi.first.units.Units.Degrees;
-
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.DistanceUnit;
@@ -16,8 +14,10 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.util.GraphCommand.GraphCommand;
 import frc.util.GraphCommand.GraphCommand.GraphCommandNode;
 
@@ -37,12 +37,28 @@ public class ArmController extends SubsystemBase {
     }
 
     private void initialize() {
-        A = m_armGraph.new GraphCommandNode("StartNode",
+        A = m_armGraph.new GraphCommandNode("A",
                 ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(0),
                         Degrees.of(-90)),
                 null,
                 null);
+        B = m_armGraph.new GraphCommandNode("B",
+                ArmController.getArmCommand(Degrees.of(90),
+                        Meters.of(0),
+                        Degrees.of(-90))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilGreaterThanCommand(Degrees.of(45.0))),
+                null,
+                new PrintCommand("B is done"));
+
+        m_armGraph.setGraphRootNode(A);
+        m_armGraph.setCurrentNode(A);
+        A.AddNode(B, 1);
+
+        m_armGraph.initialize();
+        m_armGraph.addRequirements(this);
+        this.setDefaultCommand(m_armGraph);
+        Shuffleboard.getTab("ArmController").add(this.getTransition_B());
     }
 
     @Override
@@ -71,7 +87,14 @@ public class ArmController extends SubsystemBase {
         }
     }
 
-    final static public Command getArmCommand(Angle armBaseAngle, Distance armLength, Angle wristAngle) {
-        return new PrintCommand("test");
+    public Command getTransition_B() {
+        return this.runOnce(() -> m_armGraph.setTargetNode(B));
     }
+
+    final static public Command getArmCommand(Angle armBaseAngle, Distance armLength, Angle wristAngle) {
+        return new ParallelCommandGroup(RobotContainer.m_armBase.getSetGoalCommand(armBaseAngle.in(Degree)),
+                RobotContainer.m_armExtension.getSetGoalCommand(armLength.in(Meter)),
+                RobotContainer.m_wrist.getSetGoalCommand(wristAngle.in(Degree)));
+    }
+
 }
