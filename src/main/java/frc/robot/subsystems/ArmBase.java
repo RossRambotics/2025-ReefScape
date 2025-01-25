@@ -16,6 +16,7 @@ import com.ctre.phoenix6.controls.Follower;
 
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
+import frc.util.GraphCommand.GraphCommand.GraphCommandNode;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -105,9 +106,9 @@ public class ArmBase extends SubsystemBase {
         return this.runOnce(() -> setGoal(degrees));
     }
 
-    public Command getWaitUntilGreaterThanCommand(Angle angle) {
+    public Command getWaitUntilGreaterThanCommand(Angle start) {
         return new WaitUntilCommand(() -> {
-            if (m_LeftMotor.getPosition().getValue().compareTo(angle) >= 0)
+            if (m_LeftMotor.getPosition().getValue().compareTo(start) >= 0)
                 return true;
             return false;
         });
