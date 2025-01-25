@@ -27,7 +27,8 @@ public class ArmController extends SubsystemBase {
     private GenericEntry m_GE_nodeName;
     private GenericEntry m_GE_nextNodeName;
 
-    private GraphCommandNode Start, Back_L4, Back_L3, Back_L2, Back_L1, Back_R4, Back_R3, Back_R2, Back_R1;
+    private GraphCommandNode Start, Node_Alignment, Back_L4, Back_L3, Back_L2, Back_L1, Back_R4, Back_R3, Back_R2,
+            Back_R1;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -43,12 +44,18 @@ public class ArmController extends SubsystemBase {
                         Degrees.of(-90)),
                 null,
                 null);
-
+        Node_Alignment = m_armGraph.new GraphCommandNode("Node_Alignment",
+                ArmController.getArmCommand(Degrees.of(90),
+                        Meters.of(0),
+                        Degrees.of(0))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(70.0))),
+                null,
+                new PrintCommand("Node_Alignment is done"));
         Back_L4 = m_armGraph.new GraphCommandNode("Back_L4",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(3),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilLessThanCommand(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
 
                 null,
                 new PrintCommand("Back_L4 is done"));
@@ -56,21 +63,21 @@ public class ArmController extends SubsystemBase {
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2.25),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilGreaterThanCommand(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_L3 is done"));
         Back_L2 = m_armGraph.new GraphCommandNode("Back_L2",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(1.5),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilGreaterThanCommand(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_L2 is done"));
         Back_L1 = m_armGraph.new GraphCommandNode("Back_L1",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(.75),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilGreaterThanCommand(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_L1 is done"));
 
@@ -78,47 +85,48 @@ public class ArmController extends SubsystemBase {
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(3),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilGreaterThanCommand(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_R4 is done"));
         Back_R3 = m_armGraph.new GraphCommandNode("Back_R3",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2.25),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilGreaterThanCommand(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_R3 is done"));
         Back_R2 = m_armGraph.new GraphCommandNode("Back_R2",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(1.5),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilGreaterThanCommand(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_R2 is done"));
         Back_R1 = m_armGraph.new GraphCommandNode("Back_R1",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(.75),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilGreaterThanCommand(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_R1 is done"));
 
         m_armGraph.setGraphRootNode(Start);
         m_armGraph.setCurrentNode(Start);
-        Start.AddNode(Start, 1);
-        Start.AddNode(Back_L4, 1);
-        Start.AddNode(Back_L3, 1);
-        Start.AddNode(Back_L2, 1);
-        Start.AddNode(Back_L1, 1);
-        Start.AddNode(Back_R4, 1);
-        Start.AddNode(Back_R3, 1);
-        Start.AddNode(Back_R2, 1);
-        Start.AddNode(Back_R1, 1);
+        Start.AddNode(Node_Alignment, 1);
+        Node_Alignment.AddNode(Back_L4, 1);
+        Node_Alignment.AddNode(Back_L3, 1);
+        Node_Alignment.AddNode(Back_L2, 1);
+        Node_Alignment.AddNode(Back_L1, 1);
+        Node_Alignment.AddNode(Back_R4, 1);
+        Node_Alignment.AddNode(Back_R3, 1);
+        Node_Alignment.AddNode(Back_R2, 1);
+        Node_Alignment.AddNode(Back_R1, 1);
 
         m_armGraph.initialize();
         m_armGraph.addRequirements(this);
         this.setDefaultCommand(m_armGraph);
         Shuffleboard.getTab("ArmController").add(this.getTransition_Start());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Node_Alignment());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L4());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L2());
@@ -159,6 +167,12 @@ public class ArmController extends SubsystemBase {
     public Command getTransition_Start() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(Start));
         c.setName("Start");
+        return c;
+    }
+
+    public Command getTransition_Node_Alignment() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Node_Alignment));
+        c.setName("Note_Enlinement");
         return c;
     }
 

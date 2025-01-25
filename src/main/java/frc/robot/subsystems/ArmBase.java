@@ -42,6 +42,7 @@ public class ArmBase extends SubsystemBase {
     private GenericEntry m_GE_Position = null;
     private GenericEntry m_GE_Velocity = null;
     private GenericEntry m_GE_Goal = null;
+    private double m_goal;
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
@@ -68,7 +69,7 @@ public class ArmBase extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 1; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 10; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kD = 50.0; // A velocity error of 1 rps results in 0.5 V output
 
@@ -100,27 +101,44 @@ public class ArmBase extends SubsystemBase {
     private void setGoal(double degrees) {
         m_LeftMotor.setControl(m_mmReq.withPosition(degrees / 360.0).withSlot(0));
         m_GE_Goal.setDouble(degrees);
+        m_goal = degrees;
+    }
+
+    private Angle getError() {
+        Angle goal = Degrees.of(m_GE_Goal.getDouble(0));
+        Angle current = m_LeftMotor.getPosition().getValue();
+        Angle error = goal.minus(current);
+        return error;
     }
 
     public Command getSetGoalCommand(double degrees) {
         return this.runOnce(() -> setGoal(degrees));
     }
 
-    public Command getWaitUntilGreaterThanCommand(Angle start) {
+    public Command getWaitUntilErrorLessThan(Angle angle) {
         return new WaitUntilCommand(() -> {
-            if (m_LeftMotor.getPosition().getValue().compareTo(start) >= 0)
+            Angle error = getError();
+            if (error.baseUnitMagnitude() <= angle.baseUnitMagnitude())
                 return true;
             return false;
         });
     }
 
-    public Command getWaitUntilLessThanCommand(Angle angle) {
-        return new WaitUntilCommand(() -> {
-            if (m_LeftMotor.getPosition().getValue().compareTo(angle) <= 0)
-                return true;
-            return false;
-        });
-    }
+    // public Command getWaitUntilGreaterThanCommand(Angle start) {
+    // return new WaitUntilCommand(() -> {
+    // if (getError() >= 0)
+    // return true;
+    // return false;
+    // });
+    // }
+
+    // public Command getWaitUntilLessThanCommand(Angle angle) {
+    // return new WaitUntilCommand(() -> {
+    // if (getError() <= 0)
+    // return true;
+    // return false;
+    // });
+    // }
 
     @Override
     public void periodic() {

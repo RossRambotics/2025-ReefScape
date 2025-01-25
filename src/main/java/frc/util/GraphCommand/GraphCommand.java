@@ -74,9 +74,9 @@ public class GraphCommand extends Command {
         if (m_isTransitioning) {
             if (m_command.isScheduled()) {
 
-                if (Robot.isSimulation()) {
-                    m_command.cancel();
-                }
+                // if (Robot.isSimulation()) {
+                // m_command.cancel();
+                // }
 
                 return;
             } else {
