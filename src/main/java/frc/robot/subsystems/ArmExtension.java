@@ -97,6 +97,14 @@ public class ArmExtension extends SubsystemBase {
         return this.runOnce(() -> setGoal(meters));
     }
 
+    public Command getExtendCommand() {
+        return this.runOnce(() -> setGoal(2)).withName("ArmExtension.ExtendCommand");
+    }
+
+    public Command getDetractCommand() {
+        return this.runOnce(() -> setGoal(0)).withName("ArmExtension.DetractCommand");
+    }
+
     @Override
     public void periodic() {
         // Update PID?
@@ -118,6 +126,9 @@ public class ArmExtension extends SubsystemBase {
 
     public void simulationInit() {
         PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
+
+        Shuffleboard.getTab("ArmExtention").add(this.getExtendCommand());
+        Shuffleboard.getTab("ArmExtention").add(this.getDetractCommand());
     }
 
     @Override

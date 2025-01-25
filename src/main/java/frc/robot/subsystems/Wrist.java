@@ -117,6 +117,18 @@ public class Wrist extends SubsystemBase {
 
     public void simulationInit() {
         PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
+
+        Shuffleboard.getTab("Wrist").add(this.getOpenCommand());
+        Shuffleboard.getTab("Wrist").add(this.getCloseCommand());
+
+    }
+
+    public Command getOpenCommand() {
+        return this.runOnce(() -> setGoal(0)).withName("Wrist.OpenCommand");
+    }
+
+    public Command getCloseCommand() {
+        return this.runOnce(() -> setGoal(40)).withName("Wrist.CloseCommand");
     }
 
     @Override

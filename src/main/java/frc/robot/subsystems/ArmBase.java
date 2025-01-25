@@ -87,6 +87,7 @@ public class ArmBase extends SubsystemBase {
         if (!status.isOK()) {
             System.out.println("Could not configure device. Error: " + status.toString());
             // hi
+            // hey
 
         }
     }
@@ -119,8 +120,21 @@ public class ArmBase extends SubsystemBase {
 
     }
 
+    public Command getUpCommand() {
+        return this.runOnce(() -> setGoal(90)).withName("ArmBase.UpCommand");
+    }
+
+    public Command getDownCommand() {
+        return this.runOnce(() -> setGoal(0)).withName("ArmBase.DownCommand");
+    }
+
     public void simulationInit() {
         PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
+
+        Shuffleboard.getTab("ArmBase").add(this.getUpCommand());
+
+        Shuffleboard.getTab("ArmBase").add(this.getDownCommand());
+
     }
 
     @Override
