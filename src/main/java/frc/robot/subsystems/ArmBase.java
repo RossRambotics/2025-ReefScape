@@ -17,9 +17,13 @@ import com.ctre.phoenix6.controls.Follower;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+
 import static edu.wpi.first.units.Units.*;
 
 public class ArmBase extends SubsystemBase {
@@ -99,6 +103,22 @@ public class ArmBase extends SubsystemBase {
 
     public Command getSetGoalCommand(double degrees) {
         return this.runOnce(() -> setGoal(degrees));
+    }
+
+    public Command getWaitUntilGreaterThanCommand(Angle angle) {
+        return new WaitUntilCommand(() -> {
+            if (m_LeftMotor.getPosition().getValue().compareTo(angle) >= 0)
+                return true;
+            return false;
+        });
+    }
+
+    public Command getWaitUntilLessThanCommand(Angle angle) {
+        return new WaitUntilCommand(() -> {
+            if (m_LeftMotor.getPosition().getValue().compareTo(angle) <= 0)
+                return true;
+            return false;
+        });
     }
 
     @Override
