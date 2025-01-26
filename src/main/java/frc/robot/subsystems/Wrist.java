@@ -17,6 +17,7 @@ import com.ctre.phoenix6.controls.Follower;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,6 +37,8 @@ public class Wrist extends SubsystemBase {
     private GenericEntry m_GE_Position = null;
     private GenericEntry m_GE_Velocity = null;
     private GenericEntry m_GE_Goal = null;
+
+    private Angle m_goal;
 
     /** Creates a new ArmPivot. */
     public Wrist() {
@@ -87,13 +90,22 @@ public class Wrist extends SubsystemBase {
         }
     }
 
-    private void setGoal(double degrees) {
-        m_LeftMotor.setControl(m_mmReq.withPosition(degrees / 360).withSlot(0));
-        m_GE_Goal.setDouble(degrees);
+    private void setGoal(Angle angle) {
+        m_LeftMotor.setControl(m_mmReq.withPosition(angle.in(Rotations)).withSlot(0));
+        m_GE_Goal.setDouble(angle.in(Degrees));
+        m_goal = angle;
     }
 
-    public Command getSetGoalCommand(double degrees) {
-        return this.runOnce(() -> setGoal(degrees));
+    private Angle getError() {
+        Angle goal = m_goal;
+        Angle current = m_LeftMotor.getPosition().getValue();
+        Angle error = goal.minus(current);
+        error = Degrees.of(error.abs(Degrees));
+        return error;
+    }
+
+    public Command getSetGoalCommand(Angle angle) {
+        return this.runOnce(() -> setGoal(angle));
     }
 
     @Override
@@ -124,11 +136,11 @@ public class Wrist extends SubsystemBase {
     }
 
     public Command getOpenCommand() {
-        return this.runOnce(() -> setGoal(0)).withName("Wrist.OpenCommand");
+        return this.runOnce(() -> setGoal(Degrees.of(0))).withName("Wrist.OpenCommand");
     }
 
     public Command getCloseCommand() {
-        return this.runOnce(() -> setGoal(40)).withName("Wrist.CloseCommand");
+        return this.runOnce(() -> setGoal(Degrees.of(40))).withName("Wrist.CloseCommand");
     }
 
     @Override

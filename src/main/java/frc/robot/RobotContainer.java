@@ -84,8 +84,8 @@ public class RobotContainer {
         joystick.b().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(0.0)));
         joystick.x().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(2.0)));
         joystick.y().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(0.0)));
-        joystick.button(5).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(40.0));
-        joystick.button(6).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(0.0));
+        joystick.button(5).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(Degrees.of(40.0)));
+        joystick.button(6).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(Degrees.of(0.0)));
 
         joystick.pov(0).whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
         joystick.pov(180)
