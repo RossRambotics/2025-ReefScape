@@ -116,7 +116,7 @@ public class ArmExtension extends SubsystemBase {
         return error;
     }
 
-    public Command getWaitUntilErrorLessThan(Distance meters) {
+    public Command getWaitUntilErrorLessThanCmd(Distance meters) {
         return new WaitUntilCommand(() -> {
             Distance error = getError();
             if (error.baseUnitMagnitude() <= meters.baseUnitMagnitude())

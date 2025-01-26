@@ -48,15 +48,15 @@ public class ArmController extends SubsystemBase {
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(0),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(70.0)))
-                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThan(Meters.of(0.5))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0)))
+                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(0.5))),
                 null,
                 new PrintCommand("Node_Alignment is done"));
         Back_L4 = m_armGraph.new GraphCommandNode("Back_L4",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(3),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
 
                 null,
                 new PrintCommand("Back_L4 is done"));
@@ -64,21 +64,21 @@ public class ArmController extends SubsystemBase {
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2.25),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_L3 is done"));
         Back_L2 = m_armGraph.new GraphCommandNode("Back_L2",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(1.5),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_L2 is done"));
         Back_L1 = m_armGraph.new GraphCommandNode("Back_L1",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(.75),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_L1 is done"));
 
@@ -86,28 +86,28 @@ public class ArmController extends SubsystemBase {
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(3),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_R4 is done"));
         Back_R3 = m_armGraph.new GraphCommandNode("Back_R3",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2.25),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_R3 is done"));
         Back_R2 = m_armGraph.new GraphCommandNode("Back_R2",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(1.5),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_R2 is done"));
         Back_R1 = m_armGraph.new GraphCommandNode("Back_R1",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(.75),
                         Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThan(Degrees.of(45.0))),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_R1 is done"));
 

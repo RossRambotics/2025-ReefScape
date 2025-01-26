@@ -116,7 +116,7 @@ public class ArmBase extends SubsystemBase {
         return this.runOnce(() -> setGoal(angle));
     }
 
-    public Command getWaitUntilErrorLessThan(Angle angle) {
+    public Command getWaitUntilErrorLessThanCmd(Angle angle) {
         return new WaitUntilCommand(() -> {
             Angle error = getError();
             if (error.baseUnitMagnitude() <= angle.baseUnitMagnitude())
