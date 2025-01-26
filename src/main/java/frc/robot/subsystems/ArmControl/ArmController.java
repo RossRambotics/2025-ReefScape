@@ -25,7 +25,8 @@ public class ArmController extends SubsystemBase {
     private GenericEntry m_GE_nodeName;
     private GenericEntry m_GE_nextNodeName;
 
-    private GraphCommandNode Start, Node_Alignment, Back_L4, Back_L3, Back_L2, Back_L1, Back_R4, Back_R3, Back_R2,
+    private GraphCommandNode Start_1, Start, Node_Alignment, Back_L4, Back_L3, Back_L2, Back_L1, Back_R4, Back_R3,
+            Back_R2,
             Back_R1;
 
     /** Creates a new ArmController. */
@@ -36,6 +37,12 @@ public class ArmController extends SubsystemBase {
     }
 
     private void initialize() {
+        Start_1 = m_armGraph.new GraphCommandNode("Start_1",
+                ArmController.getArmCommand(Degrees.of(0),
+                        Meters.of(0),
+                        Degrees.of(0)),
+                null,
+                null);
         Start = m_armGraph.new GraphCommandNode("Start",
                 ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(0),
@@ -109,8 +116,9 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("Back_R1 is done"));
 
-        m_armGraph.setGraphRootNode(Start);
-        m_armGraph.setCurrentNode(Start);
+        m_armGraph.setGraphRootNode(Start_1);
+        m_armGraph.setCurrentNode(Start_1);
+        Start_1.AddNode(Start, 1);
         Start.AddNode(Node_Alignment, 1);
         Node_Alignment.AddNode(Back_L4, 1);
         Node_Alignment.AddNode(Back_L3, 1);
@@ -123,6 +131,7 @@ public class ArmController extends SubsystemBase {
 
         m_armGraph.initialize();
         m_armGraph.addRequirements(this);
+        m_armGraph.setTargetNode(Start);
         this.setDefaultCommand(m_armGraph);
         Shuffleboard.getTab("ArmController").add(this.getTransition_Start());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Node_Alignment());
