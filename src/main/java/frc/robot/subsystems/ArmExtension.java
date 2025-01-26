@@ -110,6 +110,7 @@ public class ArmExtension extends SubsystemBase {
     private Distance getError() {
         Distance dist = getPosition();
         Distance error = m_goal.minus(dist);
+        error = Meters.of(error.abs(Meters));
         return error;
     }
 
@@ -156,7 +157,7 @@ public class ArmExtension extends SubsystemBase {
     public void simulationInit() {
         PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
 
-        Shuffleboard.getTab("ArmExtention").add(this.getExtendCommand());
+        Shuffleboard.getTab("ArmExt").add(this.getExtendCommand());
         Shuffleboard.getTab("ArmExtention").add(this.getDetractCommand());
     }
 
