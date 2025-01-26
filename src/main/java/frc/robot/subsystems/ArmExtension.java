@@ -30,6 +30,8 @@ public class ArmExtension extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(32, "rio");
     final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
+    private final double m_kRotationsToMeters = 0.051 * Math.PI; // 2" diameter pulley (circumference = pi * d)
+
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private GenericEntry m_GE_PID_kS = null;
     private GenericEntry m_GE_PID_kV = null;
@@ -56,9 +58,9 @@ public class ArmExtension extends SubsystemBase {
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(10))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(50))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1000))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(5000))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10000));
 
         Slot0Configs slot0 = cfg.Slot0;
         slot0.GravityType = GravityTypeValue.Elevator_Static;
@@ -93,17 +95,17 @@ public class ArmExtension extends SubsystemBase {
         }
     }
 
-    private void setGoal(double meters) {
+    private void setGoal(Distance distance) {
         // TODO Convert meters to rotations
-        double rotations = meters / (0.051 * Math.PI);
+        double rotations = distance.in(Meters) / m_kRotationsToMeters;
         m_LeftMotor.setControl(m_mmReq.withPosition(rotations).withSlot(0));
-        m_GE_Goal.setDouble(meters);
-        m_goal = Meters.of(meters);
+        m_GE_Goal.setDouble(distance.in(Meters));
+        m_goal = distance;
     }
 
     private Distance getPosition() {
         Angle current = m_LeftMotor.getPosition().getValue();
-        Distance dist = Meters.of(current.in(Degree) / 360.0 * 0.051 * Math.PI);
+        Distance dist = Meters.of(current.in(Rotations) * m_kRotationsToMeters);
         return dist;
     }
 
@@ -123,16 +125,16 @@ public class ArmExtension extends SubsystemBase {
         });
     }
 
-    public Command getSetGoalCommand(double meters) {
-        return this.runOnce(() -> setGoal(meters));
+    public Command getSetGoalCommand(Distance distance) {
+        return this.runOnce(() -> setGoal(distance));
     }
 
     public Command getExtendCommand() {
-        return this.runOnce(() -> setGoal(2)).withName("ArmExtension.ExtendCommand");
+        return this.runOnce(() -> setGoal(Meters.of(2))).withName("ArmExtension.ExtendCommand");
     }
 
     public Command getDetractCommand() {
-        return this.runOnce(() -> setGoal(0)).withName("ArmExtension.DetractCommand");
+        return this.runOnce(() -> setGoal(Meters.of(0))).withName("ArmExtension.DetractCommand");
     }
 
     @Override
@@ -155,7 +157,7 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public void simulationInit() {
-        PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
+        PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.01);
 
         Shuffleboard.getTab("ArmExt").add(this.getExtendCommand());
         Shuffleboard.getTab("ArmExtention").add(this.getDetractCommand());

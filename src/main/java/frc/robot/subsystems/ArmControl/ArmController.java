@@ -226,8 +226,8 @@ public class ArmController extends SubsystemBase {
     }
 
     final static public Command getArmCommand(Angle armBaseAngle, Distance armLength, Angle wristAngle) {
-        return new ParallelCommandGroup(RobotContainer.m_armBase.getSetGoalCommand(armBaseAngle.in(Degree)),
-                RobotContainer.m_armExtension.getSetGoalCommand(armLength.in(Meter)),
+        return new ParallelCommandGroup(RobotContainer.m_armBase.getSetGoalCommand(armBaseAngle),
+                RobotContainer.m_armExtension.getSetGoalCommand(armLength),
                 RobotContainer.m_wrist.getSetGoalCommand(wristAngle.in(Degree)));
     }
 

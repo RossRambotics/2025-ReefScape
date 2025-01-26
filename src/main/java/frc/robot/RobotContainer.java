@@ -80,10 +80,10 @@ public class RobotContainer {
                                                                                     // negative X (left)
                 ));
 
-        joystick.a().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(90.0));
-        joystick.b().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(0.0));
-        joystick.x().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(2.0));
-        joystick.y().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(0.0));
+        joystick.a().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(90.0)));
+        joystick.b().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(0.0)));
+        joystick.x().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(2.0)));
+        joystick.y().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(0.0)));
         joystick.button(5).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(40.0));
         joystick.button(6).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(0.0));
 

@@ -42,7 +42,7 @@ public class ArmBase extends SubsystemBase {
     private GenericEntry m_GE_Position = null;
     private GenericEntry m_GE_Velocity = null;
     private GenericEntry m_GE_Goal = null;
-    private double m_goal;
+    private Angle m_goal;
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
@@ -98,21 +98,22 @@ public class ArmBase extends SubsystemBase {
         }
     }
 
-    private void setGoal(double degrees) {
-        m_LeftMotor.setControl(m_mmReq.withPosition(degrees / 360.0).withSlot(0));
-        m_GE_Goal.setDouble(degrees);
-        m_goal = degrees;
+    private void setGoal(Angle angle) {
+        m_LeftMotor.setControl(m_mmReq.withPosition(angle.in(Rotations)).withSlot(0));
+        m_GE_Goal.setDouble(angle.in(Degrees));
+        m_goal = angle;
     }
 
     private Angle getError() {
-        Angle goal = Degrees.of(m_goal);
+        Angle goal = m_goal;
         Angle current = m_LeftMotor.getPosition().getValue();
         Angle error = goal.minus(current);
+        error = Degrees.of(error.abs(Degrees));
         return error;
     }
 
-    public Command getSetGoalCommand(double degrees) {
-        return this.runOnce(() -> setGoal(degrees));
+    public Command getSetGoalCommand(Angle angle) {
+        return this.runOnce(() -> setGoal(angle));
     }
 
     public Command getWaitUntilErrorLessThan(Angle angle) {
@@ -160,11 +161,11 @@ public class ArmBase extends SubsystemBase {
     }
 
     public Command getUpCommand() {
-        return this.runOnce(() -> setGoal(90)).withName("ArmBase.UpCommand");
+        return this.runOnce(() -> setGoal(Degrees.of(90))).withName("ArmBase.UpCommand");
     }
 
     public Command getDownCommand() {
-        return this.runOnce(() -> setGoal(0)).withName("ArmBase.DownCommand");
+        return this.runOnce(() -> setGoal(Degrees.of(0))).withName("ArmBase.DownCommand");
     }
 
     public void simulationInit() {
