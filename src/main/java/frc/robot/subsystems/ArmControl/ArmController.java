@@ -5,8 +5,6 @@
 package frc.robot.subsystems.ArmControl;
 
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.units.AngleUnit;
-import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 
@@ -41,13 +39,13 @@ public class ArmController extends SubsystemBase {
         Start = m_armGraph.new GraphCommandNode("Start",
                 ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(0),
-                        Degrees.of(-90)),
+                        Degrees.of(0)),
                 null,
                 null);
         Node_Alignment = m_armGraph.new GraphCommandNode("Node_Alignment",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(0),
-                        Degrees.of(0))
+                        Degrees.of(-90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0)))
                         .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(0.5))),
                 null,

@@ -21,6 +21,8 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+
 import static edu.wpi.first.units.Units.*;
 
 public class Wrist extends SubsystemBase {
@@ -64,7 +66,7 @@ public class Wrist extends SubsystemBase {
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
         slot0.kP = 14; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
-        slot0.kD = 42; // A velocity error of 1 rps results in 0.5 V output
+        slot0.kD = 10; // A velocity error of 1 rps results in 0.5 V output
 
         m_GE_PID_kS = Shuffleboard.getTab("Wrist").add("Wrist_kS", slot0.kS).getEntry();
         m_GE_PID_kV = Shuffleboard.getTab("Wrist").add("Wrist_kV", slot0.kV).getEntry();
@@ -102,6 +104,15 @@ public class Wrist extends SubsystemBase {
         Angle error = goal.minus(current);
         error = Degrees.of(error.abs(Degrees));
         return error;
+    }
+
+    public Command getWaitUntilErrorLessThanCmd(Angle angle) {
+        return new WaitUntilCommand(() -> {
+            Angle error = getError();
+            if (error.baseUnitMagnitude() <= angle.baseUnitMagnitude())
+                return true;
+            return false;
+        });
     }
 
     public Command getSetGoalCommand(Angle angle) {
