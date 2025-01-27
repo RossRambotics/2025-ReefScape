@@ -19,6 +19,7 @@ import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,6 +32,8 @@ public class ArmExtension extends SubsystemBase {
     final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
     private final double m_kRotationsToMeters = 0.051 * Math.PI; // 2" diameter pulley (circumference = pi * d)
+    private final double m_kGoalTolerance = 0.02; // 2 cm tolerance
+    private final Timer m_timer = new Timer();
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private GenericEntry m_GE_PID_kS = null;
@@ -43,7 +46,8 @@ public class ArmExtension extends SubsystemBase {
     private GenericEntry m_GE_Position = null;
     private GenericEntry m_GE_Velocity = null;
     private GenericEntry m_GE_Goal = null;
-    private Distance m_goal;
+    private Distance m_goal = Meters.of(0);
+    private GenericEntry m_GE_Timer = null;
 
     /** Creates a new ArmPivot. */
     public ArmExtension() {
@@ -81,6 +85,7 @@ public class ArmExtension extends SubsystemBase {
         m_GE_Position = Shuffleboard.getTab("ArmExt").add("ArmExt_Position", 0).getEntry();
         m_GE_Velocity = Shuffleboard.getTab("ArmExt").add("ArmExt_Velocity", 0).getEntry();
         m_GE_Goal = Shuffleboard.getTab("ArmExt").add("ArmExt_Goal", 0).getEntry();
+        m_GE_Timer = Shuffleboard.getTab("ArmExt").add("ArmExt_Timer", 0).getEntry();
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
@@ -96,6 +101,10 @@ public class ArmExtension extends SubsystemBase {
     }
 
     private void setGoal(Distance distance) {
+        if (distance.baseUnitMagnitude() != m_goal.baseUnitMagnitude()) {
+            m_timer.reset();
+            m_timer.start();
+        }
         // TODO Convert meters to rotations
         double rotations = distance.in(Meters) / m_kRotationsToMeters;
         m_LeftMotor.setControl(m_mmReq.withPosition(rotations).withSlot(0));
@@ -153,6 +162,12 @@ public class ArmExtension extends SubsystemBase {
             m_GE_bUpdatePID.setBoolean(false);
         }
         // This method will be called once per scheduler run
+        m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
+        m_GE_Position.setDouble(this.getPosition().in(Meter));
+        m_GE_Timer.setDouble(m_timer.get());
+        if (this.getError().in(Meters) <= m_kGoalTolerance) {
+            m_timer.stop();
+        }
 
     }
 
@@ -160,13 +175,12 @@ public class ArmExtension extends SubsystemBase {
         PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.01);
 
         Shuffleboard.getTab("ArmExt").add(this.getExtendCommand());
-        Shuffleboard.getTab("ArmExtention").add(this.getDetractCommand());
+        Shuffleboard.getTab("ArmExt").add(this.getDetractCommand());
     }
 
     @Override
     public void simulationPeriodic() {
-        m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
-        m_GE_Position.setDouble(this.getPosition().in(Meter));
+
         RobotContainer.m_mechanisms.updateExt(this.getPosition(), m_LeftMotor.getVelocity());
     }
 }

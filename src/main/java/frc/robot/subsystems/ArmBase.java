@@ -18,7 +18,9 @@ import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
 import frc.util.GraphCommand.GraphCommand.GraphCommandNode;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.GenericPublisher;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,6 +34,7 @@ public class ArmBase extends SubsystemBase {
     final TalonFX m_RightMotor = new TalonFX(31, "rio");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
+    private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
     private GenericEntry m_GE_PID_kS = null;
     private GenericEntry m_GE_PID_kV = null;
     private GenericEntry m_GE_PID_kA = null;
@@ -42,7 +45,9 @@ public class ArmBase extends SubsystemBase {
     private GenericEntry m_GE_Position = null;
     private GenericEntry m_GE_Velocity = null;
     private GenericEntry m_GE_Goal = null;
-    private Angle m_goal;
+    private Angle m_goal = Degrees.of(0);
+    private Timer m_timer = new Timer();
+    private GenericPublisher m_GE_Timer;
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
@@ -83,6 +88,7 @@ public class ArmBase extends SubsystemBase {
         m_GE_Position = Shuffleboard.getTab("ArmBase").add("ArmBase_Position", 0).getEntry();
         m_GE_Velocity = Shuffleboard.getTab("ArmBase").add("ArmBase_Velocity", 0).getEntry();
         m_GE_Goal = Shuffleboard.getTab("ArmBase").add("ArmBase_Goal", 0).getEntry();
+        m_GE_Timer = Shuffleboard.getTab("ArmBase").add("ArmBase_Timer", 0).getEntry();
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
@@ -99,6 +105,10 @@ public class ArmBase extends SubsystemBase {
     }
 
     private void setGoal(Angle angle) {
+        if (angle.baseUnitMagnitude() != m_goal.baseUnitMagnitude()) {
+            m_timer.reset();
+            m_timer.start();
+        }
         m_LeftMotor.setControl(m_mmReq.withPosition(angle.in(Rotations)).withSlot(0));
         m_GE_Goal.setDouble(angle.in(Degrees));
         m_goal = angle;
@@ -158,6 +168,14 @@ public class ArmBase extends SubsystemBase {
         }
         // This method will be called once per scheduler run
 
+        m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
+        m_GE_Position.setDouble(m_LeftMotor.getPosition().getValue().in(Degree));
+        m_GE_Timer.setDouble(m_timer.get());
+
+        if (this.getError().in(Degree) <= m_kGoalTolerance) {
+            m_timer.stop();
+        }
+
     }
 
     public Command getUpCommand() {
@@ -179,9 +197,6 @@ public class ArmBase extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-
-        m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
-        m_GE_Position.setDouble(m_LeftMotor.getPosition().getValue().in(Degree));
 
         RobotContainer.m_mechanisms.update(m_LeftMotor.getPosition(), m_LeftMotor.getVelocity());
     }
