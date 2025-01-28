@@ -27,7 +27,7 @@ public class ArmController extends SubsystemBase {
 
     private GraphCommandNode Start_1, Start, Node_Alignment, Back_L4, Back_L3, Back_L2, Back_L1, Back_R4, Back_R3,
             Back_R2,
-            Back_R1;
+            Back_R1, Front_TL, Front_TR, FrontHP_PickUP_Coral, Front_PickUP_Coral;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -116,9 +116,40 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("Back_R1 is done"));
 
-        m_armGraph.setGraphRootNode(Start_1);
-        m_armGraph.setCurrentNode(Start_1);
-        Start_1.AddNode(Start, 1);
+        Front_TL = m_armGraph.new GraphCommandNode("Front_TL",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(1.5),
+                        Degrees.of(-90))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("Front_TL is done"));
+
+        Front_TR = m_armGraph.new GraphCommandNode("Front_TR",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(1.5),
+                        Degrees.of(-90))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("Front_TR is done"));
+
+        FrontHP_PickUP_Coral = m_armGraph.new GraphCommandNode("FrontHP_PickUP_Coral",
+                ArmController.getArmCommand(Degrees.of(-25),
+                        Meters.of(2),
+                        Degrees.of(0))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("FrontHP_PickUP_Coral"));
+
+        Front_PickUP_Coral = m_armGraph.new GraphCommandNode("Front_PickUP_Coral",
+                ArmController.getArmCommand(Degrees.of(-25),
+                        Meters.of(2),
+                        Degrees.of(0))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("Front_PickUP_Coral"));
+
+        m_armGraph.setGraphRootNode(Start);
+        m_armGraph.setCurrentNode(Start);
         Start.AddNode(Node_Alignment, 1);
         Node_Alignment.AddNode(Back_L4, 1);
         Node_Alignment.AddNode(Back_L3, 1);
@@ -128,6 +159,8 @@ public class ArmController extends SubsystemBase {
         Node_Alignment.AddNode(Back_R3, 1);
         Node_Alignment.AddNode(Back_R2, 1);
         Node_Alignment.AddNode(Back_R1, 1);
+        Node_Alignment.AddNode(Front_TL, 1);
+        Node_Alignment.AddNode(Front_TR, 1);
 
         m_armGraph.initialize();
         m_armGraph.addRequirements(this);
@@ -143,6 +176,10 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_R3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_R2());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_R1());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_TL());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_TR());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_FrontHP_PickUP_Coral());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_PickUP_Coral());
 
     }
 
@@ -229,6 +266,30 @@ public class ArmController extends SubsystemBase {
     public Command getTransition_Back_R1() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_R1));
         c.setName("Back_R1");
+        return c;
+    }
+
+    public Command getTransition_Front_TL() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_TL));
+        c.setName("Front_TL");
+        return c;
+    }
+
+    public Command getTransition_Front_TR() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_TR));
+        c.setName("Front_TR");
+        return c;
+    }
+
+    public Command getTransition_FrontHP_PickUP_Coral() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontHP_PickUP_Coral));
+        c.setName("FrontHP_PickUP_Coral");
+        return c;
+    }
+
+    public Command getTransition_Front_PickUP_Coral() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_PickUP_Coral));
+        c.setName("Front_PickUP_Coral");
         return c;
     }
 
