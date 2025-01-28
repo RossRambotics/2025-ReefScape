@@ -148,8 +148,6 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("Front_PickUP_Coral"));
 
-        m_armGraph.setGraphRootNode(Start);
-        m_armGraph.setCurrentNode(Start);
         Start.AddNode(Node_Alignment, 1);
         Node_Alignment.AddNode(Back_L4, 1);
         Node_Alignment.AddNode(Back_L3, 1);
@@ -162,10 +160,13 @@ public class ArmController extends SubsystemBase {
         Node_Alignment.AddNode(Front_TL, 1);
         Node_Alignment.AddNode(Front_TR, 1);
 
+        m_armGraph.setGraphRootNode(Start);
+        m_armGraph.setCurrentNode(Start);
         m_armGraph.initialize();
         m_armGraph.addRequirements(this);
         m_armGraph.setTargetNode(Start);
         this.setDefaultCommand(m_armGraph);
+
         Shuffleboard.getTab("ArmController").add(this.getTransition_Start());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Node_Alignment());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L4());
