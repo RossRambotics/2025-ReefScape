@@ -4,12 +4,14 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.controls.Follower;
@@ -19,11 +21,15 @@ import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -98,6 +104,8 @@ public class ArmExtension extends SubsystemBase {
             // hi
 
         }
+
+        this.initSysID(); // used for system identification
     }
 
     private void setGoal(Distance distance) {
@@ -182,5 +190,45 @@ public class ArmExtension extends SubsystemBase {
     public void simulationPeriodic() {
 
         RobotContainer.m_mechanisms.updateExt(this.getPosition(), m_LeftMotor.getVelocity());
+    }
+
+    private final VoltageOut m_voltReq = new VoltageOut(0.0);
+
+    private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null, // Use default ramp rate (1 V/s)
+                    Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+                    null, // Use default timeout (10 s)
+                          // Log state with Phoenix SignalLogger class
+                    (state) -> SignalLogger.writeString("state", state.toString())),
+            new SysIdRoutine.Mechanism(
+                    (volts) -> m_LeftMotor.setControl(m_voltReq.withOutput(volts.in(Volts))),
+                    null,
+                    this));
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutine.dynamic(direction);
+    }
+
+    final private CommandXboxController m_joystick = new CommandXboxController(4);
+
+    private void initSysID() {
+        m_joystick.button(1).onTrue(Commands.runOnce(SignalLogger::start));
+        m_joystick.button(2).onTrue(Commands.runOnce(SignalLogger::stop));
+
+        /*
+         * Joystick Y = quasistatic forward
+         * Joystick A = quasistatic reverse
+         * Joystick B = dynamic forward
+         * Joystick X = dyanmic reverse
+         */
+        m_joystick.button(3).whileTrue(this.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        m_joystick.button(4).whileTrue(this.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        m_joystick.button(5).whileTrue(this.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        m_joystick.button(6).whileTrue(this.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 }
