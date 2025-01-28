@@ -217,7 +217,7 @@ public class ArmController extends SubsystemBase {
 
     public Command getTransition_Node_Alignment() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(Node_Alignment));
-        c.setName("Note_Enlinement");
+        c.setName("Note_Alignment");
         return c;
     }
 
