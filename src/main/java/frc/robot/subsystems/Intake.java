@@ -107,6 +107,10 @@ public class Intake extends SubsystemBase {
             // hi
 
         }
+
+        Shuffleboard.getTab("Intake").add(this.getStopCommand());
+        Shuffleboard.getTab("Intake").add(this.getIntakeCommand());
+        Shuffleboard.getTab("Intake").add(this.getOuttakeCommand());
     }
 
     @Override
@@ -154,11 +158,11 @@ public class Intake extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        return this.runOnce(() -> setGoal(-1, -1)).withName("Intake.IntakeCommand");
+        return this.runOnce(() -> setGoal(20, 20)).withName("Intake.IntakeCommand");
     }
 
     public Command getOuttakeCommand() {
-        return this.runOnce(() -> setGoal(1, 1)).withName("Intake.OuttakeCommand");
+        return this.runOnce(() -> setGoal(-10, -10)).withName("Intake.OuttakeCommand");
     }
 
     public Command getUnclogCommand() {
@@ -179,10 +183,7 @@ public class Intake extends SubsystemBase {
         PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
         PhysicsSim.getInstance().addTalonFX(m_RightMotor, 0.1);
 
-        Shuffleboard.getTab("Intake").add(this.getStopCommand());
         Shuffleboard.getTab("Intake").add(this.getIdleCommand());
-        Shuffleboard.getTab("Intake").add(this.getIntakeCommand());
-        Shuffleboard.getTab("Intake").add(this.getOuttakeCommand());
         Shuffleboard.getTab("Intake").add(this.getUnclogCommand());
         Shuffleboard.getTab("Intake").add(this.getFastshootCommand());
         Shuffleboard.getTab("Intake").add(this.getSlowshootCommand());
