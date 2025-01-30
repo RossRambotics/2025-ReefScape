@@ -25,7 +25,7 @@ public class ArmController extends SubsystemBase {
     private GenericEntry m_GE_nodeName;
     private GenericEntry m_GE_nextNodeName;
 
-    private GraphCommandNode Start_1, Start, Node_Alignment, Back_L4, Back_L3, Back_L2, Back_L1, Back_R4, Back_R3,
+    private GraphCommandNode Start, Node_Alignment, Back_L4, Back_L3, Back_L2, Back_L1, Back_R4, Back_R3,
             Back_R2,
             Back_R1, Front_TL, Front_TR, FrontHP_PickUP_Coral, Front_PickUP_Coral;
 
@@ -37,12 +37,7 @@ public class ArmController extends SubsystemBase {
     }
 
     private void initialize() {
-        Start_1 = m_armGraph.new GraphCommandNode("Start_1",
-                ArmController.getArmCommand(Degrees.of(0),
-                        Meters.of(0),
-                        Degrees.of(0)),
-                null,
-                null);
+
         Start = m_armGraph.new GraphCommandNode("Start",
                 ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(0),
@@ -133,17 +128,17 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("Front_TR is done"));
 
         FrontHP_PickUP_Coral = m_armGraph.new GraphCommandNode("FrontHP_PickUP_Coral",
-                ArmController.getArmCommand(Degrees.of(-25),
+                ArmController.getArmCommand(Degrees.of(25),
                         Meters.of(2),
-                        Degrees.of(0))
+                        Degrees.of(3))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("FrontHP_PickUP_Coral"));
 
         Front_PickUP_Coral = m_armGraph.new GraphCommandNode("Front_PickUP_Coral",
-                ArmController.getArmCommand(Degrees.of(-25),
+                ArmController.getArmCommand(Degrees.of(25),
                         Meters.of(2),
-                        Degrees.of(0))
+                        Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("Front_PickUP_Coral"));
