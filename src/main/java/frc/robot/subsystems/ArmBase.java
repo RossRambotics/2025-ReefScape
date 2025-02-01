@@ -111,6 +111,9 @@ public class ArmBase extends SubsystemBase {
         }
 
         Shuffleboard.getTab("ArmBase").add(this.getZeroArmAngleCmd());
+        Shuffleboard.getTab("ArmBase").add(this.getTestArmDownCmd());
+        Shuffleboard.getTab("ArmBase").add(this.getTestArmUpCmd());
+        Shuffleboard.getTab("ArmBase").add(this.getStopArmCmd());
     }
 
     private void setGoal(Angle angle) {
@@ -206,6 +209,24 @@ public class ArmBase extends SubsystemBase {
 
         Shuffleboard.getTab("ArmBase").add(this.getDownCommand());
 
+    }
+
+    private Command getTestArmUpCmd() {
+        Command c = this.runOnce(() -> m_LeftMotor.setVoltage(1));
+        c.setName("ArmBase.TestUp");
+        return c;
+    }
+
+    private Command getTestArmDownCmd() {
+        Command c = this.runOnce(() -> m_LeftMotor.setVoltage(-1));
+        c.setName("ArmBase.TestDown");
+        return c;
+    }
+
+    private Command getStopArmCmd() {
+        Command c = this.runOnce(() -> m_LeftMotor.stopMotor());
+        c.setName("ArmBase.Stop");
+        return c;
     }
 
     @Override
