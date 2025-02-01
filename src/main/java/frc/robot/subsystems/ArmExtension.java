@@ -200,7 +200,7 @@ public class ArmExtension extends SubsystemBase {
                     Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
                     null, // Use default timeout (10 s)
                           // Log state with Phoenix SignalLogger class
-                    (state) -> SignalLogger.writeString("state", state.toString())),
+                    (state) -> SignalLogger.writeString("SysID-ArmExtension-state", state.toString())),
             new SysIdRoutine.Mechanism(
                     (volts) -> m_LeftMotor.setControl(m_voltReq.withOutput(volts.in(Volts))),
                     null,
