@@ -11,6 +11,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +26,7 @@ import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RangeFinder;
+import frc.robot.subsystems.SpeedNanny;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.ArmControl.ArmController;
 
@@ -36,6 +39,7 @@ public class RobotContainer {
     final static public Intake m_intake = new Intake();
     final static public RangeFinder m_rangeFinder = new RangeFinder();
     final static public ArmController m_armController = new ArmController();
+    final static public SpeedNanny m_speedNanny = new SpeedNanny();
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
@@ -67,6 +71,32 @@ public class RobotContainer {
         configureBindings();
     }
 
+    private static double modifyAxis(double value) {
+
+        // Square the axis
+        value = Math.copySign(value * value, value);
+
+        return value;
+    }
+
+    private final SlewRateLimiter m_slewDriverX = new SlewRateLimiter(5);
+
+    private double getDriverXVelocity() {
+        double driverLeftX = modifyAxis(joystick.getLeftX());
+        double slew = m_slewDriverX.calculate(driverLeftX * m_speedNanny.getSpeedLimit());
+
+        return slew;
+    }
+
+    private final SlewRateLimiter m_slewDriverY = new SlewRateLimiter(5);
+
+    private double getDriverYVelocity() {
+        double driverLeftY = modifyAxis(joystick.getLeftY());
+        double slew = m_slewDriverY.calculate(driverLeftY * m_speedNanny.getSpeedLimit());
+
+        return slew;
+    }
+
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -80,12 +110,12 @@ public class RobotContainer {
                                                                                     // negative X (left)
                 ));
 
-        joystick.a().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(90.0)));
-        joystick.b().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(0.0)));
-        joystick.x().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(2.0)));
-        joystick.y().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(0.0)));
-        joystick.button(5).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(Degrees.of(40.0)));
-        joystick.button(6).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(Degrees.of(0.0)));
+        // joystick.a().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(90.0)));
+        // joystick.b().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(0.0)));
+        // joystick.x().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(2.0)));
+        // joystick.y().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(0.0)));
+        // joystick.button(5).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(Degrees.of(40.0)));
+        // joystick.button(6).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(Degrees.of(0.0)));
 
         joystick.pov(0).whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
         joystick.pov(180)
