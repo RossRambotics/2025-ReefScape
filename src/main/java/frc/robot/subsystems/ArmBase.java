@@ -8,6 +8,7 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -90,6 +91,14 @@ public class ArmBase extends SubsystemBase {
         m_GE_Goal = Shuffleboard.getTab("ArmBase").add("ArmBase_Goal", 0).getEntry();
         m_GE_Timer = Shuffleboard.getTab("ArmBase").add("ArmBase_Timer", 0).getEntry();
 
+        // setup software limits
+        SoftwareLimitSwitchConfigs swLimits = new SoftwareLimitSwitchConfigs();
+        swLimits.ForwardSoftLimitEnable = true;
+        swLimits.ForwardSoftLimitThreshold = Degrees.of(90).in(Rotations);
+        swLimits.ReverseSoftLimitEnable = true;
+        swLimits.ReverseSoftLimitThreshold = Degrees.of(-10).in(Rotations);
+        cfg.SoftwareLimitSwitch = swLimits;
+
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
             status = m_LeftMotor.getConfigurator().apply(cfg);
@@ -102,6 +111,8 @@ public class ArmBase extends SubsystemBase {
             // hey
 
         }
+
+        Shuffleboard.getTab("ArmBase").add(this.getZeroArmAngleCmd());
     }
 
     private void setGoal(Angle angle) {
@@ -124,6 +135,10 @@ public class ArmBase extends SubsystemBase {
 
     public Command getSetGoalCommand(Angle angle) {
         return this.runOnce(() -> setGoal(angle));
+    }
+
+    public Command getZeroArmAngleCmd() {
+        return this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
     }
 
     public Command getWaitUntilErrorLessThanCmd(Angle angle) {

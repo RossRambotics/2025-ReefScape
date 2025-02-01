@@ -8,6 +8,7 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -84,6 +85,14 @@ public class Wrist extends SubsystemBase {
         m_GE_Velocity = Shuffleboard.getTab("Wrist").add("Wrist_Velocity", 0).getEntry();
         m_GE_Goal = Shuffleboard.getTab("Wrist").add("Wrist_Goal", 0).getEntry();
         m_GE_Timer = Shuffleboard.getTab("Wrist").add("Wrist_Timer", 0).getEntry();
+
+        // setup software limits
+        SoftwareLimitSwitchConfigs swLimits = new SoftwareLimitSwitchConfigs();
+        swLimits.ForwardSoftLimitEnable = true;
+        swLimits.ForwardSoftLimitThreshold = Degrees.of(45).in(Rotations);
+        swLimits.ReverseSoftLimitEnable = true;
+        swLimits.ReverseSoftLimitThreshold = Degrees.of(-135).in(Rotations);
+        cfg.SoftwareLimitSwitch = swLimits;
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
