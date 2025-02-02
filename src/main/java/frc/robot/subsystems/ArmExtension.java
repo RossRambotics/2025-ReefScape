@@ -37,7 +37,7 @@ public class ArmExtension extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(32, "rio");
     final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
-    private final double m_kRotationsToMeters = 0.051 * Math.PI; // 2" diameter pulley (circumference = pi * d)
+    private final double m_kRotationsToMeters = 0.038 * Math.PI; // 2" diameter pulley (circumference = pi * d)
     private final double m_kGoalTolerance = 0.02; // 2 cm tolerance
     private final Timer m_timer = new Timer();
 
@@ -60,11 +60,11 @@ public class ArmExtension extends SubsystemBase {
         TalonFXConfiguration cfg = new TalonFXConfiguration();
 
         // Configure the right motor to follow the left motor (but opposite direction)
-        m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), true));
+        m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), false));
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = cfg.Feedback;
-        fdb.SensorToMechanismRatio = 1.0; // TODO: Calibrate motor rotations to sensor degrees
+        fdb.SensorToMechanismRatio = 5.0; // TODO: Calibrate motor rotations to sensor degrees
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
@@ -77,9 +77,9 @@ public class ArmExtension extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 25; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 0.1; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
-        slot0.kD = 20.5; // A velocity error of 1 rps results in 0.5 V output
+        slot0.kD = 0.0; // A velocity error of 1 rps results in 0.5 V output
 
         m_GE_PID_kS = Shuffleboard.getTab("ArmExt").add("ArmExt_kS", slot0.kS).getEntry();
         m_GE_PID_kV = Shuffleboard.getTab("ArmExt").add("ArmExt_kV", slot0.kV).getEntry();

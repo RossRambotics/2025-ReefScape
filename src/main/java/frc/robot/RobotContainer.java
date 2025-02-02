@@ -32,13 +32,13 @@ import frc.robot.subsystems.ArmControl.ArmController;
 
 public class RobotContainer {
     // Subsystems
-    final static public ArmBase m_armBase = new ArmBase();
+    final static public ArmBase m_armBase = null;// new ArmBase();
     final static public ArmExtension m_armExtension = new ArmExtension();
-    final static public Wrist m_wrist = new Wrist();
+    final static public Wrist m_wrist = null;// new Wrist();
     final static public Mechanisms m_mechanisms = new Mechanisms();
-    final static public Intake m_intake = new Intake();
-    final static public RangeFinder m_rangeFinder = new RangeFinder();
-    final static public ArmController m_armController = new ArmController();
+    // final static public Intake m_intake = new Intake();
+    // final static public RangeFinder m_rangeFinder = new RangeFinder();
+    // final static public ArmController m_armController = new ArmController();
     final static public SpeedNanny m_speedNanny = new SpeedNanny();
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed

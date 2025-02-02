@@ -57,7 +57,7 @@ public class ArmBase extends SubsystemBase {
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = cfg.Feedback;
-        fdb.SensorToMechanismRatio = 1.0; // TODO: Calibrate motor rotations to sensor degrees
+        fdb.SensorToMechanismRatio = 114.7; // TODO: Calibrate motor rotations to sensor degrees
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
@@ -73,9 +73,9 @@ public class ArmBase extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 10; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 300.0; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
-        slot0.kD = 50.0; // A velocity error of 1 rps results in 0.5 V output
+        slot0.kD = 0.0; // A velocity error of 1 rps results in 0.5 V output
 
         m_GE_PID_kS = Shuffleboard.getTab("ArmBase").add("ArmBase_kS", slot0.kS).getEntry();
         m_GE_PID_kV = Shuffleboard.getTab("ArmBase").add("ArmBase_kV", slot0.kV).getEntry();
@@ -114,6 +114,7 @@ public class ArmBase extends SubsystemBase {
         Shuffleboard.getTab("ArmBase").add(this.getTestArmDownCmd());
         Shuffleboard.getTab("ArmBase").add(this.getTestArmUpCmd());
         Shuffleboard.getTab("ArmBase").add(this.getStopArmCmd());
+        Shuffleboard.getTab("ArmBase").add(this.getTestAngleCommand());
     }
 
     private void setGoal(Angle angle) {
@@ -139,7 +140,11 @@ public class ArmBase extends SubsystemBase {
     }
 
     public Command getZeroArmAngleCmd() {
-        return this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
+        Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
+        c.setName("ArmBase.Zero");
+        // c.ignoringDisable(true);
+
+        return c;
     }
 
     public Command getWaitUntilErrorLessThanCmd(Angle angle) {
@@ -180,6 +185,7 @@ public class ArmBase extends SubsystemBase {
             slot0.kI = m_GE_PID_kI.getDouble(slot0.kI);
             slot0.kD = m_GE_PID_kD.getDouble(slot0.kD);
             m_LeftMotor.getConfigurator().apply(slot0);
+            this.setGoal(Degrees.of(m_GE_Goal.getDouble(0.0)));
             m_GE_bUpdatePID.setBoolean(false);
         }
         // This method will be called once per scheduler run
@@ -202,6 +208,10 @@ public class ArmBase extends SubsystemBase {
         return this.runOnce(() -> setGoal(Degrees.of(0))).withName("ArmBase.DownCommand");
     }
 
+    public Command getTestAngleCommand() {
+        return this.runOnce(() -> setGoal(Degrees.of(25))).withName("ArmBase.TestAngle");
+    }
+
     public void simulationInit() {
         PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
 
@@ -212,19 +222,25 @@ public class ArmBase extends SubsystemBase {
     }
 
     private Command getTestArmUpCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setVoltage(1));
+        Command c = this.runOnce(() -> {
+            m_LeftMotor.setVoltage(1);
+            // m_RightMotor.setVoltage(-1);
+        });
         c.setName("ArmBase.TestUp");
         return c;
     }
 
     private Command getTestArmDownCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setVoltage(-1));
+        Command c = this.runOnce(() -> m_LeftMotor.setVoltage(-5));
         c.setName("ArmBase.TestDown");
         return c;
     }
 
     private Command getStopArmCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.stopMotor());
+        Command c = this.runOnce(() -> {
+            m_LeftMotor.stopMotor();
+            m_RightMotor.stopMotor();
+        });
         c.setName("ArmBase.Stop");
         return c;
     }
