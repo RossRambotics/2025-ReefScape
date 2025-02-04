@@ -59,6 +59,11 @@ public class ArmExtension extends SubsystemBase {
 
     /** Creates a new ArmPivot. */
     public ArmExtension() {
+
+        // Turn on brake Mode
+        m_LeftMotor.setNeutralMode(NeutralModeValue.Brake);
+        m_RightMotor.setNeutralMode(NeutralModeValue.Brake);
+
         TalonFXConfiguration cfg = new TalonFXConfiguration();
 
         // Configure the right motor to follow the left motor (but opposite direction)
@@ -68,13 +73,11 @@ public class ArmExtension extends SubsystemBase {
         FeedbackConfigs fdb = cfg.Feedback;
         fdb.SensorToMechanismRatio = 5.0; // TODO: Calibrate motor rotations to sensor degrees
 
-        cfg.MotorOutput = cfg.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
-
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1000))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(5000))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10000));
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(10))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(50))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
 
         Slot0Configs slot0 = cfg.Slot0;
         slot0.GravityType = GravityTypeValue.Elevator_Static;
