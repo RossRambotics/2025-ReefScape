@@ -17,7 +17,7 @@ public class Robot extends TimedRobot {
 
     private final RobotContainer m_robotContainer;
 
-    private final boolean kUseLimelight = false;
+    private final boolean kUseLimelight = true;
 
     public Robot() {
         m_robotContainer = new RobotContainer();
@@ -111,18 +111,18 @@ public class Robot extends TimedRobot {
     }
 
     public void simulationInit() {
-        RobotContainer.m_armBase.simulationInit();
-        RobotContainer.m_armExtension.simulationInit();
-        RobotContainer.m_wrist.simulationInit();
-        RobotContainer.m_intake.simulationInit();
+        // RobotContainer.m_armBase.simulationInit();
+        // RobotContainer.m_armExtension.simulationInit();
+        // RobotContainer.m_wrist.simulationInit();
+        // RobotContainer.m_intake.simulationInit();
     }
 
     @Override
     public void simulationPeriodic() {
-        RobotContainer.m_armBase.simulationPeriodic();
-        RobotContainer.m_armExtension.simulationPeriodic();
-        RobotContainer.m_wrist.simulationPeriodic();
-        RobotContainer.m_intake.simulationPeriodic();
+        // RobotContainer.m_armBase.simulationPeriodic();
+        // RobotContainer.m_armExtension.simulationPeriodic();
+        // RobotContainer.m_wrist.simulationPeriodic();
+        // RobotContainer.m_intake.simulationPeriodic();
         PhysicsSim.getInstance().run();
 
     }

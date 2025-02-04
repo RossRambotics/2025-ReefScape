@@ -8,12 +8,14 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.Follower;
 
 import frc.robot.RobotContainer;
@@ -37,7 +39,7 @@ public class ArmExtension extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(32, "rio");
     final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
-    private final double m_kRotationsToMeters = 0.038 * Math.PI; // 2" diameter pulley (circumference = pi * d)
+    private final double m_kRotationsToMeters = 0.038 * Math.PI * 1.2; // 2" diameter pulley (circumference = pi * d)
     private final double m_kGoalTolerance = 0.02; // 2 cm tolerance
     private final Timer m_timer = new Timer();
 
@@ -65,6 +67,8 @@ public class ArmExtension extends SubsystemBase {
         /* Configure gear ratio */
         FeedbackConfigs fdb = cfg.Feedback;
         fdb.SensorToMechanismRatio = 5.0; // TODO: Calibrate motor rotations to sensor degrees
+
+        cfg.MotorOutput = cfg.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
@@ -105,7 +109,9 @@ public class ArmExtension extends SubsystemBase {
 
         }
 
-        this.initSysID(); // used for system identification
+        // this.initSysID(); // used for system identification
+        Shuffleboard.getTab("ArmExt").add(this.getZeroArmExtCmd());
+
     }
 
     private void setGoal(Distance distance) {
@@ -154,6 +160,14 @@ public class ArmExtension extends SubsystemBase {
         return this.runOnce(() -> setGoal(Meters.of(0))).withName("ArmExtension.DetractCommand");
     }
 
+    public Command getZeroArmExtCmd() {
+        Command c = this.runOnce(() -> m_LeftMotor.setPosition(0));
+        c.setName("ArmExt.Zero");
+        // c.ignoringDisable(true);
+
+        return c;
+    }
+
     @Override
     public void periodic() {
         // Update PID?
@@ -168,6 +182,7 @@ public class ArmExtension extends SubsystemBase {
             slot0.kD = m_GE_PID_kD.getDouble(slot0.kD);
             m_LeftMotor.getConfigurator().apply(slot0);
             m_GE_bUpdatePID.setBoolean(false);
+            this.setGoal(Meters.of(m_GE_Goal.getDouble(0.0)));
         }
         // This method will be called once per scheduler run
         m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
@@ -217,8 +232,8 @@ public class ArmExtension extends SubsystemBase {
     final private CommandXboxController m_joystick = new CommandXboxController(4);
 
     private void initSysID() {
-        m_joystick.button(1).onTrue(Commands.runOnce(SignalLogger::start));
-        m_joystick.button(2).onTrue(Commands.runOnce(SignalLogger::stop));
+        // m_joystick.button(1).onTrue(Commands.runOnce(SignalLogger::start));
+        // m_joystick.button(2).onTrue(Commands.runOnce(SignalLogger::stop));
 
         /*
          * Joystick Y = quasistatic forward
@@ -226,9 +241,9 @@ public class ArmExtension extends SubsystemBase {
          * Joystick B = dynamic forward
          * Joystick X = dyanmic reverse
          */
-        m_joystick.button(3).whileTrue(this.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        m_joystick.button(4).whileTrue(this.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        m_joystick.button(5).whileTrue(this.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        m_joystick.button(6).whileTrue(this.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // m_joystick.button(3).whileTrue(this.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // m_joystick.button(4).whileTrue(this.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // m_joystick.button(5).whileTrue(this.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // m_joystick.button(6).whileTrue(this.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 }
