@@ -75,9 +75,9 @@ public class ArmExtension extends SubsystemBase {
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(10))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(50))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(40))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(100))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(300));
 
         Slot0Configs slot0 = cfg.Slot0;
         slot0.GravityType = GravityTypeValue.Elevator_Static;
