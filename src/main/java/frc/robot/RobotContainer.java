@@ -34,7 +34,7 @@ public class RobotContainer {
     // Subsystems
     final static public ArmBase m_armBase = null;// new ArmBase();
     final static public ArmExtension m_armExtension = new ArmExtension();
-    final static public Wrist m_wrist = null;// new Wrist();
+    final static public Wrist m_wrist = new Wrist();
     final static public Mechanisms m_mechanisms = new Mechanisms();
     final static public Intake m_intake = null;// = new Intake();
     // final static public RangeFinder m_rangeFinder = new RangeFinder();

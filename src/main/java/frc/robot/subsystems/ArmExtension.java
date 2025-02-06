@@ -37,7 +37,7 @@ import static edu.wpi.first.units.Units.*;
 
 public class ArmExtension extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(32, "rio");
-    final TalonFX m_RightMotor = new TalonFX(33, "rio");
+    // final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
     private final double m_kRotationsToMeters = 0.038 * Math.PI * 1.2; // 2" diameter pulley (circumference = pi * d)
     private final double m_kGoalTolerance = 0.02; // 2 cm tolerance
@@ -62,12 +62,12 @@ public class ArmExtension extends SubsystemBase {
 
         // Turn on brake Mode
         m_LeftMotor.setNeutralMode(NeutralModeValue.Brake);
-        m_RightMotor.setNeutralMode(NeutralModeValue.Brake);
+        // m_RightMotor.setNeutralMode(NeutralModeValue.Brake);
 
         TalonFXConfiguration cfg = new TalonFXConfiguration();
 
         // Configure the right motor to follow the left motor (but opposite direction)
-        m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), false));
+        // m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), false));
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = cfg.Feedback;

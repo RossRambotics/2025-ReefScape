@@ -13,6 +13,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.Follower;
 
 import frc.robot.RobotContainer;
@@ -38,6 +40,7 @@ public class Wrist extends SubsystemBase {
     private GenericEntry m_GE_PID_kA = null;
     private GenericEntry m_GE_PID_kP = null;
     private GenericEntry m_GE_PID_kI = null;
+    private GenericEntry m_GE_PID_kG = null;
     private GenericEntry m_GE_PID_kD = null;
     private GenericEntry m_GE_bUpdatePID = null;
     private GenericEntry m_GE_Position = null;
@@ -57,7 +60,9 @@ public class Wrist extends SubsystemBase {
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = cfg.Feedback;
-        fdb.SensorToMechanismRatio = 1.0; // TODO: Calibrate motor rotations to sensor degrees
+        fdb.SensorToMechanismRatio = 125.0; // TODO: Calibrate motor rotations to sensor degrees
+        cfg.MotorOutput = cfg.MotorOutput.withInverted(InvertedValue.Clockwise_Positive)
+                .withNeutralMode(NeutralModeValue.Brake);
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
@@ -66,19 +71,21 @@ public class Wrist extends SubsystemBase {
                 .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
 
         Slot0Configs slot0 = cfg.Slot0;
-        slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        slot0.GravityType = GravityTypeValue.Elevator_Static;
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
         slot0.kP = 14; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
-        slot0.kD = 10; // A velocity error of 1 rps results in 0.5 V output
+        slot0.kG = 1.0;
+        slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
 
         m_GE_PID_kS = Shuffleboard.getTab("Wrist").add("Wrist_kS", slot0.kS).getEntry();
         m_GE_PID_kV = Shuffleboard.getTab("Wrist").add("Wrist_kV", slot0.kV).getEntry();
         m_GE_PID_kA = Shuffleboard.getTab("Wrist").add("Wrist_kA", slot0.kA).getEntry();
         m_GE_PID_kP = Shuffleboard.getTab("Wrist").add("Wrist_kP", slot0.kP).getEntry();
         m_GE_PID_kI = Shuffleboard.getTab("Wrist").add("Wrist_kI", slot0.kI).getEntry();
+        m_GE_PID_kG = Shuffleboard.getTab("Wrist").add("Wrist_kG", slot0.kI).getEntry();
         m_GE_PID_kD = Shuffleboard.getTab("Wrist").add("Wrist_kD", slot0.kD).getEntry();
         m_GE_bUpdatePID = Shuffleboard.getTab("Wrist").add("Wrist_UpdatePID", false).getEntry();
         m_GE_Position = Shuffleboard.getTab("Wrist").add("Wrist_Position", 0).getEntry();
@@ -89,7 +96,7 @@ public class Wrist extends SubsystemBase {
         // setup software limits
         SoftwareLimitSwitchConfigs swLimits = new SoftwareLimitSwitchConfigs();
         swLimits.ForwardSoftLimitEnable = true;
-        swLimits.ForwardSoftLimitThreshold = Degrees.of(45).in(Rotations);
+        swLimits.ForwardSoftLimitThreshold = Degrees.of(220).in(Rotations);
         swLimits.ReverseSoftLimitEnable = true;
         swLimits.ReverseSoftLimitThreshold = Degrees.of(-135).in(Rotations);
         cfg.SoftwareLimitSwitch = swLimits;
@@ -105,6 +112,7 @@ public class Wrist extends SubsystemBase {
             // hi
 
         }
+        Shuffleboard.getTab("Wrist").add(this.getZeroWristAngleCmd());
     }
 
     private void setGoal(Angle angle) {
@@ -150,9 +158,11 @@ public class Wrist extends SubsystemBase {
             slot0.kA = m_GE_PID_kA.getDouble(slot0.kA);
             slot0.kP = m_GE_PID_kP.getDouble(slot0.kP);
             slot0.kI = m_GE_PID_kI.getDouble(slot0.kI);
+            slot0.kG = m_GE_PID_kG.getDouble(slot0.kG);
             slot0.kD = m_GE_PID_kD.getDouble(slot0.kD);
             m_LeftMotor.getConfigurator().apply(slot0);
             m_GE_bUpdatePID.setBoolean(false);
+            this.setGoal(Degrees.of(m_GE_Goal.getDouble(0.0)));
         }
         // This method will be called once per scheduler run
         m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
@@ -169,6 +179,14 @@ public class Wrist extends SubsystemBase {
         Shuffleboard.getTab("Wrist").add(this.getOpenCommand());
         Shuffleboard.getTab("Wrist").add(this.getCloseCommand());
 
+    }
+
+    public Command getZeroWristAngleCmd() {
+        Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
+        c.setName("Wrist.ZeroAngle");
+        // c.ignoringDisable(true);
+
+        return c;
     }
 
     public Command getOpenCommand() {
