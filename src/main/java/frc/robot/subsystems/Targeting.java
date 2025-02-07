@@ -28,19 +28,42 @@ public class Targeting extends SubsystemBase {
         int targetID = (int) m_TargetID.getDouble(-1);
         double goal = 0.0;
         switch (targetID) {
+            // red side (i think ;) )
             case 1:
-                m_TargetAngle.setDouble(0.0);
+                m_TargetAngle.setDouble(-125.5);
                 break;
             case 2:
+                m_TargetAngle.setDouble(125.5);
+                break;
             case 3:
+                m_TargetAngle.setDouble(90);
+                break;
             case 4:
+                m_TargetAngle.setDouble(90);
+                break;
             case 5:
+                m_TargetAngle.setDouble(-90);
+                break;
             case 6:
+                m_TargetAngle.setDouble(55.8);
+                break;
             case 7:
+                m_TargetAngle.setDouble(180.0);
+                break;
             case 8:
+                m_TargetAngle.setDouble(-119.5);
+                break;
             case 9:
+                m_TargetAngle.setDouble(-55.8);
+                break;
             case 10:
+                m_TargetAngle.setDouble(0.0);
+                break;
             case 11:
+                m_TargetAngle.setDouble(55.8);
+                break;
+
+            // blue side
             case 12:
                 m_TargetAngle.setDouble(54.0);
                 break;
