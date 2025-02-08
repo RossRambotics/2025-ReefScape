@@ -27,10 +27,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import frc.robot.Commands.ReefLineUp;
 import frc.robot.Commands.RunPathToTarget;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
 import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ButtonBox;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RangeFinder;
@@ -50,6 +52,7 @@ public class RobotContainer {
     final static public ArmController m_armController = null;// = new ArmController();
     final static public SpeedNanny m_speedNanny = new SpeedNanny();
     final static public Targeting m_tracking = new Targeting();
+    final static public ButtonBox m_buttonBox = new ButtonBox();
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
@@ -214,6 +217,7 @@ public class RobotContainer {
             joystick.a().whileTrue(c);
 
         joystick.b().whileTrue(new RunPathToTarget());
+        joystick.x().whileTrue(new ReefLineUp(drivetrain, targetDrive));
 
     }
 
