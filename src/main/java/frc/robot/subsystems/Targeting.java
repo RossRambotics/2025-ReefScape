@@ -26,6 +26,7 @@ public class Targeting extends SubsystemBase {
         m_TargetAngle = Shuffleboard.getTab("Targeting").add("TargetAngle", 0.0).getEntry();
         m_TargetIDFound = Shuffleboard.getTab("Targeting").add("TargetIDFound", false).getEntry();
         m_GE_bUpdateTarget = Shuffleboard.getTab("Targeting").add("UpdateTarget", false).getEntry();
+        this.setTargetAngle();
     }
 
     @Override

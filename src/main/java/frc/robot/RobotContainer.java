@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -128,6 +129,7 @@ public class RobotContainer {
                 ));
 
         // snaps the robot to target angle
+        targetDrive.HeadingController = new PhoenixPIDController(5.0, 0.0, 0.20);
         joystick.leftBumper().whileTrue(
                 drivetrain.applyRequest(() -> targetDrive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
@@ -161,7 +163,6 @@ public class RobotContainer {
                         .withVelocityX(0)
                         .withVelocityY(0.5)));
         joystick.pov(45)
-
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
@@ -196,11 +197,6 @@ public class RobotContainer {
         // reset the field-centric heading on back press
         joystick.back().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        joystick.leftBumper()
-                .whileTrue(drivetrain.applyRequest(() -> robotDrive.withVelocityX(0).withVelocityY(0.25)));
-        joystick.rightBumper()
-                .whileTrue(drivetrain.applyRequest(() -> robotDrive.withVelocityX(0).withVelocityY(-0.25)));
-
         drivetrain.registerTelemetry(logger::telemeterize);
 
         String pathName = "Tag.18.Left";
@@ -218,6 +214,11 @@ public class RobotContainer {
 
         joystick.b().whileTrue(new RunPathToTarget());
         joystick.x().whileTrue(new ReefLineUp(drivetrain, targetDrive));
+        // joystick.x().whileTrue(drivetrain.applyRequest(() -> drive
+        // .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
+        // .withVelocityX(1) // Drive forward with negative Y(forward)
+        // .withVelocityY(1) // Drive left with negative X (left)
+        // .withRotationalRate(0)));
 
     }
 

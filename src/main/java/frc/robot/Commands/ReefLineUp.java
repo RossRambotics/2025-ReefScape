@@ -7,6 +7,7 @@ package frc.robot.Commands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,26 +37,46 @@ public class ReefLineUp extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double kP = 1.0;
+        double kP = 0.5;
+        double kS = 0.15;
 
+        // calculate error
         double distX = m_targetPose.getTranslation().getX() - m_drivetrain.getState().Pose.getX();
         double distY = m_targetPose.getTranslation().getY() - m_drivetrain.getState().Pose.getY();
 
-        double velX = distX * kP;
-        double velY = distY * kP;
+        // apply deadband
+        distX = MathUtil.applyDeadband(distX, 0.001, 5.0);
+        distY = MathUtil.applyDeadband(distY, 0.001, 5.0);
 
-        m_drivetrain.applyRequest(() -> m_drive
+        // apply static friction
+        double sX = Math.copySign(kS, distX);
+        double sY = Math.copySign(kS, distY);
+
+        // apply proportional gain
+        double velX = (distX * kP) + sX;
+        double velY = (distY * kP) + sY;
+
+        // clamp output
+        velX = MathUtil.clamp(velX, -1.0, 1.0);
+
+        // drive!
+        m_drivetrain.setControl(m_drive
                 .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                 .withVelocityX(velX) // Drive forward with negative Y(forward)
                 .withVelocityY(velY) // Drive left with negative X (left)
                 .withTargetDirection(m_targetPose.getRotation()));
 
-        DataLogManager.log("Velocity X: " + velX + " Y: " + velY);
+        DataLogManager.log("Vel X: " + velX + " Y: " + velY + "Error X: " + distX + " Y:" + distY);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        m_drivetrain.setControl(m_drive
+                .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
+                .withVelocityX(0) // Drive forward with negative Y(forward)
+                .withVelocityY(0) // Drive left with negative X (left)
+                .withTargetDirection(m_targetPose.getRotation()));
     }
 
     // Returns true when the command should end.
