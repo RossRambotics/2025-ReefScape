@@ -212,7 +212,12 @@ public class RobotContainer {
         if (c != null)
             joystick.a().whileTrue(c);
 
-        Pose2d targetPose = new Pose2d(3.168, 4.187, Rotation2d.fromDegrees(0));
+        joystick.b().whileTrue(Commands.run(() -> this.getPathFindingCommand().schedule()));
+
+    }
+
+    public Command getPathFindingCommand() {
+        Pose2d targetPose = m_tracking.getTargetPose();
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
                 3.0, 4.0,
@@ -223,9 +228,7 @@ public class RobotContainer {
                 targetPose,
                 constraints // Goal end velocity in meters/sec
         );
-
-        joystick.b().whileTrue(pathfindingCommand);
-
+        return pathfindingCommand;
     }
 
     public Command getAutonomousCommand() {

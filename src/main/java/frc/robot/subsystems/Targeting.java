@@ -6,29 +6,51 @@ package frc.robot.subsystems;
 
 import org.opencv.objdetect.CascadeClassifier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Targeting extends SubsystemBase {
     private GenericEntry m_TargetID = null;
     private GenericEntry m_TargetAngle = null;
     private GenericEntry m_TargetIDFound = null;
+    private GenericEntry m_GE_bUpdateTarget = null;
+
+    private Pose2d m_TargetPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
     /** Creates a new Targeting. */
     public Targeting() {
+        m_TargetID = Shuffleboard.getTab("Targeting").add("TargetID", 0).getEntry();
+        m_TargetAngle = Shuffleboard.getTab("Targeting").add("TargetAngle", 0.0).getEntry();
+        m_TargetIDFound = Shuffleboard.getTab("Targeting").add("TargetIDFound", false).getEntry();
+        m_GE_bUpdateTarget = Shuffleboard.getTab("Targeting").add("UpdateTarget", false).getEntry();
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        if (m_GE_bUpdateTarget.getBoolean(false)) {
+            setTargetAngle();
+            m_GE_bUpdateTarget.setBoolean(false);
+        }
     }
 
     public Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(m_TargetAngle.getDouble(0.0));
     }
 
-    public void setTargetAngle() {
+    public Pose2d getTargetPose() {
+        return m_TargetPose;
+    }
+
+    public void setTargetID(int targetID) {
+        m_TargetID.setDouble(targetID);
+        this.setTargetAngle();
+    }
+
+    private void setTargetAngle() {
 
         int targetID = (int) m_TargetID.getDouble(-1);
         double goal = 0.0;
@@ -89,6 +111,7 @@ public class Targeting extends SubsystemBase {
                 break;
             case 18:
                 m_TargetAngle.setDouble(0.0);
+                m_TargetPose = new Pose2d(3.168, 4.187, Rotation2d.fromDegrees(0));
                 break;
             case 19:
                 m_TargetAngle.setDouble(-55.8);
