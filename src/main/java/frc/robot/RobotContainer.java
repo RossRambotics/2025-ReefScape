@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import frc.robot.Commands.RunPathToTarget;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
 import frc.robot.subsystems.ArmExtension;
@@ -212,24 +213,25 @@ public class RobotContainer {
         if (c != null)
             joystick.a().whileTrue(c);
 
-        joystick.b().whileTrue(Commands.run(() -> this.getPathFindingCommand().schedule()));
+        joystick.b().whileTrue(new RunPathToTarget());
 
     }
 
-    public Command getPathFindingCommand() {
-        Pose2d targetPose = m_tracking.getTargetPose();
-        // Create the constraints to use while pathfinding
-        PathConstraints constraints = new PathConstraints(
-                3.0, 4.0,
-                Units.degreesToRadians(540), Units.degreesToRadians(720));
+    // public Command getPathFindingCommand() {
+    // Pose2d targetPose = m_tracking.getTargetPose();
+    // // Create the constraints to use while pathfinding
+    // PathConstraints constraints = new PathConstraints(
+    // 3.0, 4.0,
+    // Units.degreesToRadians(540), Units.degreesToRadians(720));
 
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        Command pathfindingCommand = AutoBuilder.pathfindToPose(
-                targetPose,
-                constraints // Goal end velocity in meters/sec
-        );
-        return pathfindingCommand;
-    }
+    // // Since AutoBuilder is configured, we can use it to build pathfinding
+    // commands
+    // Command pathfindingCommand = AutoBuilder.pathfindToPose(
+    // targetPose,
+    // constraints // Goal end velocity in meters/sec
+    // );
+    // return pathfindingCommand;
+    // }
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
