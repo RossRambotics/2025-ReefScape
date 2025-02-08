@@ -93,9 +93,11 @@ public class Targeting extends SubsystemBase {
             // blue side
             case 12:
                 m_TargetAngle.setDouble(54.0);
+                m_TargetPose = new Pose2d(1.300, 1.225, Rotation2d.fromDegrees(54.0));
                 break;
             case 13:
                 m_TargetAngle.setDouble(-54.5);
+                m_TargetPose = new Pose2d(1.300, 6.916, Rotation2d.fromDegrees(54.0));
                 break;
             case 14:
                 m_TargetAngle.setDouble(180.0);
