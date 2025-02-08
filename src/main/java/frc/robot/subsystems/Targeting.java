@@ -107,23 +107,28 @@ public class Targeting extends SubsystemBase {
                 m_TargetAngle.setDouble(270.0);
                 break;
             case 17:
-                m_TargetAngle.setDouble(55.8);
+                m_TargetAngle.setDouble(60.0);
+                m_TargetPose = new Pose2d(3.733, 2.707, Rotation2d.fromDegrees(60.0));
                 break;
             case 18:
                 m_TargetAngle.setDouble(0.0);
-                m_TargetPose = new Pose2d(3.168, 4.187, Rotation2d.fromDegrees(0));
+                m_TargetPose = new Pose2d(2.960, 4.033, Rotation2d.fromDegrees(0));
                 break;
             case 19:
-                m_TargetAngle.setDouble(-55.8);
+                m_TargetAngle.setDouble(-60);
+                m_TargetPose = new Pose2d(3.733, 5.357, Rotation2d.fromDegrees(-60.0));
                 break;
             case 20:
-                m_TargetAngle.setDouble(-119.5);
+                m_TargetAngle.setDouble(-120);
+                m_TargetPose = new Pose2d(5.385, 5.357, Rotation2d.fromDegrees(-120.0));
                 break;
             case 21:
                 m_TargetAngle.setDouble(180.0);
+                m_TargetPose = new Pose2d(6.050, 4.033, Rotation2d.fromDegrees(180));
                 break;
             case 22:
-                m_TargetAngle.setDouble(118.5);
+                m_TargetAngle.setDouble(120);
+                m_TargetPose = new Pose2d(5.213, 2.707, Rotation2d.fromDegrees(120.0));
                 break;
 
         }
