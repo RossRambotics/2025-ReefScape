@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -110,6 +112,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testExit() {
+    }
+
+    @Override
+    public void robotInit() {
+        // ... all other robot initialization
+
+        FollowPathCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     public void simulationInit() {

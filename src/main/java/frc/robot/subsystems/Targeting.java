@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import org.opencv.objdetect.CascadeClassifier;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -21,6 +22,10 @@ public class Targeting extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+    }
+
+    public Rotation2d getTargetAngle() {
+        return Rotation2d.fromDegrees(m_TargetAngle.getDouble(0.0));
     }
 
     public void setTargetAngle() {
