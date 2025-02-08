@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import frc.robot.Commands.ReefLineUp;
 import frc.robot.Commands.RunPathToTarget;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
@@ -216,6 +217,7 @@ public class RobotContainer {
             joystick.a().whileTrue(c);
 
         joystick.b().whileTrue(new RunPathToTarget());
+        joystick.x().whileTrue(new ReefLineUp(drivetrain, targetDrive));
 
     }
 
