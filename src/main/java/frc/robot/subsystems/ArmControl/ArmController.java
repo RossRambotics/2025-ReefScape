@@ -4,11 +4,12 @@
 
 package frc.robot.subsystems.ArmControl;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-
-import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,9 +26,10 @@ public class ArmController extends SubsystemBase {
     private GenericEntry m_GE_nodeName;
     private GenericEntry m_GE_nextNodeName;
 
-    private GraphCommandNode Start, Node_Alignment, Back_L4, Back_L3, Back_L2, Back_L1, Back_R4, Back_R3,
-            Back_R2,
-            Back_R1, Front_TL, Front_TR, FrontHP_PickUP_Coral, Front_PickUP_Coral;
+    private GraphCommandNode BackScore_L4, BackScore_L3, BackScore_L2, BackScore_L1, Back_L4, Back_L3, Back_L2, Back_L1,
+            BackAligment, Carry, FrontAligment,
+            S1, Start, FrontScore_L2, FrontScore_L1, Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae,
+            ProcessorAlgae, NetAlgae;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -44,14 +46,14 @@ public class ArmController extends SubsystemBase {
                         Degrees.of(0)),
                 null,
                 null);
-        Node_Alignment = m_armGraph.new GraphCommandNode("Node_Alignment",
+        BackAligment = m_armGraph.new GraphCommandNode("BackAlignment",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(0),
                         Degrees.of(-90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0)))
                         .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(0.5))),
                 null,
-                new PrintCommand("Node_Alignment is done"));
+                new PrintCommand("BackAlignment is done"));
         Back_L4 = m_armGraph.new GraphCommandNode("Back_L4",
                 ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(3),
@@ -82,78 +84,153 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("Back_L1 is done"));
 
-        Back_R4 = m_armGraph.new GraphCommandNode("Back_R4",
-                ArmController.getArmCommand(Degrees.of(90),
-                        Meters.of(3),
-                        Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
-                null,
-                new PrintCommand("Back_R4 is done"));
-        Back_R3 = m_armGraph.new GraphCommandNode("Back_R3",
-                ArmController.getArmCommand(Degrees.of(90),
-                        Meters.of(2.25),
-                        Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
-                null,
-                new PrintCommand("Back_R3 is done"));
-        Back_R2 = m_armGraph.new GraphCommandNode("Back_R2",
-                ArmController.getArmCommand(Degrees.of(90),
-                        Meters.of(1.5),
-                        Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
-                null,
-                new PrintCommand("Back_R2 is done"));
-        Back_R1 = m_armGraph.new GraphCommandNode("Back_R1",
-                ArmController.getArmCommand(Degrees.of(90),
-                        Meters.of(.75),
-                        Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
-                null,
-                new PrintCommand("Back_R1 is done"));
-
-        Front_TL = m_armGraph.new GraphCommandNode("Front_TL",
+        Front_L2 = m_armGraph.new GraphCommandNode("Front_L2",
                 ArmController.getArmCommand(Degrees.of(25),
                         Meters.of(1.5),
                         Degrees.of(-90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
-                new PrintCommand("Front_TL is done"));
+                new PrintCommand("Front_L2 is done"));
 
-        Front_TR = m_armGraph.new GraphCommandNode("Front_TR",
+        Front_L1 = m_armGraph.new GraphCommandNode("Front_L1",
                 ArmController.getArmCommand(Degrees.of(25),
                         Meters.of(1.5),
                         Degrees.of(-90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
-                new PrintCommand("Front_TR is done"));
+                new PrintCommand("Front_L1 is done"));
 
-        FrontHP_PickUP_Coral = m_armGraph.new GraphCommandNode("FrontHP_PickUP_Coral",
+        HumanPlayerCoral = m_armGraph.new GraphCommandNode("HumanPlayerCoral",
                 ArmController.getArmCommand(Degrees.of(25),
                         Meters.of(2),
                         Degrees.of(3))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
-                new PrintCommand("FrontHP_PickUP_Coral"));
+                new PrintCommand("HumanPlayerCoral"));
 
-        Front_PickUP_Coral = m_armGraph.new GraphCommandNode("Front_PickUP_Coral",
+        GroundCoral = m_armGraph.new GraphCommandNode("GroundCoral",
                 ArmController.getArmCommand(Degrees.of(25),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
-                new PrintCommand("Front_PickUP_Coral"));
+                new PrintCommand("GroundCoral"));
 
-        Start.AddNode(Node_Alignment, 1);
-        Node_Alignment.AddNode(Back_L4, 1);
-        Node_Alignment.AddNode(Back_L3, 1);
-        Node_Alignment.AddNode(Back_L2, 1);
-        Node_Alignment.AddNode(Back_L1, 1);
-        Node_Alignment.AddNode(Back_R4, 1);
-        Node_Alignment.AddNode(Back_R3, 1);
-        Node_Alignment.AddNode(Back_R2, 1);
-        Node_Alignment.AddNode(Back_R1, 1);
-        Node_Alignment.AddNode(Front_TL, 1);
-        Node_Alignment.AddNode(Front_TR, 1);
+        BackScore_L4 = m_armGraph.new GraphCommandNode("BackScore_L4",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("BackScore_L4"));
+
+        BackScore_L3 = m_armGraph.new GraphCommandNode("BackScore_L3",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("BackScore_L3"));
+
+        BackScore_L2 = m_armGraph.new GraphCommandNode("BackScore_L2",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("BackScore_L2"));
+
+        BackScore_L1 = m_armGraph.new GraphCommandNode("BackScore_L1",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("BackScore_L1"));
+
+        Carry = m_armGraph.new GraphCommandNode("Carry",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("Carry"));
+        FrontAligment = m_armGraph.new GraphCommandNode("FrontAligment",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("FrontAligment"));
+
+        S1 = m_armGraph.new GraphCommandNode("S1",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("S1"));
+        FrontScore_L2 = m_armGraph.new GraphCommandNode("FrontScore_L2",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("FrontScore_L2"));
+        FrontScore_L1 = m_armGraph.new GraphCommandNode("FrontScore_L1",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("FrontScore_L1"));
+        GroundAlgae = m_armGraph.new GraphCommandNode("GroundAlgae",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("GroundAlgae"));
+        ProcessorAlgae = m_armGraph.new GraphCommandNode("ProcessorAlgae",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("ProcessorAlgae"));
+        NetAlgae = m_armGraph.new GraphCommandNode("NetAlgae",
+                ArmController.getArmCommand(Degrees.of(25),
+                        Meters.of(2),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("NetAlgae"));
+
+        S1.AddNode(Start, 1, true);
+        Start.AddNode(BackAligment, 1);
+        BackAligment.AddNode(Back_L4, 1);
+        BackAligment.AddNode(Back_L3, 1);
+        BackAligment.AddNode(Back_L2, 1);
+        BackAligment.AddNode(Back_L1, 1);
+        BackAligment.AddNode(Front_L2, 1);
+        BackAligment.AddNode(Front_L1, 1);
+        Back_L4.AddNode(BackScore_L4, 1);
+        Back_L3.AddNode(BackScore_L3, 1);
+        Back_L2.AddNode(BackScore_L2, 1);
+        Back_L1.AddNode(BackScore_L1, 1);
+        Front_L2.AddNode(FrontScore_L2, 1);
+        Front_L1.AddNode(FrontScore_L1, 1);
+        BackAligment.AddNode(Carry, 1);
+        BackAligment.AddNode(FrontAligment, 1);
+        Carry.AddNode(FrontAligment, 1);
+        Start.AddNode(FrontAligment, 1);
+        FrontAligment.AddNode(Front_L2, 1);
+        FrontAligment.AddNode(Front_L1, 1);
+        FrontAligment.AddNode(HumanPlayerCoral, 1);
+        FrontAligment.AddNode(GroundAlgae, 1);
+        FrontAligment.AddNode(GroundCoral, 1);
+        FrontAligment.AddNode(ProcessorAlgae, 1);
+        FrontAligment.AddNode(NetAlgae, 1);
 
         m_armGraph.setGraphRootNode(Start);
         m_armGraph.setCurrentNode(Start);
@@ -163,19 +240,27 @@ public class ArmController extends SubsystemBase {
         this.setDefaultCommand(m_armGraph);
 
         Shuffleboard.getTab("ArmController").add(this.getTransition_Start());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Node_Alignment());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_BackAligment());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L4());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L2());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L1());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Back_R4());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Back_R3());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Back_R2());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Back_R1());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_TL());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_TR());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_FrontHP_PickUP_Coral());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_PickUP_Coral());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L2());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L1());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_HumanPlayerCoral());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_GroundCoral());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_BackScore_L4());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_BackScore_L3());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_BackScore_L2());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_BackScore_L1());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Carry());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_FrontAligment());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_S1());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L2());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L1());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_GroundAlgae());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_ProcessorAlgae());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_NetAlgae());
 
     }
 
@@ -211,9 +296,9 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
-    public Command getTransition_Node_Alignment() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Node_Alignment));
-        c.setName("Note_Alignment");
+    public Command getTransition_BackAligment() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackAligment));
+        c.setName("BackAligment");
         return c;
     }
 
@@ -241,51 +326,99 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
-    public Command getTransition_Back_R4() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_R4));
-        c.setName("Back_R4");
+    public Command getTransition_Front_L2() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_L2));
+        c.setName("Front_L2");
         return c;
     }
 
-    public Command getTransition_Back_R3() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_R3));
-        c.setName("Back_R3");
+    public Command getTransition_Front_L1() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_L1));
+        c.setName("Front_L1");
         return c;
     }
 
-    public Command getTransition_Back_R2() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_R2));
-        c.setName("Back_R2");
+    public Command getTransition_HumanPlayerCoral() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(HumanPlayerCoral));
+        c.setName("HumanPlayerCoral");
         return c;
     }
 
-    public Command getTransition_Back_R1() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_R1));
-        c.setName("Back_R1");
+    public Command getTransition_GroundCoral() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(GroundCoral));
+        c.setName("GroundCoral");
         return c;
     }
 
-    public Command getTransition_Front_TL() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_TL));
-        c.setName("Front_TL");
+    public Command getTransition_BackScore_L4() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackScore_L4));
+        c.setName("BackScore_L4");
         return c;
     }
 
-    public Command getTransition_Front_TR() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_TR));
-        c.setName("Front_TR");
+    public Command getTransition_BackScore_L3() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackScore_L3));
+        c.setName("BackScore_L3");
         return c;
     }
 
-    public Command getTransition_FrontHP_PickUP_Coral() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontHP_PickUP_Coral));
-        c.setName("FrontHP_PickUP_Coral");
+    public Command getTransition_BackScore_L2() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackScore_L2));
+        c.setName("BackScore_L2");
         return c;
     }
 
-    public Command getTransition_Front_PickUP_Coral() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_PickUP_Coral));
-        c.setName("Front_PickUP_Coral");
+    public Command getTransition_BackScore_L1() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackScore_L1));
+        c.setName("BackScore_L1");
+        return c;
+    }
+
+    public Command getTransition_Carry() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Carry));
+        c.setName("Carry");
+        return c;
+    }
+
+    public Command getTransition_FrontAligment() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontAligment));
+        c.setName("FrontAligment");
+        return c;
+    }
+
+    public Command getTransition_S1() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(S1));
+        c.setName("S1");
+        return c;
+    }
+
+    public Command getTransition_FrontScore_L2() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L2));
+        c.setName("FrontScore_L2");
+        return c;
+    }
+
+    public Command getTransition_FrontScore_L1() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L1));
+        c.setName("FrontScore_L1");
+        return c;
+    }
+
+    public Command getTransition_GroundAlgae() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(GroundAlgae));
+        c.setName("GroundAlgae");
+        return c;
+    }
+
+    public Command getTransition_ProcessorAlgae() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(ProcessorAlgae));
+        c.setName("ProcessorAlgae");
+        return c;
+    }
+
+    public Command getTransition_NetAlgae() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(NetAlgae));
+        c.setName("NetAlgae");
         return c;
     }
 
