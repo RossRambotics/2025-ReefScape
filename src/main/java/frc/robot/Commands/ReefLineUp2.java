@@ -23,8 +23,8 @@ public class ReefLineUp2 extends Command {
     private SwerveRequest.FieldCentricFacingAngle m_drive;
     private Pose2d m_targetPose;
     private final double kP = 1.0;
-    private final double kI = 0.1;
-    private final double kD = 0.0;
+    private final double kI = 0.0;
+    private final double kD = 0.1;
     private double kS = 0.15;
     private final double kTolerance = 0.02;
     private final PIDController m_xPID = new PIDController(kP, kI, kD);
@@ -36,6 +36,7 @@ public class ReefLineUp2 extends Command {
     private GenericEntry m_xError = null;
     private GenericEntry m_yError = null;
     private GenericEntry m_GE_bUpdatePID = null;
+    private GenericEntry m_GE_isAtGoal = null;
 
     /** Creates a new ReefLineUp. */
     public ReefLineUp2(CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentricFacingAngle drive) {
@@ -52,6 +53,7 @@ public class ReefLineUp2 extends Command {
         m_GE_bUpdatePID = Shuffleboard.getTab("ReefLineUp2").add("ReefLineUp_bUpdatePID", false).getEntry();
         m_xError = Shuffleboard.getTab("ReefLineUp2").add("ReefLineUp_xError", 0.0).getEntry();
         m_yError = Shuffleboard.getTab("ReefLineUp2").add("ReefLineUp_yError", 0.0).getEntry();
+        m_GE_isAtGoal = Shuffleboard.getTab("ReefLineUp2").add("ReefLineUp_isAtGoal", false).getEntry();
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(drivetrain);
@@ -85,9 +87,16 @@ public class ReefLineUp2 extends Command {
         m_xError.setDouble(distX);
         m_yError.setDouble(distY);
 
+        if (Math.abs(distX) < kTolerance && Math.abs(distY) < kTolerance) {
+            m_GE_isAtGoal.setBoolean(true);
+            return;
+        } else {
+            m_GE_isAtGoal.setBoolean(false);
+        }
+
         // prepare static friction
-        double sX = Math.copySign(kS, distX);
-        double sY = Math.copySign(kS, distY);
+        double sX = -Math.copySign(kS, distX);
+        double sY = -Math.copySign(kS, distY);
 
         // apply PID control
         double velX = m_xPID.calculate(distX) + sX;
@@ -104,7 +113,8 @@ public class ReefLineUp2 extends Command {
                 .withVelocityY(-velY) // Drive left with negative X (left)
                 .withTargetDirection(m_targetPose.getRotation()));
 
-        DataLogManager.log("Vel X: " + velX + " Y: " + velY + " Error X: " + distX + " Y:" + distY);
+        // DataLogManager.log("Vel X: " + velX + " Y: " + velY + " Error X: " + distX +
+        // " Y:" + distY);
     }
 
     // Called once the command ends or is interrupted.
