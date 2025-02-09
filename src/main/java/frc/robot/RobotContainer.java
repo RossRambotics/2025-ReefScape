@@ -40,21 +40,33 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RangeFinder;
 import frc.robot.subsystems.SpeedNanny;
 import frc.robot.subsystems.Targeting;
+import frc.robot.subsystems.VisionForOdometry;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.ArmControl.ArmController;
 
 public class RobotContainer {
     // Subsystems
-    final static public ArmBase m_armBase = null;// new ArmBase();
-    final static public ArmExtension m_armExtension = null;// new ArmExtension();
-    final static public Wrist m_wrist = null;// new Wrist();
-    final static public Mechanisms m_mechanisms = new Mechanisms();
-    final static public Intake m_intake = null;// new Intake();
+    final static public ArmBase m_armBase = new ArmBase();
+    final static public ArmExtension m_armExtension = new ArmExtension();
+    final static public Wrist m_wrist = new Wrist();
+    final static public Intake m_intake = new Intake();
+    final static public ArmController m_armController = new ArmController();
+    final static public VisionForOdometry m_visionForOdometry = new VisionForOdometry();
+
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
-    final static public ArmController m_armController = null;// new ArmController();
+
+    // final static public ArmBase m_armBase = null;// new ArmBase();
+    // final static public ArmExtension m_armExtension = null;// new ArmExtension();
+    // final static public Wrist m_wrist = null;// new Wrist();
+    // final static public Intake m_intake = null;// new Intake();
+    // final static public ArmController m_armController = null;// new
+    // ArmController();
+    // final static public RangeFinder m_rangeFinder = new RangeFinder();
+
     final static public SpeedNanny m_speedNanny = new SpeedNanny();
     final static public Targeting m_tracking = new Targeting();
     final static public ButtonBox m_buttonBox = new ButtonBox();
+    final static public Mechanisms m_mechanisms = new Mechanisms();
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
@@ -77,12 +89,13 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 

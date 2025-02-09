@@ -42,19 +42,22 @@ public class Robot extends TimedRobot {
          * of how to use vision should be tuned per-robot and to the team's
          * specification.
          */
-        if (kUseLimelight) {
-            var driveState = m_robotContainer.drivetrain.getState();
-            double headingDeg = driveState.Pose.getRotation().getDegrees();
-            double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
+        // if (kUseLimelight) {
+        // var driveState = m_robotContainer.drivetrain.getState();
+        // double headingDeg = driveState.Pose.getRotation().getDegrees();
+        // double omegaRps =
+        // Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
-            LimelightHelpers.SetRobotOrientation("limelight-back", headingDeg, 0, 0, 0, 0, 0);
-            var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
-            if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 2.0) {
-                // DataLogManager.log("Updating odometry from vision.");
-                m_robotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose,
-                        Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
-            }
-        }
+        // LimelightHelpers.SetRobotOrientation("limelight-back", headingDeg, 0, 0, 0,
+        // 0, 0);
+        // var llMeasurement =
+        // LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+        // if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 2.0) {
+        // // DataLogManager.log("Updating odometry from vision.");
+        // m_robotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose,
+        // Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
+        // }
+        // }
     }
 
     @Override
