@@ -86,7 +86,7 @@ public class ArmController extends SubsystemBase {
 
         Front_L2 = m_armGraph.new GraphCommandNode("Front_L2",
                 ArmController.getArmCommand(Degrees.of(25),
-                        Meters.of(1.5),
+                        Meters.of(2),
                         Degrees.of(-90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
@@ -94,14 +94,14 @@ public class ArmController extends SubsystemBase {
 
         Front_L1 = m_armGraph.new GraphCommandNode("Front_L1",
                 ArmController.getArmCommand(Degrees.of(25),
-                        Meters.of(1.5),
+                        Meters.of(2),
                         Degrees.of(-90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("Front_L1 is done"));
 
         HumanPlayerCoral = m_armGraph.new GraphCommandNode("HumanPlayerCoral",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(2),
                         Degrees.of(3))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -109,7 +109,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("HumanPlayerCoral"));
 
         GroundCoral = m_armGraph.new GraphCommandNode("GroundCoral",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -117,7 +117,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("GroundCoral"));
 
         BackScore_L4 = m_armGraph.new GraphCommandNode("BackScore_L4",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -125,7 +125,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackScore_L4"));
 
         BackScore_L3 = m_armGraph.new GraphCommandNode("BackScore_L3",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -133,7 +133,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackScore_L3"));
 
         BackScore_L2 = m_armGraph.new GraphCommandNode("BackScore_L2",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -141,7 +141,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackScore_L2"));
 
         BackScore_L1 = m_armGraph.new GraphCommandNode("BackScore_L1",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -149,57 +149,57 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackScore_L1"));
 
         Carry = m_armGraph.new GraphCommandNode("Carry",
-                ArmController.getArmCommand(Degrees.of(25),
-                        Meters.of(2),
-                        Degrees.of(20))
+                ArmController.getArmCommand(Degrees.of(90),
+                        Meters.of(0),
+                        Degrees.of(-90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("Carry"));
         FrontAligment = m_armGraph.new GraphCommandNode("FrontAligment",
-                ArmController.getArmCommand(Degrees.of(25),
-                        Meters.of(2),
-                        Degrees.of(20))
+                ArmController.getArmCommand(Degrees.of(90),
+                        Meters.of(0),
+                        Degrees.of(90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("FrontAligment"));
 
         S1 = m_armGraph.new GraphCommandNode("S1",
-                ArmController.getArmCommand(Degrees.of(25),
-                        Meters.of(2),
-                        Degrees.of(20))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                ArmController.getArmCommand(Degrees.of(0),
+                        Meters.of(0),
+                        Degrees.of(0)),
                 null,
-                new PrintCommand("S1"));
+                null);
+        new PrintCommand("S1");
         FrontScore_L2 = m_armGraph.new GraphCommandNode("FrontScore_L2",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("FrontScore_L2"));
         FrontScore_L1 = m_armGraph.new GraphCommandNode("FrontScore_L1",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(90),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("FrontScore_L1"));
         GroundAlgae = m_armGraph.new GraphCommandNode("GroundAlgae",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("GroundAlgae"));
         ProcessorAlgae = m_armGraph.new GraphCommandNode("ProcessorAlgae",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("ProcessorAlgae"));
         NetAlgae = m_armGraph.new GraphCommandNode("NetAlgae",
-                ArmController.getArmCommand(Degrees.of(25),
+                ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(2),
                         Degrees.of(20))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
