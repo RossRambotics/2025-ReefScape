@@ -45,6 +45,8 @@ public class ReefLineUp2 extends Command {
 
         m_xPID.setTolerance(kTolerance);
         m_yPID.setTolerance(kTolerance);
+        m_xPID.reset();
+        m_yPID.reset();
 
         m_GE_PID_kS = Shuffleboard.getTab("ReefLineUp2").add("ReefLineUp_kS", kS).getEntry();
         m_GE_PID_kP = Shuffleboard.getTab("ReefLineUp2").add("ReefLineUp_kP", kP).getEntry();
