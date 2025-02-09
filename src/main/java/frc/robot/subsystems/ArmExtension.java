@@ -232,7 +232,8 @@ public class ArmExtension extends SubsystemBase {
         return m_sysIdRoutine.dynamic(direction);
     }
 
-    final private CommandXboxController m_joystick = new CommandXboxController(4);
+    // final private CommandXboxController m_joystick = new
+    // CommandXboxController(4);
 
     private void initSysID() {
         // m_joystick.button(1).onTrue(Commands.runOnce(SignalLogger::start));
