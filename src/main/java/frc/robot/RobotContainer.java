@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Commands.ReefLineUp;
+import frc.robot.Commands.ReefLineUp2;
 import frc.robot.Commands.RunPathToTarget;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
@@ -137,13 +138,12 @@ public class RobotContainer {
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
                         .withTargetDirection(m_tracking.getTargetAngle())));
 
-        // joystick.a().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(90.0)));
-        // joystick.b().whileTrue(RobotContainer.m_armBase.getSetGoalCommand(Degrees.of(0.0)));
-        // joystick.x().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(2.0)));
-        // joystick.y().whileTrue(RobotContainer.m_armExtension.getSetGoalCommand(Meters.of(0.0)));
-        // joystick.button(5).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(Degrees.of(40.0)));
-        // joystick.button(6).whileTrue(RobotContainer.m_wrist.getSetGoalCommand(Degrees.of(0.0)));
-
+        joystick.pov(0)
+                .whileTrue(drivetrain.applyRequest(() -> drive
+                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
+                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
+                        .withVelocityX(0.5)
+                        .withVelocityY(0)));
         joystick.pov(180)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
@@ -213,30 +213,9 @@ public class RobotContainer {
             joystick.a().whileTrue(c);
 
         joystick.b().whileTrue(new RunPathToTarget());
-        joystick.x().whileTrue(new ReefLineUp(drivetrain, targetDrive));
-        // joystick.x().whileTrue(drivetrain.applyRequest(() -> drive
-        // .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
-        // .withVelocityX(1) // Drive forward with negative Y(forward)
-        // .withVelocityY(1) // Drive left with negative X (left)
-        // .withRotationalRate(0)));
+        joystick.x().whileTrue(new ReefLineUp2(drivetrain, targetDrive));
 
     }
-
-    // public Command getPathFindingCommand() {
-    // Pose2d targetPose = m_tracking.getTargetPose();
-    // // Create the constraints to use while pathfinding
-    // PathConstraints constraints = new PathConstraints(
-    // 3.0, 4.0,
-    // Units.degreesToRadians(540), Units.degreesToRadians(720));
-
-    // // Since AutoBuilder is configured, we can use it to build pathfinding
-    // commands
-    // Command pathfindingCommand = AutoBuilder.pathfindToPose(
-    // targetPose,
-    // constraints // Goal end velocity in meters/sec
-    // );
-    // return pathfindingCommand;
-    // }
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
