@@ -9,6 +9,8 @@ import org.opencv.objdetect.CascadeClassifier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -17,6 +19,7 @@ public class Targeting extends SubsystemBase {
     private GenericEntry m_TargetAngle = null;
     private GenericEntry m_TargetIDFound = null;
     private GenericEntry m_GE_bUpdateTarget = null;
+    private boolean m_isFirstTime = true;
 
     private Pose2d m_TargetPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
@@ -26,11 +29,20 @@ public class Targeting extends SubsystemBase {
         m_TargetAngle = Shuffleboard.getTab("Targeting").add("TargetAngle", 0.0).getEntry();
         m_TargetIDFound = Shuffleboard.getTab("Targeting").add("TargetIDFound", false).getEntry();
         m_GE_bUpdateTarget = Shuffleboard.getTab("Targeting").add("UpdateTarget", false).getEntry();
-        this.setTargetID(18);
+
     }
 
     @Override
     public void periodic() {
+        if (m_isFirstTime && DriverStation.isEnabled()) {
+            m_isFirstTime = false;
+            if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+                this.setTargetID(9);
+            } else {
+                this.setTargetID(18);
+            }
+        }
+
         // This method will be called once per scheduler run
         if (m_GE_bUpdateTarget.getBoolean(false)) {
             setTargetAngle();
@@ -83,6 +95,7 @@ public class Targeting extends SubsystemBase {
                 break;
             case 9:
                 m_TargetAngle.setDouble(-55.8);
+                m_TargetPose = new Pose2d(14.5, 4, Rotation2d.fromDegrees(180.0));
                 break;
             case 10:
                 m_TargetAngle.setDouble(0.0);
