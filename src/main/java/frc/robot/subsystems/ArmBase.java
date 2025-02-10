@@ -213,7 +213,7 @@ public class ArmBase extends SubsystemBase {
     }
 
     public void simulationInit() {
-        PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
+        PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.0001);
 
         Shuffleboard.getTab("ArmBase").add(this.getUpCommand());
 

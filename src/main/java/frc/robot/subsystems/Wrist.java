@@ -60,7 +60,7 @@ public class Wrist extends SubsystemBase {
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = cfg.Feedback;
-        fdb.SensorToMechanismRatio = 125.0; // TODO: Calibrate motor rotations to sensor degrees
+        fdb.SensorToMechanismRatio = 25.0; // TODO: Calibrate motor rotations to sensor degrees
         cfg.MotorOutput = cfg.MotorOutput.withInverted(InvertedValue.Clockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake);
 
@@ -75,7 +75,7 @@ public class Wrist extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 14; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 200; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kG = 1.0;
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
@@ -174,7 +174,7 @@ public class Wrist extends SubsystemBase {
     }
 
     public void simulationInit() {
-        PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.1);
+        PhysicsSim.getInstance().addTalonFX(m_LeftMotor, .000000001);
 
         Shuffleboard.getTab("Wrist").add(this.getOpenCommand());
         Shuffleboard.getTab("Wrist").add(this.getCloseCommand());

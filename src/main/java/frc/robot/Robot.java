@@ -8,7 +8,10 @@ import com.ctre.phoenix6.Utils;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,9 +29,14 @@ public class Robot extends TimedRobot {
         m_robotContainer = new RobotContainer();
     }
 
+    StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
+            .getStructTopic("AdvMyPose", Pose2d.struct).publish();
+
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
+        publisher.set(RobotContainer.drivetrain.getState().Pose);
 
         /*
          * This example of adding Limelight is very simple and may not be sufficient for
