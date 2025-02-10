@@ -25,7 +25,7 @@ public class Mechanisms {
 
     // Position
 
-    MechanismLigament2d arm = mech.getRoot("pivotPoint", 0.25, 0.1)
+    MechanismLigament2d arm = mech.getRoot("pivotPoint", 0.7, 0.3)
             .append(new MechanismLigament2d("arm", .1, 0, 20, new Color8Bit(Color.kAliceBlue)));
 
     // MechanismLigament2d side1 = arm
@@ -54,7 +54,7 @@ public class Mechanisms {
     // Color8Bit(Color.kAliceBlue)));
 
     MechanismLigament2d armBase = arm
-            .append(new MechanismLigament2d("armbase", 0.5, 0, 6,
+            .append(new MechanismLigament2d("armbase", 0.45, 0, 6,
                     new Color8Bit(Color.kDarkMagenta)));
 
     MechanismLigament2d armExt = armBase
@@ -84,7 +84,7 @@ public class Mechanisms {
     }
 
     public void updateExt(Distance position, StatusSignal<AngularVelocity> velocity) {
-        armExt.setLength(position.magnitude() / 2);
+        armExt.setLength(0.1 + position.magnitude() / 2);
     }
 
     public void updateWrist(StatusSignal<Angle> position, StatusSignal<AngularVelocity> velocity) {

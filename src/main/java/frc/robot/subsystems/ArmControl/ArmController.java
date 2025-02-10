@@ -149,7 +149,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackScore_L1"));
 
         Carry = m_armGraph.new GraphCommandNode("Carry",
-                ArmController.getArmCommand(Degrees.of(90),
+                ArmController.getArmCommand(Degrees.of(45),
                         Meters.of(0),
                         Degrees.of(-90))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
