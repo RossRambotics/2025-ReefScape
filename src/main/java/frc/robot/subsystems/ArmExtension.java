@@ -84,7 +84,7 @@ public class ArmExtension extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 0.1; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 5.0; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kD = 0.0; // A velocity error of 1 rps results in 0.5 V output
 
@@ -198,7 +198,7 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public void simulationInit() {
-        PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.01);
+        PhysicsSim.getInstance().addTalonFX(m_LeftMotor, 0.00001);
 
         Shuffleboard.getTab("ArmExt").add(this.getExtendCommand());
         Shuffleboard.getTab("ArmExt").add(this.getDetractCommand());
@@ -232,7 +232,8 @@ public class ArmExtension extends SubsystemBase {
         return m_sysIdRoutine.dynamic(direction);
     }
 
-    final private CommandXboxController m_joystick = new CommandXboxController(4);
+    // final private CommandXboxController m_joystick = new
+    // CommandXboxController(4);
 
     private void initSysID() {
         // m_joystick.button(1).onTrue(Commands.runOnce(SignalLogger::start));

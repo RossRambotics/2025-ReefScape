@@ -5,8 +5,13 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,9 +29,14 @@ public class Robot extends TimedRobot {
         m_robotContainer = new RobotContainer();
     }
 
+    StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
+            .getStructTopic("AdvMyPose", Pose2d.struct).publish();
+
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
+        publisher.set(RobotContainer.drivetrain.getState().Pose);
 
         /*
          * This example of adding Limelight is very simple and may not be sufficient for
@@ -40,19 +50,22 @@ public class Robot extends TimedRobot {
          * of how to use vision should be tuned per-robot and to the team's
          * specification.
          */
-        if (kUseLimelight) {
-            var driveState = m_robotContainer.drivetrain.getState();
-            double headingDeg = driveState.Pose.getRotation().getDegrees();
-            double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
+        // if (kUseLimelight) {
+        // var driveState = m_robotContainer.drivetrain.getState();
+        // double headingDeg = driveState.Pose.getRotation().getDegrees();
+        // double omegaRps =
+        // Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
-            LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
-            var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-            if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 2.0) {
-                // DataLogManager.log("Updating odometry from vision.");
-                m_robotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose,
-                        Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
-            }
-        }
+        // LimelightHelpers.SetRobotOrientation("limelight-back", headingDeg, 0, 0, 0,
+        // 0, 0);
+        // var llMeasurement =
+        // LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+        // if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 2.0) {
+        // // DataLogManager.log("Updating odometry from vision.");
+        // m_robotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose,
+        // Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
+        // }
+        // }
     }
 
     @Override
@@ -112,19 +125,27 @@ public class Robot extends TimedRobot {
     public void testExit() {
     }
 
+    @Override
+    public void robotInit() {
+        // ... all other robot initialization
+
+        FollowPathCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().schedule();
+    }
+
     public void simulationInit() {
-        // RobotContainer.m_armBase.simulationInit();
-        // RobotContainer.m_armExtension.simulationInit();
-        // RobotContainer.m_wrist.simulationInit();
-        // RobotContainer.m_intake.simulationInit();
+        RobotContainer.m_armBase.simulationInit();
+        RobotContainer.m_armExtension.simulationInit();
+        RobotContainer.m_wrist.simulationInit();
+        RobotContainer.m_intake.simulationInit();
     }
 
     @Override
     public void simulationPeriodic() {
-        // RobotContainer.m_armBase.simulationPeriodic();
-        // RobotContainer.m_armExtension.simulationPeriodic();
-        // RobotContainer.m_wrist.simulationPeriodic();
-        // RobotContainer.m_intake.simulationPeriodic();
+        RobotContainer.m_armBase.simulationPeriodic();
+        RobotContainer.m_armExtension.simulationPeriodic();
+        RobotContainer.m_wrist.simulationPeriodic();
+        RobotContainer.m_intake.simulationPeriodic();
         PhysicsSim.getInstance().run();
 
     }

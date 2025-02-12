@@ -1,41 +1,9 @@
 {
-  "NetworkTables": {
-    "types": {
-      "/FMSInfo": "FMSInfo",
-      "/Pose": "Field2d",
-      "/Shuffleboard/Intake/Intake.IntakeCommand": "Command",
-      "/Shuffleboard/Intake/Intake.OuttakeCommand": "Command",
-      "/Shuffleboard/Intake/Intake.StopCommand": "Command",
-      "/SmartDashboard/Alerts": "Alerts",
-      "/SmartDashboard/Auto Mode": "String Chooser",
-      "/SmartDashboard/Module 0": "Mechanism2d",
-      "/SmartDashboard/Module 1": "Mechanism2d",
-      "/SmartDashboard/Module 2": "Mechanism2d",
-      "/SmartDashboard/Module 3": "Mechanism2d"
-    },
-    "windows": {
-      "/Shuffleboard/Intake/Intake.IntakeCommand": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/Intake/Intake.OuttakeCommand": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/Intake/Intake.StopCommand": {
-        "window": {
-          "visible": true
-        }
-      }
-    }
-  },
   "NetworkTables Info": {
     "visible": true
   },
   "NetworkTables Settings": {
     "mode": "Client (NT4)",
-    "serverTeam": "3201"
+    "serverTeam": "127.0.0.1"
   }
 }
