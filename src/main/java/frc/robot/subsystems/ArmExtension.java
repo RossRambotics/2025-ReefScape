@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.Follower;
 
 import frc.robot.RobotContainer;
+import frc.robot.Commands.CalibrateArmExtension;
 import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
@@ -113,8 +114,9 @@ public class ArmExtension extends SubsystemBase {
         }
 
         // this.initSysID(); // used for system identification
-        Shuffleboard.getTab("ArmExt").add(this.getZeroArmExtCmd());
-
+        Shuffleboard.getTab("ArmExt").add(this.getZeroArmExtCmd().withName("ArmExt.Zero"));
+        Shuffleboard.getTab("ArmExt").add(this.GetCalibrateCmd().withName("ArmExt.Calibrate"));
+        Shuffleboard.getTab("ArmExt").add(this.GetStopCmd().withName("ArmExt.Stop"));
     }
 
     private void setGoal(Distance distance) {
@@ -195,6 +197,14 @@ public class ArmExtension extends SubsystemBase {
             m_timer.stop();
         }
 
+    }
+
+    public Command GetCalibrateCmd() {
+        return new CalibrateArmExtension(m_LeftMotor, this);
+    }
+
+    public Command GetStopCmd() {
+        return this.runOnce(() -> m_LeftMotor.set(0));
     }
 
     public void simulationInit() {
