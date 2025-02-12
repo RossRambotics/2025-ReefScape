@@ -1,9 +1,98 @@
 {
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "ArmExt": {
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Pose": "Field2d",
+      "/Shuffleboard/ArmBase/ArmBase.Stop": "Command",
+      "/Shuffleboard/ArmBase/ArmBase.TestAngle": "Command",
+      "/Shuffleboard/ArmBase/ArmBase.TestDown": "Command",
+      "/Shuffleboard/ArmBase/ArmBase.TestUp": "Command",
+      "/Shuffleboard/ArmBase/ArmBase.Zero": "Command",
+      "/Shuffleboard/ArmController/BackAligment": "Command",
+      "/Shuffleboard/ArmController/BackScore_L1": "Command",
+      "/Shuffleboard/ArmController/BackScore_L2": "Command",
+      "/Shuffleboard/ArmController/BackScore_L3": "Command",
+      "/Shuffleboard/ArmController/BackScore_L4": "Command",
+      "/Shuffleboard/ArmController/Back_L1": "Command",
+      "/Shuffleboard/ArmController/Back_L2": "Command",
+      "/Shuffleboard/ArmController/Back_L3": "Command",
+      "/Shuffleboard/ArmController/Back_L4": "Command",
+      "/Shuffleboard/ArmController/Carry": "Command",
+      "/Shuffleboard/ArmController/FrontAligment": "Command",
+      "/Shuffleboard/ArmController/FrontScore_L1": "Command",
+      "/Shuffleboard/ArmController/FrontScore_L2": "Command",
+      "/Shuffleboard/ArmController/Front_L1": "Command",
+      "/Shuffleboard/ArmController/Front_L2": "Command",
+      "/Shuffleboard/ArmController/GroundAlgae": "Command",
+      "/Shuffleboard/ArmController/GroundCoral": "Command",
+      "/Shuffleboard/ArmController/HumanPlayerCoral": "Command",
+      "/Shuffleboard/ArmController/NetAlgae": "Command",
+      "/Shuffleboard/ArmController/ProcessorAlgae": "Command",
+      "/Shuffleboard/ArmController/S1": "Command",
+      "/Shuffleboard/ArmController/Start": "Command",
+      "/Shuffleboard/ArmExt/ArmExt.Zero": "Command",
+      "/Shuffleboard/ButtonBox/Calibrate Arm": "Command",
+      "/Shuffleboard/ButtonBox/High": "Command",
+      "/Shuffleboard/ButtonBox/Intake In": "Command",
+      "/Shuffleboard/ButtonBox/Intake Out": "Command",
+      "/Shuffleboard/ButtonBox/Low": "Command",
+      "/Shuffleboard/ButtonBox/Middle": "Command",
+      "/Shuffleboard/ButtonBox/Reset Arm": "Command",
+      "/Shuffleboard/ButtonBox/Shoot Processor": "Command",
+      "/Shuffleboard/ButtonBox/Travel To Processor": "Command",
+      "/Shuffleboard/ButtonBox/Travel To Reef": "Command",
+      "/Shuffleboard/ButtonBox/Trough": "Command",
+      "/Shuffleboard/Intake/Intake.IntakeCommand": "Command",
+      "/Shuffleboard/Intake/Intake.OuttakeCommand": "Command",
+      "/Shuffleboard/Intake/Intake.StopCommand": "Command",
+      "/Shuffleboard/Wrist/Wrist.ZeroAngle": "Command",
+      "/SmartDashboard/Alerts": "Alerts",
+      "/SmartDashboard/Auto Mode": "String Chooser",
+      "/SmartDashboard/Module 0": "Mechanism2d",
+      "/SmartDashboard/Module 1": "Mechanism2d",
+      "/SmartDashboard/Module 2": "Mechanism2d",
+      "/SmartDashboard/Module 3": "Mechanism2d"
+    }
+  },
   "NetworkTables Info": {
     "visible": true
   },
   "NetworkTables Settings": {
     "mode": "Client (NT4)",
-    "serverTeam": "127.0.0.1"
+    "serverTeam": "3201"
+  },
+  "Plots": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 299,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/Shuffleboard/ArmExt/ArmExt_Velocity"
+            }
+          ]
+        }
+      ]
+    }
   }
 }

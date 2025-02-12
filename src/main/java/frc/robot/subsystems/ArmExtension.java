@@ -15,6 +15,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.Follower;
 
@@ -63,9 +64,13 @@ public class ArmExtension extends SubsystemBase {
 
         // Turn on brake Mode
         m_LeftMotor.setNeutralMode(NeutralModeValue.Brake);
+
         // m_RightMotor.setNeutralMode(NeutralModeValue.Brake);
 
         TalonFXConfiguration cfg = new TalonFXConfiguration();
+        cfg.MotorOutput = new MotorOutputConfigs()
+                .withNeutralMode(NeutralModeValue.Brake)
+                .withInverted(InvertedValue.Clockwise_Positive);
 
         // Configure the right motor to follow the left motor (but opposite direction)
         // m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), false));
@@ -76,7 +81,7 @@ public class ArmExtension extends SubsystemBase {
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(40))
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(100))
                 .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(100))
                 .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(300));
 
