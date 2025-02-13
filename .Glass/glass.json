@@ -38,6 +38,8 @@
       "/Shuffleboard/ArmController/ProcessorAlgae": "Command",
       "/Shuffleboard/ArmController/S1": "Command",
       "/Shuffleboard/ArmController/Start": "Command",
+      "/Shuffleboard/ArmExt/ArmExt.Calibrate": "Command",
+      "/Shuffleboard/ArmExt/ArmExt.Stop": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Zero": "Command",
       "/Shuffleboard/ButtonBox/Calibrate Arm": "Command",
       "/Shuffleboard/ButtonBox/High": "Command",
@@ -60,6 +62,18 @@
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d"
+    },
+    "windows": {
+      "/Shuffleboard/ArmExt/ArmExt.Calibrate": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmExt/ArmExt.Zero": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Info": {
