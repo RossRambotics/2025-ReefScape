@@ -68,31 +68,31 @@ public class Wrist extends SubsystemBase {
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = fx_cfg.Feedback;
-        // use internal encoder
-        // fdb.SensorToMechanismRatio = 25.0; // TODO: Calibrate motor rotations to
-        // sensor degrees
+        double gearRatio = 25.0;
 
+        // use internal encoder
+        // fdb.SensorToMechanismRatio = gearRatio;
         // use external encoder (CANCoder)
         fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
         fdb.FeedbackRemoteSensorID = m_wristCANcoder.getDeviceID();
         fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        fdb.RotorToSensorRatio = 25.0;
+        fdb.RotorToSensorRatio = gearRatio;
 
         fx_cfg.MotorOutput = fx_cfg.MotorOutput.withInverted(InvertedValue.Clockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake);
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = fx_cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(10))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(50))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(5))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10));
 
         Slot0Configs slot0 = fx_cfg.Slot0;
         slot0.GravityType = GravityTypeValue.Elevator_Static;
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 200; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 2; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kG = 1.0;
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
