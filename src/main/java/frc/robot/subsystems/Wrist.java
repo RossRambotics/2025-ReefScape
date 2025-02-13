@@ -5,18 +5,20 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.controls.Follower;
-
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
@@ -31,6 +33,7 @@ import static edu.wpi.first.units.Units.*;
 
 public class Wrist extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(34, "rio");
+    final CANcoder m_wristCANcoder = new CANcoder(99, "rio");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
@@ -51,31 +54,45 @@ public class Wrist extends SubsystemBase {
 
     private Angle m_goal = Degrees.of(0);
 
-    /** Creates a new ArmPivot. */
+    /** Creates a new Wrist. */
     public Wrist() {
-        TalonFXConfiguration cfg = new TalonFXConfiguration();
+        // CAN Coder configuration
+        CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
+        cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
+        cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(0));
+        m_wristCANcoder.getConfigurator().apply(cc_cfg);
 
-        // Configure the right motor to follow the left motor (but opposite direction)
-        // m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), true));
+        // TalonFX configuration
+        TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
 
         /* Configure gear ratio */
-        FeedbackConfigs fdb = cfg.Feedback;
-        fdb.SensorToMechanismRatio = 25.0; // TODO: Calibrate motor rotations to sensor degrees
-        cfg.MotorOutput = cfg.MotorOutput.withInverted(InvertedValue.Clockwise_Positive)
+        FeedbackConfigs fdb = fx_cfg.Feedback;
+        double gearRatio = 25.0;
+
+        // use internal encoder
+        // fdb.SensorToMechanismRatio = gearRatio;
+        // use external encoder (CANCoder)
+        fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
+        fdb.FeedbackRemoteSensorID = m_wristCANcoder.getDeviceID();
+        fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        fdb.RotorToSensorRatio = gearRatio;
+
+        fx_cfg.MotorOutput = fx_cfg.MotorOutput.withInverted(InvertedValue.Clockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake);
 
         /* Configure Motion Magic */
-        MotionMagicConfigs mm = cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(10))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(50))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
+        MotionMagicConfigs mm = fx_cfg.MotionMagic;
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(5))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10));
 
-        Slot0Configs slot0 = cfg.Slot0;
+        Slot0Configs slot0 = fx_cfg.Slot0;
         slot0.GravityType = GravityTypeValue.Elevator_Static;
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 200; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 2; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kG = 1.0;
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
@@ -96,14 +113,14 @@ public class Wrist extends SubsystemBase {
         // setup software limits
         SoftwareLimitSwitchConfigs swLimits = new SoftwareLimitSwitchConfigs();
         swLimits.ForwardSoftLimitEnable = true;
-        swLimits.ForwardSoftLimitThreshold = Degrees.of(220).in(Rotations);
+        swLimits.ForwardSoftLimitThreshold = Degrees.of(125).in(Rotations);
         swLimits.ReverseSoftLimitEnable = true;
-        swLimits.ReverseSoftLimitThreshold = Degrees.of(-135).in(Rotations);
-        cfg.SoftwareLimitSwitch = swLimits;
+        swLimits.ReverseSoftLimitThreshold = Degrees.of(-175).in(Rotations);
+        fx_cfg.SoftwareLimitSwitch = swLimits;
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
-            status = m_LeftMotor.getConfigurator().apply(cfg);
+            status = m_LeftMotor.getConfigurator().apply(fx_cfg);
             if (status.isOK())
                 break;
         }
