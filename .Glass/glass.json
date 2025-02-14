@@ -2,7 +2,13 @@
   "NetworkTables": {
     "transitory": {
       "Shuffleboard": {
+        "ArmBase": {
+          "open": true
+        },
         "ArmExt": {
+          "open": true
+        },
+        "Wrist": {
           "open": true
         },
         "open": true
@@ -69,7 +75,17 @@
           "visible": true
         }
       },
-      "/Shuffleboard/ArmExt/ArmExt.Zero": {
+      "/Shuffleboard/Intake/Intake.IntakeCommand": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Intake/Intake.OuttakeCommand": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Intake/Intake.StopCommand": {
         "window": {
           "visible": true
         }
@@ -93,7 +109,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 299,
+          "height": 249,
           "series": [
             {
               "color": [

@@ -35,7 +35,7 @@ import static edu.wpi.first.units.Units.*;
 public class ArmBase extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(30, "rio");
     final TalonFX m_RightMotor = new TalonFX(31, "rio");
-    final CANcoder m_armBaseCANcoder = new CANcoder(99, "rio");
+    // final CANcoder m_armBaseCANcoder = new CANcoder(99, "rio");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
@@ -60,7 +60,7 @@ public class ArmBase extends SubsystemBase {
         cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
         cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(0));
-        m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
+        // m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
 
         TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
 
@@ -83,15 +83,15 @@ public class ArmBase extends SubsystemBase {
         /* Configure Motion Magic */
         MotionMagicConfigs mm = fx_cfg.MotionMagic;
         mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(5))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10));
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(2.5))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(5));
 
         Slot0Configs slot0 = fx_cfg.Slot0;
         slot0.GravityType = GravityTypeValue.Arm_Cosine;
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 3.0; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 300.0; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kD = 0.0; // A velocity error of 1 rps results in 0.5 V output
 
