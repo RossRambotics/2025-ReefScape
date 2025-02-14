@@ -44,8 +44,11 @@ import frc.robot.subsystems.VisionForOdometry;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.ArmControl.ArmController;
 
+import frc.util.SlewRateLimiterWithSupplier;
+
 public class RobotContainer {
     // Subsystems
+
     final static public ArmBase m_armBase = new ArmBase();
     final static public ArmExtension m_armExtension = new ArmExtension();
     final static public Wrist m_wrist = new Wrist();
@@ -110,7 +113,8 @@ public class RobotContainer {
         return value;
     }
 
-    private final SlewRateLimiter m_slewDriverX = new SlewRateLimiter(15);
+    private final SlewRateLimiterWithSupplier m_slewDriverX = new SlewRateLimiterWithSupplier(
+            m_speedNanny::getAccelerationLimit);
 
     private double getDriverXVelocity() {
         double driverLeftX = modifyAxis(joystick.getLeftX());
@@ -119,7 +123,8 @@ public class RobotContainer {
         return slew;
     }
 
-    private final SlewRateLimiter m_slewDriverY = new SlewRateLimiter(15);
+    private final SlewRateLimiterWithSupplier m_slewDriverY = new SlewRateLimiterWithSupplier(
+            m_speedNanny::getAccelerationLimit);
     private double m_kNudgeRate = 0.25;
 
     private double getDriverYVelocity() {
