@@ -45,6 +45,7 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getProcessorCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getLeftReefCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getRightReefCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getIntakeStopCmd());
     }
 
     @Override
@@ -52,12 +53,21 @@ public class ButtonBox extends SubsystemBase {
         // This method will be called once per scheduler run
     }
 
+    // working on...
     public Command getResetArmCmd() {
-        Command c = new PrintCommand("Reset Arm");
+        Command c = new PrintCommand("Reset Arm")
+                .andThen(RobotContainer.m_armController.getTransition_BackAligment());
         c.setName("Reset Arm");
         return c;
     }
 
+    // origional
+    /*
+     * public Command getResetArmCmd() {
+     * Command c = new PrintCommand("Reset Arm");
+     * c.setName("Reset Arm");
+     * return c;
+     */
     public Command getCalibrateArmCmd() {
         Command c = new PrintCommand("Calibrate Arm")
                 .andThen(RobotContainer.m_intake.getIntakeCommand());
@@ -251,6 +261,13 @@ public class ButtonBox extends SubsystemBase {
     public Command getProcessorCmd() {
         Command c = new PrintCommand("Processor");
         c.setName("Processor");
+        return c;
+    }
+
+    public Command getIntakeStopCmd() {
+        Command c = new PrintCommand("Intake Stop")
+                .andThen(RobotContainer.m_intake.getStopCommand());
+        c.setName("Intake Stop");
         return c;
     }
 }
