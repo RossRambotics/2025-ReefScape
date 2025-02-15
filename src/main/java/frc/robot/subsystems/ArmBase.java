@@ -5,14 +5,20 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.controls.Follower;
 
 import frc.robot.RobotContainer;
@@ -23,6 +29,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
@@ -31,6 +38,7 @@ import static edu.wpi.first.units.Units.*;
 public class ArmBase extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(30, "rio");
     final TalonFX m_RightMotor = new TalonFX(31, "rio");
+    // final CANcoder m_armBaseCANcoder = new CANcoder(99, "rio");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
@@ -50,25 +58,42 @@ public class ArmBase extends SubsystemBase {
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
-        TalonFXConfiguration cfg = new TalonFXConfiguration();
+        // CAN Coder configuration
+        CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
+        cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
+        cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(0));
+        // m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
+
+        TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
 
         // Configure the right motor to follow the left motor (but opposite direction)
         m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), true));
 
         /* Configure gear ratio */
-        FeedbackConfigs fdb = cfg.Feedback;
-        fdb.SensorToMechanismRatio = 114.7; // TODO: Calibrate motor rotations to sensor degrees
+        FeedbackConfigs fdb = fx_cfg.Feedback;
+        double gearRatio = 114.7;
+
+        // needed for internal sensor
+        fdb.SensorToMechanismRatio = gearRatio;
+
+        // use external encoder (CANCoder)
+        // fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
+        // fdb.FeedbackRemoteSensorID = m_armBaseCANcoder.getDeviceID();
+        // fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        // fdb.RotorToSensorRatio = gearRatio;
 
         /* Configure Motion Magic */
-        MotionMagicConfigs mm = cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(10)) // 5 (mechanism) rotations per second cruise
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(50)) // Take approximately 0.5 seconds to
-                                                                                 // reach max
-                                                                                 // vel
-                // Take approximately 0.1 seconds to reach max accel
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
+        MotionMagicConfigs mm = fx_cfg.MotionMagic;
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(2.5))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(5));
 
-        Slot0Configs slot0 = cfg.Slot0;
+        // enable brake mode
+        fx_cfg.MotorOutput = new MotorOutputConfigs()
+                .withNeutralMode(NeutralModeValue.Brake);
+
+        Slot0Configs slot0 = fx_cfg.Slot0;
         slot0.GravityType = GravityTypeValue.Arm_Cosine;
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
@@ -95,11 +120,11 @@ public class ArmBase extends SubsystemBase {
         swLimits.ForwardSoftLimitThreshold = Degrees.of(90).in(Rotations);
         swLimits.ReverseSoftLimitEnable = true;
         swLimits.ReverseSoftLimitThreshold = Degrees.of(-10).in(Rotations);
-        cfg.SoftwareLimitSwitch = swLimits;
+        fx_cfg.SoftwareLimitSwitch = swLimits;
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
-            status = m_LeftMotor.getConfigurator().apply(cfg);
+            status = m_LeftMotor.getConfigurator().apply(fx_cfg);
             if (status.isOK())
                 break;
         }
@@ -140,7 +165,12 @@ public class ArmBase extends SubsystemBase {
     }
 
     public Command getZeroArmAngleCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
+
+        Command c = Commands.runOnce(() -> m_LeftMotor
+                .setPosition(Degrees.of(0)))
+                .ignoringDisable(true);
+
+        // Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
         c.setName("ArmBase.Zero");
         // c.ignoringDisable(true);
 

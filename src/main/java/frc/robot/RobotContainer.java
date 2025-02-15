@@ -44,8 +44,11 @@ import frc.robot.subsystems.VisionForOdometry;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.ArmControl.ArmController;
 
+import frc.util.SlewRateLimiterWithSupplier;
+
 public class RobotContainer {
     // Subsystems
+
     final static public ArmBase m_armBase = new ArmBase();
     final static public ArmExtension m_armExtension = new ArmExtension();
     final static public Wrist m_wrist = new Wrist();
@@ -110,7 +113,8 @@ public class RobotContainer {
         return value;
     }
 
-    private final SlewRateLimiter m_slewDriverX = new SlewRateLimiter(15);
+    private final SlewRateLimiterWithSupplier m_slewDriverX = new SlewRateLimiterWithSupplier(
+            m_speedNanny::getAccelerationLimit);
 
     private double getDriverXVelocity() {
         double driverLeftX = modifyAxis(joystick.getLeftX());
@@ -119,7 +123,8 @@ public class RobotContainer {
         return slew;
     }
 
-    private final SlewRateLimiter m_slewDriverY = new SlewRateLimiter(15);
+    private final SlewRateLimiterWithSupplier m_slewDriverY = new SlewRateLimiterWithSupplier(
+            m_speedNanny::getAccelerationLimit);
     private double m_kNudgeRate = 0.25;
 
     private double getDriverYVelocity() {
@@ -212,22 +217,25 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        String pathName = "Tag.18.Left";
-        Command c = null;
-        try {
-            PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-            path.preventFlipping = true;
-            c = AutoBuilder.followPath(path);
-        } catch (Exception e) {
-            DriverStation.reportError("Can't Load Path: " + pathName, false);
-        }
+        // String pathName = "Tag.18.Left";
+        // Command c = null;
+        // try {
+        // PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        // path.preventFlipping = true;
+        // c = AutoBuilder.followPath(path);
+        // } catch (Exception e) {
+        // DriverStation.reportError("Can't Load Path: " + pathName, false);
+        // }
 
-        if (c != null)
-            joystick.a().whileTrue(c);
+        // if (c != null)
+        // joystick.a().whileTrue(c);
 
-        joystick.b().whileTrue(new RunPathToTarget());
-        joystick.x().whileTrue(new ReefLineUp2(drivetrain, targetDrive));
-
+        // joystick.b().whileTrue(new RunPathToTarget());
+        // joystick.x().whileTrue(new ReefLineUp2(drivetrain, targetDrive));
+        joystick.a().onTrue(m_intake.getIntakeCommand());
+        joystick.a().onFalse(m_intake.getStopCommand());
+        joystick.b().onTrue(m_intake.getOuttakeCommand());
+        joystick.b().onFalse(m_intake.getStopCommand());
     }
 
     public Command getAutonomousCommand() {

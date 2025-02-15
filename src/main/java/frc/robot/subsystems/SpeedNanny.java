@@ -29,4 +29,8 @@ public class SpeedNanny extends SubsystemBase {
         return m_speedLimit;
     }
 
+    public double getAccelerationLimit() {
+        return 15.0;
+    }
+
 }

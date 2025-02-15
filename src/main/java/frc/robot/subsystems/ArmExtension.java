@@ -12,13 +12,16 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.Follower;
 
 import frc.robot.RobotContainer;
+import frc.robot.Commands.CalibrateArmExtension;
 import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
@@ -39,7 +42,8 @@ public class ArmExtension extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(32, "rio");
     // final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
-    private final double m_kRotationsToMeters = 0.038 * Math.PI * 1.2; // 2" diameter pulley (circumference = pi * d)
+    private final double m_kRotationsToMeters = 0.038 * Math.PI * 1.2 * 2.64; // 2" diameter pulley (circumference = pi
+                                                                              // * d)
     private final double m_kGoalTolerance = 0.02; // 2 cm tolerance
     private final Timer m_timer = new Timer();
 
@@ -62,24 +66,30 @@ public class ArmExtension extends SubsystemBase {
 
         // Turn on brake Mode
         m_LeftMotor.setNeutralMode(NeutralModeValue.Brake);
+
         // m_RightMotor.setNeutralMode(NeutralModeValue.Brake);
 
         TalonFXConfiguration cfg = new TalonFXConfiguration();
+        cfg.MotorOutput = new MotorOutputConfigs()
+                .withNeutralMode(NeutralModeValue.Brake)
+                .withInverted(InvertedValue.Clockwise_Positive);
 
         // Configure the right motor to follow the left motor (but opposite direction)
         // m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), false));
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = cfg.Feedback;
-        fdb.SensorToMechanismRatio = 5.0; // TODO: Calibrate motor rotations to sensor degrees
+        fdb.SensorToMechanismRatio = 1; // TODO: Calibrate motor rotations
+        // to sensor degrees
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(40))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(100))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(300));
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(100))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(400))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(1000));
 
         Slot0Configs slot0 = cfg.Slot0;
+
         slot0.GravityType = GravityTypeValue.Elevator_Static;
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
@@ -113,8 +123,9 @@ public class ArmExtension extends SubsystemBase {
         }
 
         // this.initSysID(); // used for system identification
-        Shuffleboard.getTab("ArmExt").add(this.getZeroArmExtCmd());
-
+        Shuffleboard.getTab("ArmExt").add(this.getZeroArmExtCmd().withName("ArmExt.Zero"));
+        Shuffleboard.getTab("ArmExt").add(this.GetCalibrateCmd().withName("ArmExt.Calibrate"));
+        Shuffleboard.getTab("ArmExt").add(this.GetStopCmd().withName("ArmExt.Stop"));
     }
 
     private void setGoal(Distance distance) {
@@ -125,6 +136,9 @@ public class ArmExtension extends SubsystemBase {
         // TODO Convert meters to rotations
         double rotations = distance.in(Meters) / m_kRotationsToMeters;
         m_LeftMotor.setControl(m_mmReq.withPosition(rotations).withSlot(0));
+        // PositionDutyCycle pdc = new PositionDutyCycle(rotations).withSlot(0);
+        // m_LeftMotor.setControl(pdc);
+
         m_GE_Goal.setDouble(distance.in(Meters));
         m_goal = distance;
     }
@@ -195,6 +209,14 @@ public class ArmExtension extends SubsystemBase {
             m_timer.stop();
         }
 
+    }
+
+    public Command GetCalibrateCmd() {
+        return new CalibrateArmExtension(m_LeftMotor, this);
+    }
+
+    public Command GetStopCmd() {
+        return this.runOnce(() -> m_LeftMotor.set(0));
     }
 
     public void simulationInit() {
