@@ -27,9 +27,9 @@ public class ArmController extends SubsystemBase {
     private GenericEntry m_GE_nextNodeName;
 
     private GraphCommandNode BackScore_L4, BackScore_L3, BackScore_L2, BackScore_L1, Back_L4, Back_L3, Back_L2, Back_L1,
-            BackAligment, Carry, FrontAligment,
-            S1, Start, FrontScore_L2, FrontScore_L1, Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae,
-            ProcessorAlgae, NetAlgae;
+            BackAligment, Carry, FrontAligment, FrontScore_L3, Front_L3, S1, Start, FrontScore_L2, FrontScore_L1,
+            Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae, ProcessorAlgae, NetAlgae, RemoveAlgaeHigh,
+            RemoveAlgaeLow, Climb;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -59,7 +59,6 @@ public class ArmController extends SubsystemBase {
                         Meters.of(0),
                         Degrees.of(0))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
-
                 null,
                 new PrintCommand("Back_L4 is done"));
         Back_L3 = m_armGraph.new GraphCommandNode("Back_L3",
@@ -148,6 +147,14 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("BackScore_L1"));
 
+        Climb = m_armGraph.new GraphCommandNode("Climb",
+                ArmController.getArmCommand(Degrees.of(90),
+                        Meters.of(-77.3),
+                        Degrees.of(-140))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("Climb"));
+
         Carry = m_armGraph.new GraphCommandNode("Carry",
                 ArmController.getArmCommand(Degrees.of(20),
                         Meters.of(-77.3),
@@ -184,6 +191,20 @@ public class ArmController extends SubsystemBase {
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("FrontScore_L1"));
+        Front_L3 = m_armGraph.new GraphCommandNode("Front_L3",
+                ArmController.getArmCommand(Degrees.of(35),
+                        Meters.of(-66),
+                        Degrees.of(60))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("Front_L3"));
+        FrontScore_L3 = m_armGraph.new GraphCommandNode("FrontScore_L3",
+                ArmController.getArmCommand(Degrees.of(10),
+                        Meters.of(-77.3),
+                        Degrees.of(20))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("FrontScore_L3"));
         GroundAlgae = m_armGraph.new GraphCommandNode("GroundAlgae",
                 ArmController.getArmCommand(Degrees.of(-11),
                         Meters.of(0.8),
@@ -205,6 +226,20 @@ public class ArmController extends SubsystemBase {
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("NetAlgae"));
+        RemoveAlgaeHigh = m_armGraph.new GraphCommandNode("RemoveAlgaeHigh",
+                ArmController.getArmCommand(Degrees.of(95),
+                        Meters.of(3),
+                        Degrees.of(-95))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("RemoveAlgaeHigh"));
+        RemoveAlgaeLow = m_armGraph.new GraphCommandNode("RemoveAlgaeLow",
+                ArmController.getArmCommand(Degrees.of(95),
+                        Meters.of(3),
+                        Degrees.of(-95))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("RemoveAlgaeLow"));
 
         S1.AddNode(Start, 1, true);
         Start.AddNode(BackAligment, 1);
@@ -214,16 +249,19 @@ public class ArmController extends SubsystemBase {
         BackAligment.AddNode(Back_L1, 1);
         BackAligment.AddNode(Front_L2, 1);
         BackAligment.AddNode(Front_L1, 1);
+        BackAligment.AddNode(Climb, 1);
         Back_L4.AddNode(BackScore_L4, 1);
         Back_L3.AddNode(BackScore_L3, 1);
         Back_L2.AddNode(BackScore_L2, 1);
         Back_L1.AddNode(BackScore_L1, 1);
+        Front_L3.AddNode(FrontScore_L3, 1);
         Front_L2.AddNode(FrontScore_L2, 1);
         Front_L1.AddNode(FrontScore_L1, 1);
         BackAligment.AddNode(Carry, 1);
         BackAligment.AddNode(FrontAligment, 1);
         Carry.AddNode(FrontAligment, 1);
         Start.AddNode(FrontAligment, 1);
+        FrontAligment.AddNode(Front_L3, 1);
         FrontAligment.AddNode(Front_L2, 1);
         FrontAligment.AddNode(Front_L1, 1);
         FrontAligment.AddNode(HumanPlayerCoral, 1);
@@ -231,6 +269,8 @@ public class ArmController extends SubsystemBase {
         FrontAligment.AddNode(GroundCoral, 1);
         FrontAligment.AddNode(ProcessorAlgae, 1);
         FrontAligment.AddNode(NetAlgae, 1);
+        FrontAligment.AddNode(RemoveAlgaeHigh, 1);
+        FrontAligment.AddNode(RemoveAlgaeLow, 1);
 
         m_armGraph.setGraphRootNode(Start);
         m_armGraph.setCurrentNode(Start);
@@ -246,6 +286,7 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L2());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L2());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_HumanPlayerCoral());
         Shuffleboard.getTab("ArmController").add(this.getTransition_GroundCoral());
@@ -256,12 +297,15 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_Carry());
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontAligment());
         Shuffleboard.getTab("ArmController").add(this.getTransition_S1());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L2());
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_GroundAlgae());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Processor());
         Shuffleboard.getTab("ArmController").add(this.getTransition_NetAlgae());
-
+        Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeHigh());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeLow());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Climb());
     }
 
     @Override
@@ -332,6 +376,12 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
+    public Command getTransition_Front_L3() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_L3));
+        c.setName("Front_L3");
+        return c;
+    }
+
     public Command getTransition_Front_L1() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_L1));
         c.setName("Front_L1");
@@ -374,6 +424,12 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
+    public Command getTransition_Climb() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Climb));
+        c.setName("Climb");
+        return c;
+    }
+
     public Command getTransition_Carry() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(Carry));
         c.setName("Carry");
@@ -398,6 +454,12 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
+    public Command getTransition_FrontScore_L3() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L3));
+        c.setName("FrontScore_L3");
+        return c;
+    }
+
     public Command getTransition_FrontScore_L1() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L1));
         c.setName("FrontScore_L1");
@@ -419,6 +481,18 @@ public class ArmController extends SubsystemBase {
     public Command getTransition_NetAlgae() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(NetAlgae));
         c.setName("NetAlgae");
+        return c;
+    }
+
+    public Command getTransition_RemoveAlgaeHigh() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(RemoveAlgaeHigh));
+        c.setName("RemoveAlgaeHigh");
+        return c;
+    }
+
+    public Command getTransition_RemoveAlgaeLow() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(RemoveAlgaeLow));
+        c.setName("RemoveAlgaeLow");
         return c;
     }
 
