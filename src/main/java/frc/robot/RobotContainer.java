@@ -67,7 +67,7 @@ public class RobotContainer {
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
 
     final static public SpeedNanny m_speedNanny = new SpeedNanny();
-    final static public Targeting m_tracking = new Targeting();
+    final static public Targeting m_targeting = new Targeting();
     final static public ButtonBox m_buttonBox = new ButtonBox();
     final static public Mechanisms m_mechanisms = new Mechanisms();
 
@@ -154,7 +154,7 @@ public class RobotContainer {
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative Y(forward)
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withTargetDirection(m_tracking.getTargetAngle())));
+                        .withTargetDirection(m_targeting.getTargetAngle())));
 
         joystick.pov(0)
                 .whileTrue(drivetrain.applyRequest(() -> drive

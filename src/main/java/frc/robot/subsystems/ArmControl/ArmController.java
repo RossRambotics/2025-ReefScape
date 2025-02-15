@@ -259,7 +259,7 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L2());
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_GroundAlgae());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_ProcessorAlgae());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_Processor());
         Shuffleboard.getTab("ArmController").add(this.getTransition_NetAlgae());
 
     }
@@ -410,9 +410,9 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
-    public Command getTransition_ProcessorAlgae() {
+    public Command getTransition_Processor() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(ProcessorAlgae));
-        c.setName("ProcessorAlgae");
+        c.setName("Processor");
         return c;
     }
 

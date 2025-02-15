@@ -58,6 +58,10 @@ public class Targeting extends SubsystemBase {
         return m_TargetPose;
     }
 
+    public void setTargetIDRedBlue(int redID, int blueID) {
+        // TODO fix this
+    }
+
     public void setTargetID(int targetID) {
         m_TargetID.setDouble(targetID);
         this.setTargetAngle();

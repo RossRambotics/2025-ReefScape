@@ -40,7 +40,7 @@ public class ReefLineUp extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_targetPose = RobotContainer.m_tracking.getTargetPose();
+        m_targetPose = RobotContainer.m_targeting.getTargetPose();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
