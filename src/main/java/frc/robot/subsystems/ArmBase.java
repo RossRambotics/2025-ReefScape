@@ -29,6 +29,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
@@ -164,7 +165,12 @@ public class ArmBase extends SubsystemBase {
     }
 
     public Command getZeroArmAngleCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
+
+        Command c = Commands.runOnce(() -> m_LeftMotor
+                .setPosition(Degrees.of(0)))
+                .ignoringDisable(true);
+
+        // Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
         c.setName("ArmBase.Zero");
         // c.ignoringDisable(true);
 

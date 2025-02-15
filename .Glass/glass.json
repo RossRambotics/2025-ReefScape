@@ -22,8 +22,7 @@
           },
           "Intake.StopCommand": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Wrist": {
           "open": true
@@ -39,6 +38,7 @@
       "/Shuffleboard/ArmBase/ArmBase.TestDown": "Command",
       "/Shuffleboard/ArmBase/ArmBase.TestUp": "Command",
       "/Shuffleboard/ArmBase/ArmBase.Zero": "Command",
+      "/Shuffleboard/ArmBase/ArmBaseZeroEncoder": "Command",
       "/Shuffleboard/ArmController/BackAligment": "Command",
       "/Shuffleboard/ArmController/BackScore_L1": "Command",
       "/Shuffleboard/ArmController/BackScore_L2": "Command",
@@ -88,6 +88,11 @@
     },
     "windows": {
       "/Shuffleboard/ArmBase/ArmBase.Zero": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmBase/ArmBaseZeroEncoder": {
         "window": {
           "visible": true
         }
@@ -148,6 +153,11 @@
         }
       },
       "/Shuffleboard/ArmController/HumanPlayerCoral": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmExt/ArmExt.Calibrate": {
         "window": {
           "visible": true
         }

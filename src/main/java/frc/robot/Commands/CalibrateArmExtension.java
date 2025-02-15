@@ -15,7 +15,7 @@ import frc.robot.subsystems.ArmExtension;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CalibrateArmExtension extends Command {
-    private double kStallVelocityThreshold = -0.5;
+    private double kStallVelocityThreshold = 0.25;
     private double kStallTimeThreshold = 0.25;
     private double kStallMotorPower = -0.1;
     private TalonFX m_motor = null;
@@ -43,7 +43,7 @@ public class CalibrateArmExtension extends Command {
         m_motor.getConfigurator().apply(currentConfig);
 
         // Set the motor to slowly retract
-        VelocityTorqueCurrentFOC request = new VelocityTorqueCurrentFOC(-1.0)
+        VelocityTorqueCurrentFOC request = new VelocityTorqueCurrentFOC(-5.0)
                 .withFeedForward(-kStallMotorPower);
         m_motor.setControl(request);
         m_stallTimer.reset();
@@ -56,6 +56,8 @@ public class CalibrateArmExtension extends Command {
 
         // rotor velocity ignore mechaniasm ratios
         double currentVelocity = m_motor.getRotorVelocity().getValueAsDouble();
+        currentVelocity = Math.abs(currentVelocity);
+        System.out.println("Calibrate Ext Vel: " + currentVelocity + " Time: " + m_stallTimer.get());
 
         if (currentVelocity < kStallVelocityThreshold) {
             if (!m_stallTimer.isRunning()) {
@@ -69,7 +71,7 @@ public class CalibrateArmExtension extends Command {
         if (m_stallTimer.hasElapsed(kStallTimeThreshold)) {
             // Motor has stalled for 0.5 seconds
             // Take appropriate action, e.g., stop the motor
-            m_motor.set(0);
+            m_motor.stopMotor();
             m_isFinished = true;
         }
     }
