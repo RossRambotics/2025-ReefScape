@@ -24,6 +24,25 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getMiddleCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getLowCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getTroughCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getIntakeAlgaeCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getRemoveAlgaeCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getReleaseClimbCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getClimbCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getClimbArmCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getHighArmCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getPlayerStation1Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getPlayerStation2Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getReef1Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getReef2Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getReef3Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getReef4Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getReef5Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getReef6Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getNetCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getProcessorCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getLeftReefCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getRightReefCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getAlgaeReefCmd());
     }
 
     @Override
@@ -97,4 +116,117 @@ public class ButtonBox extends SubsystemBase {
         return c;
     }
 
+    public Command getIntakeAlgaeCmd() {
+        Command c = new PrintCommand("Intake Algae");
+        c.setName("Intake Algae");
+        return c;
+    }
+
+    public Command getRemoveAlgaeCmd() {
+        Command c = new PrintCommand("Remove Algae");
+        c.setName("Remove Algae");
+        return c;
+    }
+
+    public Command getReleaseClimbCmd() {
+        Command c = new PrintCommand("Release Climb");
+        c.setName("Release Climb");
+        return c;
+    }
+
+    public Command getClimbCmd() {
+        Command c = new PrintCommand("Climb");
+        c.setName("Climb");
+        return c;
+    }
+
+    public Command getClimbArmCmd() {
+        Command c = new PrintCommand("Climb Arm");
+        c.setName("Climb Arm");
+        return c;
+    }
+
+    public Command getHighArmCmd() {
+        Command c = new PrintCommand("High Arm");
+        c.setName("High Arm");
+        return c;
+    }
+
+    public Command getPlayerStation1Cmd() {
+        Command c = new PrintCommand("Player Station 1");
+        c.setName("Player Station 1");
+        return c;
+    }
+
+    public Command getPlayerStation2Cmd() {
+        Command c = new PrintCommand("Player Station 2");
+        c.setName("Player Station 2");
+        return c;
+    }
+
+    public Command getReef1Cmd() {
+        Command c = new PrintCommand("Reef 1");
+        c.setName("Reef 1");
+        return c;
+    }
+
+    public Command getReef2Cmd() {
+        Command c = new PrintCommand("Reef 2");
+        c.setName("Reef 2");
+        return c;
+    }
+
+    public Command getReef3Cmd() {
+        Command c = new PrintCommand("Reef 3");
+        c.setName("Reef 3");
+        return c;
+    }
+
+    public Command getReef4Cmd() {
+        Command c = new PrintCommand("Reef 4");
+        c.setName("Reef 4");
+        return c;
+    }
+
+    public Command getReef5Cmd() {
+        Command c = new PrintCommand("Reef 5");
+        c.setName("Reef 5");
+        return c;
+    }
+
+    public Command getReef6Cmd() {
+        Command c = new PrintCommand("Reef 6");
+        c.setName("Reef 6");
+        return c;
+    }
+
+    public Command getNetCmd() {
+        Command c = new PrintCommand("Net");
+        c.setName("Net");
+        return c;
+    }
+
+    public Command getLeftReefCmd() {
+        Command c = new PrintCommand("Left Reef");
+        c.setName("Left Reef");
+        return c;
+    }
+
+    public Command getRightReefCmd() {
+        Command c = new PrintCommand("Right Reef");
+        c.setName("Right Reef");
+        return c;
+    }
+
+    public Command getAlgaeReefCmd() {
+        Command c = new PrintCommand("Algae Reef");
+        c.setName("Algae Reef");
+        return c;
+    }
+
+    public Command getProcessorCmd() {
+        Command c = new PrintCommand("Processor");
+        c.setName("Processor");
+        return c;
+    }
 }
