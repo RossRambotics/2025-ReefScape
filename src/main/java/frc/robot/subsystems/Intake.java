@@ -158,7 +158,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        return this.runOnce(() -> setGoal(30, 30)).withName("Intake.IntakeCommand");
+        return this.runOnce(() -> setGoal(15, 15)).withName("Intake.IntakeCommand");
     }
 
     public Command getOuttakeCommand() {

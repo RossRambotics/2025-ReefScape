@@ -67,7 +67,7 @@ public class RobotContainer {
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
 
     final static public SpeedNanny m_speedNanny = new SpeedNanny();
-    final static public Targeting m_tracking = new Targeting();
+    final static public Targeting m_targeting = new Targeting();
     final static public ButtonBox m_buttonBox = new ButtonBox();
     final static public Mechanisms m_mechanisms = new Mechanisms();
 
@@ -154,7 +154,7 @@ public class RobotContainer {
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative Y(forward)
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withTargetDirection(m_tracking.getTargetAngle())));
+                        .withTargetDirection(m_targeting.getTargetAngle())));
 
         joystick.pov(0)
                 .whileTrue(drivetrain.applyRequest(() -> drive
@@ -217,22 +217,25 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        String pathName = "Tag.18.Left";
-        Command c = null;
-        try {
-            PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-            path.preventFlipping = true;
-            c = AutoBuilder.followPath(path);
-        } catch (Exception e) {
-            DriverStation.reportError("Can't Load Path: " + pathName, false);
-        }
+        // String pathName = "Tag.18.Left";
+        // Command c = null;
+        // try {
+        // PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        // path.preventFlipping = true;
+        // c = AutoBuilder.followPath(path);
+        // } catch (Exception e) {
+        // DriverStation.reportError("Can't Load Path: " + pathName, false);
+        // }
 
-        if (c != null)
-            joystick.a().whileTrue(c);
+        // if (c != null)
+        // joystick.a().whileTrue(c);
 
-        joystick.b().whileTrue(new RunPathToTarget());
-        joystick.x().whileTrue(new ReefLineUp2(drivetrain, targetDrive));
-
+        // joystick.b().whileTrue(new RunPathToTarget());
+        // joystick.x().whileTrue(new ReefLineUp2(drivetrain, targetDrive));
+        joystick.a().onTrue(m_intake.getIntakeCommand());
+        joystick.a().onFalse(m_intake.getStopCommand());
+        joystick.b().onTrue(m_intake.getOuttakeCommand());
+        joystick.b().onFalse(m_intake.getStopCommand());
     }
 
     public Command getAutonomousCommand() {

@@ -1,5 +1,10 @@
 {
   "NetworkTables": {
+    "retained": {
+      ".schema": {
+        "open": true
+      }
+    },
     "transitory": {
       "Shuffleboard": {
         "ArmBase": {
@@ -7,6 +12,17 @@
         },
         "ArmExt": {
           "open": true
+        },
+        "Intake": {
+          "Intake.IntakeCommand": {
+            "open": true
+          },
+          "Intake.OuttakeCommand": {
+            "open": true
+          },
+          "Intake.StopCommand": {
+            "open": true
+          }
         },
         "Wrist": {
           "open": true
@@ -22,6 +38,7 @@
       "/Shuffleboard/ArmBase/ArmBase.TestDown": "Command",
       "/Shuffleboard/ArmBase/ArmBase.TestUp": "Command",
       "/Shuffleboard/ArmBase/ArmBase.Zero": "Command",
+      "/Shuffleboard/ArmBase/ArmBaseZeroEncoder": "Command",
       "/Shuffleboard/ArmController/BackAligment": "Command",
       "/Shuffleboard/ArmController/BackScore_L1": "Command",
       "/Shuffleboard/ArmController/BackScore_L2": "Command",
@@ -70,22 +87,77 @@
       "/SmartDashboard/Module 3": "Mechanism2d"
     },
     "windows": {
+      "/Shuffleboard/ArmBase/ArmBase.Zero": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmBase/ArmBaseZeroEncoder": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/BackAligment": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/BackScore_L2": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/BackScore_L3": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/BackScore_L4": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/Back_L2": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/Back_L3": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/Back_L4": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/Carry": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/FrontAligment": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/FrontScore_L1": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/Front_L1": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/HumanPlayerCoral": {
+        "window": {
+          "visible": true
+        }
+      },
       "/Shuffleboard/ArmExt/ArmExt.Calibrate": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/Intake/Intake.IntakeCommand": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/Intake/Intake.OuttakeCommand": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/Intake/Intake.StopCommand": {
         "window": {
           "visible": true
         }
@@ -109,7 +181,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 249,
+          "height": 0,
           "series": [
             {
               "color": [

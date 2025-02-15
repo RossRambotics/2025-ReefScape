@@ -24,7 +24,7 @@ public class RunPathToTarget extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        Pose2d targetPose = RobotContainer.m_tracking.getTargetPose();
+        Pose2d targetPose = RobotContainer.m_targeting.getTargetPose();
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
                 1.0, 2.0,
