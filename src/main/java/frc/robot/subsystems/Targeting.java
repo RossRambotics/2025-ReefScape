@@ -20,6 +20,7 @@ public class Targeting extends SubsystemBase {
     private GenericEntry m_TargetIDFound = null;
     private GenericEntry m_GE_bUpdateTarget = null;
     private boolean m_isFirstTime = true;
+    private Alliance m_alliance = Alliance.Red;
 
     private Pose2d m_TargetPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
@@ -58,8 +59,20 @@ public class Targeting extends SubsystemBase {
         return m_TargetPose;
     }
 
+    /**
+     * Set the target ID for the red and blue side. Defaults to the red side if the
+     * alliance is not set.
+     * 
+     * @param redID
+     * @param blueID
+     */
     public void setTargetIDRedBlue(int redID, int blueID) {
-        // TODO fix this
+        if (m_alliance == Alliance.Red) {
+            m_TargetID.setDouble(redID);
+        } else {
+            m_TargetID.setDouble(blueID);
+        }
+        this.setTargetAngle();
     }
 
     public void setTargetID(int targetID) {
@@ -153,6 +166,10 @@ public class Targeting extends SubsystemBase {
 
         }
 
+    }
+
+    public void setAlliance(Alliance allianceColor) {
+        m_alliance = allianceColor;
     }
 
 }
