@@ -16,6 +16,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.units.measure.Angle;
 
@@ -28,6 +29,13 @@ public class Targeting extends SubsystemBase {
         kRightCoral
     }
 
+    // Define the enumerated type
+    public enum HumanPlayerStation {
+        kLeftStation,
+        kRightStation
+    }
+
+    private HumanPlayerStation m_HumanPlayerStation = HumanPlayerStation.kLeftStation;
     private ScoreTarget m_ScoreTarget = ScoreTarget.kLeftCoral;
     private GenericEntry m_TargetID = null;
     private GenericEntry m_TargetAngle = null;
@@ -168,11 +176,42 @@ public class Targeting extends SubsystemBase {
         }
 
         m_TargetPose = robotPose;
-        m_TargetAngle.setDouble(pose.getRotation().getDegrees());
+        m_TargetAngle.setDouble(robotPose.getRotation().getDegrees());
     }
 
     public void setAlliance(Alliance allianceColor) {
         m_alliance = allianceColor;
+    }
+
+    public void setHumanPlayerStation(HumanPlayerStation station) {
+        m_HumanPlayerStation = station;
+    }
+
+    public Command getTargetHumanPlayerStation() {
+        return this.runOnce(() -> setHumanPlayerStationAprilID(m_HumanPlayerStation))
+                .withName("Targeting.HumanPlayerStation");
+
+    }
+
+    private void setHumanPlayerStationAprilID(HumanPlayerStation station) {
+        switch (station) {
+            case kLeftStation:
+                if (m_alliance == Alliance.Red) {
+                    setTargetID(1);
+                } else {
+                    setTargetID(13);
+                }
+                return;
+            case kRightStation:
+                if (m_alliance == Alliance.Red) {
+                    setTargetID(2);
+                } else {
+                    setTargetID(12);
+                }
+                return;
+            default:
+                return;
+        }
     }
 
 }

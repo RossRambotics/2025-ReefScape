@@ -11,9 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Targeting.HumanPlayerStation;
 import frc.robot.subsystems.Targeting.ScoreTarget;
 
 public class ButtonBox extends SubsystemBase {
+
     /** Creates a new ButtonBox. */
     public ButtonBox() {
 
@@ -34,8 +36,8 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getClimbCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getClimbArmCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getHighArmCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getPlayerStation1Cmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getPlayerStation2Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getPlayerStationLeftCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getPlayerStationRightCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReef1Cmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReef2Cmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReef3Cmd());
@@ -172,19 +174,22 @@ public class ButtonBox extends SubsystemBase {
         return c;
     }
 
-    public Command getPlayerStation1Cmd() {
-        Command c = new PrintCommand("Player Station 1");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(1, 13)));
+    public Command getPlayerStationLeftCmd() {
+        Command c = new PrintCommand("Player Station Left");
+        c = c.andThen(
+                this.runOnce(() -> RobotContainer.m_targeting
+                        .setHumanPlayerStation(HumanPlayerStation.kLeftStation)));
 
-        c.setName("Player Station 1");
+        c.setName("Player Station Left");
         return c;
     }
 
-    public Command getPlayerStation2Cmd() {
-        Command c = new PrintCommand("Player Station 2");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(2, 12)));
+    public Command getPlayerStationRightCmd() {
+        Command c = new PrintCommand("Player Station Right");
+        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting
+                .setHumanPlayerStation(HumanPlayerStation.kRightStation)));
 
-        c.setName("Player Station 2");
+        c.setName("Player Station Right");
         return c;
     }
 
