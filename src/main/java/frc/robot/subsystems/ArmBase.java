@@ -21,6 +21,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.controls.Follower;
 
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
@@ -74,14 +75,16 @@ public class ArmBase extends SubsystemBase {
         FeedbackConfigs fdb = fx_cfg.Feedback;
         double gearRatio = 112.0;
 
-        // needed for internal sensor
-        fdb.SensorToMechanismRatio = gearRatio;
-
-        // use external encoder (CANCoder)
-        // fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
-        // fdb.FeedbackRemoteSensorID = m_armBaseCANcoder.getDeviceID();
-        // fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        // fdb.RotorToSensorRatio = gearRatio;
+        if (Robot.isSimulation()) {
+            // needed for internal sensor
+            fdb.SensorToMechanismRatio = gearRatio;
+        } else {
+            // use external encoder (CANCoder)
+            fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
+            fdb.FeedbackRemoteSensorID = m_armBaseCANcoder.getDeviceID();
+            fdb.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
+            fdb.RotorToSensorRatio = gearRatio;
+        }
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = fx_cfg.MotionMagic;

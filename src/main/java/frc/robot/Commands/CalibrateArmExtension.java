@@ -16,7 +16,8 @@ import frc.robot.subsystems.ArmExtension;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CalibrateArmExtension extends Command {
     private double kStallVelocityThreshold = 0.25;
-    private double kStallTimeThreshold = 0.25;
+    private double kStallCurrentThreshold = 5.0;
+    private double kStallTimeThreshold = 0.1;
     private double kStallMotorPower = -0.1;
     private TalonFX m_motor = null;
     private Timer m_stallTimer = new Timer();
@@ -56,10 +57,12 @@ public class CalibrateArmExtension extends Command {
 
         // rotor velocity ignore mechaniasm ratios
         double currentVelocity = m_motor.getRotorVelocity().getValueAsDouble();
+        double currentAMPs = m_motor.getSupplyCurrent().getValueAsDouble();
         currentVelocity = Math.abs(currentVelocity);
-        System.out.println("Calibrate Ext Vel: " + currentVelocity + " Time: " + m_stallTimer.get());
+        System.out.println(
+                "Calibrate Ext AMPs:" + currentAMPs + " Vel: " + currentVelocity + " Time: " + m_stallTimer.get());
 
-        if (currentVelocity < kStallVelocityThreshold) {
+        if (currentAMPs > kStallCurrentThreshold) {
             if (!m_stallTimer.isRunning()) {
                 m_stallTimer.start();
             }
