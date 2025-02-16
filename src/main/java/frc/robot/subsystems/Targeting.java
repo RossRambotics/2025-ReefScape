@@ -6,7 +6,10 @@ package frc.robot.subsystems;
 
 import org.opencv.objdetect.CascadeClassifier;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
@@ -32,6 +35,8 @@ public class Targeting extends SubsystemBase {
     private GenericEntry m_GE_bUpdateTarget = null;
     private boolean m_isFirstTime = true;
     private Alliance m_alliance = Alliance.Red;
+    private AprilTagFieldLayout m_aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    private double kAprilTagWidth = 0.17 / 2.0;
 
     private Pose2d m_TargetPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
@@ -131,89 +136,39 @@ public class Targeting extends SubsystemBase {
     private void setTargetAngle() {
 
         int targetID = (int) m_TargetID.getDouble(-1);
-        double goal = 0.0;
+
+        Pose3d tagPose = m_aprilTagFieldLayout.getTagPose(targetID).isPresent()
+                ? m_aprilTagFieldLayout.getTagPose(targetID).get()
+                : new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(180)));
+        Pose2d pose = new Pose2d(tagPose.getX(), tagPose.getY(), tagPose.getRotation().toRotation2d());
+
+        // robot is 32 in long and we are trying to put it 14 inches from the reef, so
+        // we need to be
+        // 16 (half of length) + 14 inches from the reef or 30 inches from the reef. 30
+        // inches in meters is 0.762.
+        double distance = -0.762; // distance in meters
+        Rotation2d rotation = pose.getRotation(); // get the rotation
+
+        // Calculate the new x and y coordinates using the rotation
+        double newX = pose.getX() - distance * rotation.getCos();
+        double newY = pose.getY() - distance * rotation.getSin();
+
+        // Create the new Pose2d
+        Pose2d robotPose;
+
+        // adjust robotPose based on player station
         switch (targetID) {
-            // red side (i think ;) )
-            case 1:
-                m_TargetAngle.setDouble(-125.5);
+            case 1, 2, 12, 13:
+                robotPose = new Pose2d(newX, newY, rotation.plus(Rotation2d.fromDegrees(180)));
                 break;
-            case 2:
-                m_TargetAngle.setDouble(125.5);
+            default:
+                // Create the new Pose2d
+                robotPose = new Pose2d(newX, newY, rotation);
                 break;
-            case 3:
-                m_TargetAngle.setDouble(90);
-                break;
-            case 4:
-                m_TargetAngle.setDouble(90);
-                break;
-            case 5:
-                m_TargetAngle.setDouble(-90);
-                break;
-            case 6:
-                m_TargetAngle.setDouble(55.8);
-                break;
-            case 7:
-                m_TargetAngle.setDouble(180.0);
-                break;
-            case 8:
-                m_TargetAngle.setDouble(-119.5);
-                break;
-            case 9:
-                m_TargetAngle.setDouble(0);
-                m_TargetPose = new Pose2d(14.5, 4, Rotation2d.fromDegrees(0.0));
-                break;
-            case 10:
-                m_TargetAngle.setDouble(0.0);
-                break;
-            case 11:
-                m_TargetAngle.setDouble(55.8);
-                break;
-
-            // blue side
-            case 12:
-                m_TargetAngle.setDouble(54.0);
-                m_TargetPose = new Pose2d(1.300, 1.225, Rotation2d.fromDegrees(54.0));
-                break;
-            case 13:
-                m_TargetAngle.setDouble(-216 + 360);
-                m_TargetPose = new Pose2d(1.300, 6.916, Rotation2d.fromDegrees(-216 + 360));
-                break;
-            case 14:
-                m_TargetAngle.setDouble(180.0);
-                break;
-            case 15:
-                m_TargetAngle.setDouble(180.0);
-                break;
-            case 16:
-                m_TargetAngle.setDouble(270.0);
-                break;
-            case 17:
-                m_TargetAngle.setDouble(60.0);
-                m_TargetPose = new Pose2d(3.733, 2.707, Rotation2d.fromDegrees(60.0));
-                break;
-            case 18:
-                m_TargetAngle.setDouble(180);
-                m_TargetPose = new Pose2d(2.720, 4.10, Rotation2d.fromDegrees(180));
-                break;
-            case 19:
-                m_TargetAngle.setDouble(-60);
-                m_TargetPose = new Pose2d(3.733, 5.357, Rotation2d.fromDegrees(-60.0));
-                break;
-            case 20:
-                m_TargetAngle.setDouble(-120);
-                m_TargetPose = new Pose2d(5.385, 5.357, Rotation2d.fromDegrees(-120.0));
-                break;
-            case 21:
-                m_TargetAngle.setDouble(180.0);
-                m_TargetPose = new Pose2d(6.050, 4.033, Rotation2d.fromDegrees(180));
-                break;
-            case 22:
-                m_TargetAngle.setDouble(120);
-                m_TargetPose = new Pose2d(5.213, 2.707, Rotation2d.fromDegrees(120.0));
-                break;
-
         }
 
+        m_TargetPose = robotPose;
+        m_TargetAngle.setDouble(pose.getRotation().getDegrees());
     }
 
     public void setAlliance(Alliance allianceColor) {
