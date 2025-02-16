@@ -84,11 +84,11 @@ public class Mechanisms {
     }
 
     public void updateExt(Distance position, StatusSignal<AngularVelocity> velocity) {
-        armExt.setLength(0.1 + position.magnitude() / 2);
+        armExt.setLength(0.1 + 1 + (position.magnitude() / 80));
     }
 
     public void updateWrist(StatusSignal<Angle> position, StatusSignal<AngularVelocity> velocity) {
-        wrist.setAngle(position.getValue().in(Degrees) + 90);
+        wrist.setAngle(-position.getValue().in(Degrees));
     }
 
     public void updateIntake(StatusSignal<Angle> positionL, StatusSignal<Angle> positionR) {

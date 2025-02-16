@@ -19,6 +19,8 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.networktables.GenericEntry;
@@ -71,12 +73,15 @@ public class Wrist extends SubsystemBase {
         double gearRatio = 25.0;
 
         // use internal encoder
-        // fdb.SensorToMechanismRatio = gearRatio;
-        // use external encoder (CANCoder)
-        fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
-        fdb.FeedbackRemoteSensorID = m_wristCANcoder.getDeviceID();
-        fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        fdb.RotorToSensorRatio = gearRatio;
+        if (Robot.isSimulation()) {
+            fdb.SensorToMechanismRatio = gearRatio;
+        } else {
+            // use external encoder (CANCoder)
+            fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
+            fdb.FeedbackRemoteSensorID = m_wristCANcoder.getDeviceID();
+            fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+            fdb.RotorToSensorRatio = gearRatio;
+        }
 
         fx_cfg.MotorOutput = fx_cfg.MotorOutput.withInverted(InvertedValue.Clockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake);
