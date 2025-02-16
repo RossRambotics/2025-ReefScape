@@ -70,6 +70,7 @@
       "/Shuffleboard/ArmExt/ArmExt.Calibrate": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Stop": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Zero": "Command",
+      "/Shuffleboard/ButtonBox/Algae Reef": "Command",
       "/Shuffleboard/ButtonBox/Calibrate Arm": "Command",
       "/Shuffleboard/ButtonBox/Climb": "Command",
       "/Shuffleboard/ButtonBox/Climb Arm": "Command",
@@ -178,6 +179,11 @@
         }
       },
       "/Shuffleboard/ArmExt/ArmExt.Calibrate": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmExt/ArmExt.Zero": {
         "window": {
           "visible": true
         }
