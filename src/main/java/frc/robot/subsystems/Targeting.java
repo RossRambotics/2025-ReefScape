@@ -66,8 +66,8 @@ public class Targeting extends SubsystemBase {
         m_ScoreTarget = target;
     }
 
-    private final double kCoralYoffset = 0.5;
-    private final double kCoralXoffset = 0.25;
+    private final double kCoralYoffset = 0.10;
+    private final double kCoralXoffset = 0.15;
     private final double kAlgaeXoffset = 0.75;
 
     public Pose2d getScoreTargetPose() {
@@ -193,7 +193,7 @@ public class Targeting extends SubsystemBase {
                 break;
             case 18:
                 m_TargetAngle.setDouble(180);
-                m_TargetPose = new Pose2d(2.960, 4.033, Rotation2d.fromDegrees(180));
+                m_TargetPose = new Pose2d(2.720, 4.10, Rotation2d.fromDegrees(180));
                 break;
             case 19:
                 m_TargetAngle.setDouble(-60);

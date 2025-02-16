@@ -23,7 +23,7 @@ public class ReefLineUp3 extends Command {
     private SwerveRequest.FieldCentricFacingAngle m_drive;
     private Pose2d m_targetPose;
     private Supplier<Pose2d> mSupplierTargetPose;
-    private final double kP = 1.0;
+    private final double kP = 7.5;
     private final double kI = 0.0;
     private final double kD = 0.1;
     private double kS = 0.15;

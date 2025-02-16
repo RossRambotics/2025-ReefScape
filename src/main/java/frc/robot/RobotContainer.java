@@ -81,7 +81,7 @@ public class RobotContainer {
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.FieldCentricFacingAngle targetDrive = new SwerveRequest.FieldCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -149,8 +149,9 @@ public class RobotContainer {
                 ));
 
         // snaps the robot to target angle
-        targetDrive.HeadingController = new PhoenixPIDController(5.0, 0.0, 0.20);
-        targetDrive.HeadingController.enableContinuousInput(-179.999, 180);
+        targetDrive.HeadingController = new PhoenixPIDController(7.0, 0.0, 0.20);
+        targetDrive.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+
         joystick.leftBumper().whileTrue(
                 drivetrain.applyRequest(() -> targetDrive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
