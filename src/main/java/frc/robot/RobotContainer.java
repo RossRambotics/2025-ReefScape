@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Commands.ReefLineUp;
 import frc.robot.Commands.ReefLineUp2;
+import frc.robot.Commands.ReefLineUp3;
 import frc.robot.Commands.RunPathToTarget;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
@@ -231,7 +232,8 @@ public class RobotContainer {
         // joystick.a().whileTrue(c);
 
         // joystick.b().whileTrue(new RunPathToTarget());
-        // joystick.x().whileTrue(new ReefLineUp2(drivetrain, targetDrive));
+        joystick.x().whileTrue(new ReefLineUp3(drivetrain, targetDrive, m_targeting::getTargetPose));
+        joystick.y().whileTrue(new ReefLineUp3(drivetrain, targetDrive, m_targeting::getScoreTargetPose));
         joystick.a().onTrue(m_intake.getIntakeCommand());
         joystick.a().onFalse(m_intake.getStopCommand());
         joystick.b().onTrue(m_intake.getOuttakeCommand());

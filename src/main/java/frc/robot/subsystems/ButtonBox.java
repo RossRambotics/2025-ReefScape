@@ -46,6 +46,7 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getProcessorCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getLeftReefCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getRightReefCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getAlgaeReefCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getIntakeStopCmd());
     }
 

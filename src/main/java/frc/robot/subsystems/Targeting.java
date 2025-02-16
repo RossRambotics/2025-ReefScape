@@ -8,11 +8,13 @@ import org.opencv.objdetect.CascadeClassifier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.units.measure.Angle;
 
 public class Targeting extends SubsystemBase {
 
@@ -62,6 +64,39 @@ public class Targeting extends SubsystemBase {
 
     public void setScoreTarget(ScoreTarget target) {
         m_ScoreTarget = target;
+    }
+
+    private final double kCoralYoffset = 0.5;
+    private final double kCoralXoffset = 0.25;
+    private final double kAlgaeXoffset = 0.75;
+
+    public Pose2d getScoreTargetPose() {
+        // start with the target pose
+        Pose2d pose = new Pose2d(m_TargetPose.getTranslation().getX(), m_TargetPose.getTranslation().getY(),
+                m_TargetPose.getRotation());
+        Translation2d offset;
+
+        // apply the offset based on the target (coral or algae)
+        switch (m_ScoreTarget) {
+            case kLeftCoral:
+                offset = new Translation2d(kCoralXoffset, kCoralYoffset);
+                break;
+
+            case kCenterAlgae:
+                offset = new Translation2d(kAlgaeXoffset, 0);
+                break;
+
+            case kRightCoral:
+                offset = new Translation2d(kCoralXoffset, -kCoralYoffset);
+                break;
+            default:
+                return m_TargetPose;
+        }
+
+        // rotate the offset by the target pose angle and add it to the target pose to
+        // calculate the score target pose
+        offset = offset.rotateBy(pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        return new Pose2d(pose.getTranslation().plus(offset), pose.getRotation());
     }
 
     public Rotation2d getTargetAngle() {
@@ -124,8 +159,8 @@ public class Targeting extends SubsystemBase {
                 m_TargetAngle.setDouble(-119.5);
                 break;
             case 9:
-                m_TargetAngle.setDouble(-55.8);
-                m_TargetPose = new Pose2d(14.5, 4, Rotation2d.fromDegrees(180.0));
+                m_TargetAngle.setDouble(0);
+                m_TargetPose = new Pose2d(14.5, 4, Rotation2d.fromDegrees(0.0));
                 break;
             case 10:
                 m_TargetAngle.setDouble(0.0);
@@ -157,8 +192,8 @@ public class Targeting extends SubsystemBase {
                 m_TargetPose = new Pose2d(3.733, 2.707, Rotation2d.fromDegrees(60.0));
                 break;
             case 18:
-                m_TargetAngle.setDouble(0.0);
-                m_TargetPose = new Pose2d(2.960, 4.033, Rotation2d.fromDegrees(0));
+                m_TargetAngle.setDouble(180);
+                m_TargetPose = new Pose2d(2.960, 4.033, Rotation2d.fromDegrees(180));
                 break;
             case 19:
                 m_TargetAngle.setDouble(-60);
