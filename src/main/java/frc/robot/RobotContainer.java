@@ -233,8 +233,17 @@ public class RobotContainer {
         // if (c != null)
         // joystick.a().whileTrue(c);
 
-        // joystick.b().whileTrue(new RunPathToTarget());
-        joystick.x().whileTrue(new ReefLineUp3(drivetrain, targetDrive, m_targeting::getTargetPose));
+        joystick.leftTrigger().whileTrue(new RunPathToTarget(drivetrain, targetDrive));
+
+        joystick.leftBumper().whileTrue(
+                drivetrain.applyRequest(() -> targetDrive
+                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
+                        .withVelocityX(-getDriverYVelocity()) // Drive forward with negative Y(forward)
+                        .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
+                        .withTargetDirection(m_targeting.getTargetAngle())));
+
+        // joystick.x().whileTrue(new ReefLineUp3(drivetrain, targetDrive,
+        // m_targeting::getTargetPose));
         joystick.y().whileTrue(new ReefLineUp3(drivetrain, targetDrive, m_targeting::getScoreTargetPose));
         joystick.a().onTrue(m_intake.getIntakeCommand());
         joystick.a().onFalse(m_intake.getStopCommand());
