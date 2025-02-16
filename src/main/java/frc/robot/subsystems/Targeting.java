@@ -15,6 +15,15 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Targeting extends SubsystemBase {
+
+    // Define the enumerated type
+    public enum ScoreTarget {
+        kLeftCoral,
+        kCenterAlgae,
+        kRightCoral
+    }
+
+    private ScoreTarget m_ScoreTarget = ScoreTarget.kLeftCoral;
     private GenericEntry m_TargetID = null;
     private GenericEntry m_TargetAngle = null;
     private GenericEntry m_TargetIDFound = null;
@@ -49,6 +58,10 @@ public class Targeting extends SubsystemBase {
             setTargetAngle();
             m_GE_bUpdateTarget.setBoolean(false);
         }
+    }
+
+    public void setScoreTarget(ScoreTarget target) {
+        m_ScoreTarget = target;
     }
 
     public Rotation2d getTargetAngle() {

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Targeting.ScoreTarget;
 
 public class ButtonBox extends SubsystemBase {
     /** Creates a new ButtonBox. */
@@ -241,19 +242,23 @@ public class ButtonBox extends SubsystemBase {
     }
 
     public Command getLeftReefCmd() {
-        Command c = new PrintCommand("Left Reef");
+        Command c = new PrintCommand("Left Reef")
+                .andThen(this.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kLeftCoral)));
+
         c.setName("Left Reef");
         return c;
     }
 
     public Command getRightReefCmd() {
-        Command c = new PrintCommand("Right Reef");
+        Command c = new PrintCommand("Right Reef")
+                .andThen(this.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kRightCoral)));
         c.setName("Right Reef");
         return c;
     }
 
     public Command getAlgaeReefCmd() {
-        Command c = new PrintCommand("Algae Reef");
+        Command c = new PrintCommand("Algae Reef")
+                .andThen(this.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kCenterAlgae)));
         c.setName("Algae Reef");
         return c;
     }
