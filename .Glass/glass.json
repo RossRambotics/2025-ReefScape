@@ -49,28 +49,53 @@
       "/Shuffleboard/ArmController/Back_L3": "Command",
       "/Shuffleboard/ArmController/Back_L4": "Command",
       "/Shuffleboard/ArmController/Carry": "Command",
+      "/Shuffleboard/ArmController/Climb": "Command",
       "/Shuffleboard/ArmController/FrontAligment": "Command",
       "/Shuffleboard/ArmController/FrontScore_L1": "Command",
       "/Shuffleboard/ArmController/FrontScore_L2": "Command",
+      "/Shuffleboard/ArmController/FrontScore_L3": "Command",
       "/Shuffleboard/ArmController/Front_L1": "Command",
       "/Shuffleboard/ArmController/Front_L2": "Command",
+      "/Shuffleboard/ArmController/Front_L3": "Command",
       "/Shuffleboard/ArmController/GroundAlgae": "Command",
       "/Shuffleboard/ArmController/GroundCoral": "Command",
       "/Shuffleboard/ArmController/HumanPlayerCoral": "Command",
       "/Shuffleboard/ArmController/NetAlgae": "Command",
+      "/Shuffleboard/ArmController/Processor": "Command",
       "/Shuffleboard/ArmController/ProcessorAlgae": "Command",
+      "/Shuffleboard/ArmController/RemoveAlgaeHigh": "Command",
+      "/Shuffleboard/ArmController/RemoveAlgaeLow": "Command",
       "/Shuffleboard/ArmController/S1": "Command",
       "/Shuffleboard/ArmController/Start": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Calibrate": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Stop": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Zero": "Command",
       "/Shuffleboard/ButtonBox/Calibrate Arm": "Command",
+      "/Shuffleboard/ButtonBox/Climb": "Command",
+      "/Shuffleboard/ButtonBox/Climb Arm": "Command",
       "/Shuffleboard/ButtonBox/High": "Command",
+      "/Shuffleboard/ButtonBox/High Arm": "Command",
+      "/Shuffleboard/ButtonBox/Intake Algae": "Command",
       "/Shuffleboard/ButtonBox/Intake In": "Command",
       "/Shuffleboard/ButtonBox/Intake Out": "Command",
+      "/Shuffleboard/ButtonBox/Intake Stop": "Command",
+      "/Shuffleboard/ButtonBox/Left Reef": "Command",
       "/Shuffleboard/ButtonBox/Low": "Command",
       "/Shuffleboard/ButtonBox/Middle": "Command",
+      "/Shuffleboard/ButtonBox/Net": "Command",
+      "/Shuffleboard/ButtonBox/Player Station 1": "Command",
+      "/Shuffleboard/ButtonBox/Player Station 2": "Command",
+      "/Shuffleboard/ButtonBox/Processor": "Command",
+      "/Shuffleboard/ButtonBox/Reef 1": "Command",
+      "/Shuffleboard/ButtonBox/Reef 2": "Command",
+      "/Shuffleboard/ButtonBox/Reef 3": "Command",
+      "/Shuffleboard/ButtonBox/Reef 4": "Command",
+      "/Shuffleboard/ButtonBox/Reef 5": "Command",
+      "/Shuffleboard/ButtonBox/Reef 6": "Command",
+      "/Shuffleboard/ButtonBox/Release Climb": "Command",
+      "/Shuffleboard/ButtonBox/Remove Algae": "Command",
       "/Shuffleboard/ButtonBox/Reset Arm": "Command",
+      "/Shuffleboard/ButtonBox/Right Reef": "Command",
       "/Shuffleboard/ButtonBox/Shoot Processor": "Command",
       "/Shuffleboard/ButtonBox/Travel To Processor": "Command",
       "/Shuffleboard/ButtonBox/Travel To Reef": "Command",
@@ -132,11 +157,6 @@
           "visible": true
         }
       },
-      "/Shuffleboard/ArmController/Carry": {
-        "window": {
-          "visible": true
-        }
-      },
       "/Shuffleboard/ArmController/FrontAligment": {
         "window": {
           "visible": true
@@ -181,7 +201,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 0,
+          "height": 249,
           "series": [
             {
               "color": [

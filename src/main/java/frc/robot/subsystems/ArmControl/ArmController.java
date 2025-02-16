@@ -156,7 +156,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("Climb"));
 
         Carry = m_armGraph.new GraphCommandNode("Carry",
-                ArmController.getArmCommand(Degrees.of(20),
+                ArmController.getArmCommand(Degrees.of(-20),
                         Meters.of(-77.3),
                         Degrees.of(-130))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),

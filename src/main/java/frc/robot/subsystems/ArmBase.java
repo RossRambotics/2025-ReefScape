@@ -38,7 +38,7 @@ import static edu.wpi.first.units.Units.*;
 public class ArmBase extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(30, "rio");
     final TalonFX m_RightMotor = new TalonFX(31, "rio");
-    // final CANcoder m_armBaseCANcoder = new CANcoder(12, "rio");
+    final CANcoder m_armBaseCANcoder = new CANcoder(12, "rio");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
@@ -61,9 +61,9 @@ public class ArmBase extends SubsystemBase {
         // CAN Coder configuration
         CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
         cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
-        cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(0));
-        // m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
+        cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(109.0 - 216.0));
+        m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
 
         TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
 
@@ -72,7 +72,7 @@ public class ArmBase extends SubsystemBase {
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = fx_cfg.Feedback;
-        double gearRatio = 114.7;
+        double gearRatio = 112.0;
 
         // needed for internal sensor
         fdb.SensorToMechanismRatio = gearRatio;
@@ -117,10 +117,10 @@ public class ArmBase extends SubsystemBase {
         // setup software limits
         SoftwareLimitSwitchConfigs swLimits = new SoftwareLimitSwitchConfigs();
         swLimits.ForwardSoftLimitEnable = true;
-        swLimits.ForwardSoftLimitThreshold = Degrees.of(90).in(Rotations);
+        swLimits.ForwardSoftLimitThreshold = Degrees.of(120).in(Rotations);
         swLimits.ReverseSoftLimitEnable = true;
         swLimits.ReverseSoftLimitThreshold = Degrees.of(-10).in(Rotations);
-        fx_cfg.SoftwareLimitSwitch = swLimits;
+        // fx_cfg.SoftwareLimitSwitch = swLimits;
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
