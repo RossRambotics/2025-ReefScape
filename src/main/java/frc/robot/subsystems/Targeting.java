@@ -26,7 +26,8 @@ public class Targeting extends SubsystemBase {
     public enum ScoreTarget {
         kLeftCoral,
         kCenterAlgae,
-        kRightCoral
+        kRightCoral,
+        kPlayerStation
     }
 
     // Define the enumerated type
@@ -97,7 +98,17 @@ public class Targeting extends SubsystemBase {
         Translation2d offset;
 
         // apply the offset based on the target (coral or algae)
-        switch (m_ScoreTarget) {
+        ScoreTarget target = m_ScoreTarget;
+        int targetID = (int) m_TargetID.getDouble(-1);
+
+        switch (targetID) {
+            case 1, 2, 12, 13:
+                target = ScoreTarget.kPlayerStation;
+                break;
+            default:
+                break;
+        }
+        switch (target) {
             case kLeftCoral:
                 offset = new Translation2d(kCoralXoffset, kCoralYoffset);
                 break;
@@ -108,6 +119,9 @@ public class Targeting extends SubsystemBase {
 
             case kRightCoral:
                 offset = new Translation2d(kCoralXoffset, -kCoralYoffset);
+                break;
+            case kPlayerStation:
+                offset = new Translation2d(0, 0);
                 break;
             default:
                 return m_TargetPose;
