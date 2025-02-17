@@ -246,6 +246,7 @@ public class RobotContainer {
                         .withTargetDirection(m_targeting.getTargetAngle())));
 
         joystick.rightBumper().onTrue(m_armController.getTransition_Carry());
+        joystick.rightTrigger().onTrue(m_armController.getNextNodeCmd());
 
         joystick.y().onTrue(m_armController.getTransition_HumanPlayerCoral()
                 .andThen(m_targeting.getTargetHumanPlayerStation()));

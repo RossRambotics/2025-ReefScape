@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.util.GraphCommand.GraphCommand;
 import frc.util.GraphCommand.GraphCommand.GraphCommandNode;
@@ -251,12 +252,26 @@ public class ArmController extends SubsystemBase {
         BackAligment.AddNode(Front_L1, 1);
         BackAligment.AddNode(Climb, 1);
         Back_L4.AddNode(BackScore_L4, 1);
+        Back_L4.setNextNode(BackScore_L4);
+        BackScore_L4.setNextNode(Back_L4);
         Back_L3.AddNode(BackScore_L3, 1);
+        Back_L3.setNextNode(BackScore_L3);
+        BackScore_L3.setNextNode(Back_L3);
         Back_L2.AddNode(BackScore_L2, 1);
+        Back_L2.setNextNode(BackScore_L2);
+        BackScore_L2.setNextNode(Back_L2);
         Back_L1.AddNode(BackScore_L1, 1);
+        Back_L1.setNextNode(BackScore_L1);
+        BackScore_L1.setNextNode(Back_L1);
         Front_L3.AddNode(FrontScore_L3, 1);
+        Front_L3.setNextNode(FrontScore_L3);
+        FrontScore_L3.setNextNode(Front_L3);
         Front_L2.AddNode(FrontScore_L2, 1);
+        Front_L2.setNextNode(FrontScore_L2);
+        FrontScore_L2.setNextNode(Front_L2);
         Front_L1.AddNode(FrontScore_L1, 1);
+        Front_L1.setNextNode(FrontScore_L1);
+        FrontScore_L1.setNextNode(Front_L1);
         BackAligment.AddNode(Carry, 1);
         BackAligment.AddNode(FrontAligment, 1);
         Carry.AddNode(FrontAligment, 1);
@@ -306,6 +321,7 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeHigh());
         Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeLow());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Climb());
+        Shuffleboard.getTab("ArmController").add(this.getNextNodeCmd());
     }
 
     @Override
@@ -332,6 +348,29 @@ public class ArmController extends SubsystemBase {
         } else {
             m_GE_nextNodeName.setString(m_armGraph.getCurrentNode().getNextNode().getNodeName());
         }
+    }
+
+    public Command getNextNodeCmd() {
+        Command c = this.runOnce(() -> advanceGraph());
+        c.setName("NextNode");
+        return c;
+    }
+
+    // private boolean m_isWaitingForDriver = false;
+
+    // private boolean isWaitingForDriver() {
+    // return m_isWaitingForDriver;
+    // }
+
+    // private Command getWaitForDriverCmd() {
+    // Command c = this.runOnce(() -> m_isWaitingForDriver = false)
+    // .andThen(new WaitUntilCommand(this::isWaitingForDriver));
+    // c.setName("WaitForDriver");
+    // return c;
+    // }
+
+    private void advanceGraph() {
+        m_armGraph.setTargetNode(m_armGraph.getCurrentNode().getNextNode());
     }
 
     public Command getTransition_Start() {

@@ -35,6 +35,13 @@ public class Targeting extends SubsystemBase {
         kRightStation
     }
 
+    // Define the enumerated type
+    public enum LineUpOrientation {
+        kForward,
+        kBackward
+    }
+
+    private LineUpOrientation m_lineUpOrientation = LineUpOrientation.kBackward;
     private HumanPlayerStation m_HumanPlayerStation = HumanPlayerStation.kLeftStation;
     private ScoreTarget m_ScoreTarget = ScoreTarget.kLeftCoral;
     private GenericEntry m_TargetID = null;
@@ -108,7 +115,12 @@ public class Targeting extends SubsystemBase {
 
         // rotate the offset by the target pose angle and add it to the target pose to
         // calculate the score target pose
-        offset = offset.rotateBy(pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        if (m_lineUpOrientation == LineUpOrientation.kBackward) {
+            offset = offset.rotateBy(pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        } else {
+            offset = offset.rotateBy(pose.getRotation().plus(Rotation2d.fromDegrees(0)));
+        }
+
         return new Pose2d(pose.getTranslation().plus(offset), pose.getRotation());
     }
 
@@ -171,6 +183,9 @@ public class Targeting extends SubsystemBase {
                 break;
             default:
                 // Create the new Pose2d
+                if (m_lineUpOrientation == LineUpOrientation.kForward) {
+                    rotation = rotation.plus(Rotation2d.fromDegrees(180));
+                }
                 robotPose = new Pose2d(newX, newY, rotation);
                 break;
         }
@@ -185,6 +200,11 @@ public class Targeting extends SubsystemBase {
 
     public void setHumanPlayerStation(HumanPlayerStation station) {
         m_HumanPlayerStation = station;
+    }
+
+    public void setLineUpOrientation(LineUpOrientation orientation) {
+        m_lineUpOrientation = orientation;
+        this.setTargetAngle();
     }
 
     public Command getTargetHumanPlayerStation() {

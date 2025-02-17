@@ -26,10 +26,10 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getShootProcessorCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getTravelToReefCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getTravelToProcessorCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getHighCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getMiddleCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getLowCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getTroughCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getBackL4Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getBackL3Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getBackL2Cmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getBackL1Cmd());
         Shuffleboard.getTab("ButtonBox").add(this.getIntakeAlgaeCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getRemoveAlgaeCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReleaseClimbCmd());
@@ -50,11 +50,29 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getRightReefCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getAlgaeReefCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getIntakeStopCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getBackWardsOrientationCmd());
+        Shuffleboard.getTab("ButtonBox").add(this.getForwardOrientationCmd());
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+    }
+
+    public Command getBackWardsOrientationCmd() {
+        Command c = new PrintCommand("Backwards")
+                .andThen(runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(
+                        Targeting.LineUpOrientation.kBackward)));
+        c.setName("Backwards Orientation");
+        return c;
+    }
+
+    public Command getForwardOrientationCmd() {
+        Command c = new PrintCommand("Forward")
+                .andThen(runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(
+                        Targeting.LineUpOrientation.kForward)));
+        c.setName("Forward Orientation");
+        return c;
     }
 
     // working on...
@@ -111,29 +129,31 @@ public class ButtonBox extends SubsystemBase {
         return c;
     }
 
-    public Command getHighCmd() {
-        Command c = new PrintCommand("High");
-        c.setName("High");
+    public Command getBackL4Cmd() {
+        Command c = new PrintCommand("Back L4")
+                .andThen(RobotContainer.m_armController.getTransition_Back_L4());
+        c.setName("Back L4");
         return c;
     }
 
-    public Command getMiddleCmd() {
-        Command c = new PrintCommand("Middle");
-        c.setName("Middle");
+    public Command getBackL3Cmd() {
+        Command c = new PrintCommand("Back L3")
+                .andThen(RobotContainer.m_armController.getTransition_Back_L3());
+        c.setName("Back L3");
         return c;
     }
 
-    public Command getLowCmd() {
-        Command c = new PrintCommand("Low")
+    public Command getBackL2Cmd() {
+        Command c = new PrintCommand("Back L2")
                 .andThen(RobotContainer.m_armController.getTransition_Back_L2());
-        c.setName("Low");
+        c.setName("Back L2");
         return c;
     }
 
-    public Command getTroughCmd() {
-        Command c = new PrintCommand("Trough")
+    public Command getBackL1Cmd() {
+        Command c = new PrintCommand("Back L1")
                 .andThen(RobotContainer.m_armController.getTransition_Back_L1());
-        c.setName("Trough");
+        c.setName("Back L1");
         return c;
     }
 

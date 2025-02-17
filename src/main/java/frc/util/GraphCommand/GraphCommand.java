@@ -38,7 +38,7 @@ public class GraphCommand extends Command {
         }
 
         if (m_isInitialized) {
-            DataLogManager.log("GraphCommand initialization again.  Skipping optimize.");
+            // DataLogManager.log("GraphCommand initialization again. Skipping optimize.");
             return;
         } else {
             m_isInitialized = true;
@@ -266,6 +266,11 @@ public class GraphCommand extends Command {
         }
 
         public GraphCommandNode getNextNodeGivenTarget(GraphCommandNode node) {
+            // trying to go to null!
+            if (node == null) {
+                return null;
+            }
+
             GraphCommandNodeLink link = m_optimizedLinks.get(node.m_nodeName);
 
             // cannot get to the node
