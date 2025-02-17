@@ -38,6 +38,7 @@ import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ButtonBox;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ManualArmControl;
 import frc.robot.subsystems.RangeFinder;
 import frc.robot.subsystems.SpeedNanny;
 import frc.robot.subsystems.Targeting;
@@ -56,6 +57,7 @@ public class RobotContainer {
     final static public Intake m_intake = new Intake();
     final static public ArmController m_armController = new ArmController();
     final static public VisionForOdometry m_visionForOdometry = new VisionForOdometry();
+    final static public ManualArmControl m_manualArmControl = new ManualArmControl();
 
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
 
@@ -107,6 +109,8 @@ public class RobotContainer {
     }
 
     private static double modifyAxis(double value) {
+        // Deadband
+        value = MathUtil.applyDeadband(value, 0.05);
 
         // Square the axis
         value = Math.copySign(value * value, value);

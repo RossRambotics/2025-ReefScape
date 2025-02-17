@@ -173,8 +173,10 @@ public class ArmBase extends SubsystemBase {
 
     public Command getZeroArmAngleCmd() {
 
-        Command c = Commands.runOnce(() -> m_LeftMotor
-                .setPosition(Degrees.of(0)))
+        Command c = Commands.runOnce(() -> {
+            m_LeftMotor.setPosition(Degrees.of(0));
+            // this.setGoal(Degrees.of(0));
+        })
                 .ignoringDisable(true);
 
         // Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
@@ -286,5 +288,19 @@ public class ArmBase extends SubsystemBase {
     public void simulationPeriodic() {
 
         RobotContainer.m_mechanisms.update(m_LeftMotor.getPosition(), m_LeftMotor.getVelocity());
+    }
+
+    public void doManualMove(double theta) {
+        double kManualMaxSpeed = 1.0;
+        double change = theta * kManualMaxSpeed;
+        Angle newGoal = m_goal.plus(Degrees.of(change));
+
+        if (newGoal.in(Degrees) > 120) {
+            newGoal = Degrees.of(120);
+        } else if (newGoal.in(Degrees) < -30) {
+            newGoal = Degrees.of(-30);
+        }
+
+        setGoal(newGoal);
     }
 }

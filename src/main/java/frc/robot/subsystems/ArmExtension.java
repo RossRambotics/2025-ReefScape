@@ -178,7 +178,7 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public Command getZeroArmExtCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setPosition(0));
+        Command c = this.runOnce(() -> m_LeftMotor.setPosition(-78));
         c.setName("ArmExt.Zero");
         // c.ignoringDisable(true);
 
@@ -271,5 +271,19 @@ public class ArmExtension extends SubsystemBase {
         // m_joystick.button(4).whileTrue(this.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // m_joystick.button(5).whileTrue(this.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // m_joystick.button(6).whileTrue(this.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    public void doManualMove(double vel) {
+        double kManualMaxSpeed = 1.0;
+        double change = vel * kManualMaxSpeed;
+        Distance newGoal = m_goal.plus(Meters.of(change));
+
+        if (newGoal.in(Meters) > 5) {
+            newGoal = Meters.of(5);
+        } else if (newGoal.in(Meters) < -80) {
+            newGoal = Meters.of(-80);
+        }
+
+        setGoal(newGoal);
     }
 }

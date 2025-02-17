@@ -224,4 +224,18 @@ public class Wrist extends SubsystemBase {
 
         RobotContainer.m_mechanisms.updateWrist(m_LeftMotor.getPosition(), m_LeftMotor.getVelocity());
     }
+
+    public void doManualMove(double theta) {
+        double kManualMaxSpeed = 1.0;
+        double change = theta * kManualMaxSpeed;
+        Angle newGoal = m_goal.plus(Degrees.of(change));
+
+        if (newGoal.in(Degrees) > 60) {
+            newGoal = Degrees.of(60);
+        } else if (newGoal.in(Degrees) < -220) {
+            newGoal = Degrees.of(-220);
+        }
+
+        setGoal(newGoal);
+    }
 }
