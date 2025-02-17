@@ -63,7 +63,7 @@ public class ArmBase extends SubsystemBase {
         CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
         cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
         cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(109.0 - 216.0));
+        cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(109.0 - 216.0 - 5.5));
         m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
 
         TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
@@ -75,15 +75,15 @@ public class ArmBase extends SubsystemBase {
         FeedbackConfigs fdb = fx_cfg.Feedback;
         double gearRatio = 112.0;
 
-        if (Robot.isSimulation()) {
+        if (Robot.isSimulation() || true) {
             // needed for internal sensor
             fdb.SensorToMechanismRatio = gearRatio;
         } else {
-            // use external encoder (CANCoder)
-            fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
-            fdb.FeedbackRemoteSensorID = m_armBaseCANcoder.getDeviceID();
-            fdb.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
-            fdb.RotorToSensorRatio = gearRatio;
+            // // use external encoder (CANCoder)
+            // fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
+            // fdb.FeedbackRemoteSensorID = m_armBaseCANcoder.getDeviceID();
+            // fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+            // fdb.RotorToSensorRatio = gearRatio;
         }
 
         /* Configure Motion Magic */
