@@ -155,6 +155,10 @@ public class ArmBase extends SubsystemBase {
         m_goal = angle;
     }
 
+    public Angle getCurrentAngle() {
+        return m_LeftMotor.getPosition().getValue();
+    }
+
     private Angle getError() {
         Angle goal = m_goal;
         Angle current = m_LeftMotor.getPosition().getValue();

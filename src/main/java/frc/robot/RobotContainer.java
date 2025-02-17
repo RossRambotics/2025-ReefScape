@@ -144,8 +144,10 @@ public class RobotContainer {
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative Y(forward)
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
-                                                                                    // negative X (left)
+                        .withRotationalRate(-joystick.getRightX() * m_speedNanny.getAngularRateLimit()) // Drive
+                                                                                                        // counterclockwise
+                                                                                                        // with
+                // negative X (left)
                 ));
 
         // snaps the robot to target angle
