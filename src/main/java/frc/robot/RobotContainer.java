@@ -139,6 +139,11 @@ public class RobotContainer {
         return slew;
     }
 
+    private double getDriverRotationalRate() {
+        double driverRightX = modifyAxis(joystick.getRightX());
+        return driverRightX * m_speedNanny.getAngularRateLimit();
+    }
+
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -148,9 +153,9 @@ public class RobotContainer {
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative Y(forward)
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withRotationalRate(-joystick.getRightX() * m_speedNanny.getAngularRateLimit()) // Drive
-                                                                                                        // counterclockwise
-                                                                                                        // with
+                        .withRotationalRate(-getDriverRotationalRate()) // Drive
+                                                                        // counterclockwise
+                                                                        // with
                 // negative X (left)
                 ));
 
