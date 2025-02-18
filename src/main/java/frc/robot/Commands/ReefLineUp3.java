@@ -16,6 +16,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.util.RandomExecutionLimiter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ReefLineUp3 extends Command {
@@ -38,6 +39,7 @@ public class ReefLineUp3 extends Command {
     private static GenericEntry m_yError = null;
     private static GenericEntry m_GE_bUpdatePID = null;
     private static GenericEntry m_GE_isAtGoal = null;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     /** Creates a new ReefLineUp. */
     public ReefLineUp3(CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentricFacingAngle drive,
@@ -76,16 +78,6 @@ public class ReefLineUp3 extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_GE_bUpdatePID.getBoolean(false)) {
-            kS = m_GE_PID_kS.getDouble(0.15);
-            m_xPID.setP(m_GE_PID_kP.getDouble(kP));
-            m_xPID.setI(m_GE_PID_kI.getDouble(kI));
-            m_xPID.setD(m_GE_PID_kD.getDouble(kD));
-            m_yPID.setP(m_GE_PID_kP.getDouble(kP));
-            m_yPID.setI(m_GE_PID_kI.getDouble(kI));
-            m_yPID.setD(m_GE_PID_kD.getDouble(kD));
-            m_GE_bUpdatePID.setBoolean(false);
-        }
 
         // calculate error
         double distX = m_targetPose.getTranslation().getX() - m_drivetrain.getState().Pose.getX();
@@ -118,6 +110,21 @@ public class ReefLineUp3 extends Command {
                 .withVelocityX(-velX) // Drive forward with negative Y(forward)
                 .withVelocityY(-velY) // Drive left with negative X (left)
                 .withTargetDirection(m_targetPose.getRotation()));
+
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
+        if (m_GE_bUpdatePID.getBoolean(false)) {
+            kS = m_GE_PID_kS.getDouble(0.15);
+            m_xPID.setP(m_GE_PID_kP.getDouble(kP));
+            m_xPID.setI(m_GE_PID_kI.getDouble(kI));
+            m_xPID.setD(m_GE_PID_kD.getDouble(kD));
+            m_yPID.setP(m_GE_PID_kP.getDouble(kP));
+            m_yPID.setI(m_GE_PID_kI.getDouble(kI));
+            m_yPID.setD(m_GE_PID_kD.getDouble(kD));
+            m_GE_bUpdatePID.setBoolean(false);
+        }
 
         // DataLogManager.log("Vel X: " + velX + " Y: " + velY + " Error X: " + distX +
         // " Y:" + distY);
