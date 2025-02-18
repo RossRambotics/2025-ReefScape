@@ -126,7 +126,7 @@ public class ArmExtension extends SubsystemBase {
 
         // this.initSysID(); // used for system identification
         Shuffleboard.getTab("ArmExt").add(this.getZeroArmExtCmd().withName("ArmExt.Zero"));
-        Shuffleboard.getTab("ArmExt").add(this.GetCalibrateCmd().withName("ArmExt.Calibrate"));
+        Shuffleboard.getTab("ArmExt").add(this.getCalibrateAndZero().withName("ArmExt.Calibrate & Zero"));
         Shuffleboard.getTab("ArmExt").add(this.GetStopCmd().withName("ArmExt.Stop"));
     }
 
@@ -188,6 +188,11 @@ public class ArmExtension extends SubsystemBase {
         // c.ignoringDisable(true);
 
         return c;
+    }
+
+    public Command getCalibrateAndZero() {
+        return this.GetCalibrateCmd()
+                .andThen(this.getZeroArmExtCmd()).withName("Calibrate & Zero");
     }
 
     @Override
