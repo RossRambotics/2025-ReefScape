@@ -34,7 +34,7 @@ public class RunPathToTarget extends Command {
         Pose2d targetPose = RobotContainer.m_targeting.getTargetPose();
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
-                2.0, 3.0,
+                2.0, 2.0,
                 Units.degreesToRadians(540), Units.degreesToRadians(720));
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
