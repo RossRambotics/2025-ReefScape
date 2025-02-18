@@ -178,7 +178,10 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public Command getZeroArmExtCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setPosition(-78 / m_kRotationsToMeters)).ignoringDisable(true);
+        Command c = this.runOnce(() -> {
+            m_LeftMotor.setPosition(-78 / m_kRotationsToMeters);
+            setGoal(Meters.of(-78));
+        }).ignoringDisable(true);
         c.setName("ArmExt.Zero");
         // c.ignoringDisable(true);
 

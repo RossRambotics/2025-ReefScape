@@ -39,7 +39,7 @@ import static edu.wpi.first.units.Units.*;
 public class ArmBase extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(30, "rio");
     final TalonFX m_RightMotor = new TalonFX(31, "rio");
-    final CANcoder m_armBaseCANcoder = new CANcoder(12, "rio");
+    // final CANcoder m_armBaseCANcoder = new CANcoder(12, "rio");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
@@ -64,7 +64,7 @@ public class ArmBase extends SubsystemBase {
         cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
         cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(109.0 - 216.0 - 5.5));
-        m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
+        // m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
 
         TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
 
@@ -89,8 +89,8 @@ public class ArmBase extends SubsystemBase {
         /* Configure Motion Magic */
         MotionMagicConfigs mm = fx_cfg.MotionMagic;
         mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(2.5))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(5));
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(0.5))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(2));
 
         // enable brake mode
         fx_cfg.MotorOutput = new MotorOutputConfigs()
