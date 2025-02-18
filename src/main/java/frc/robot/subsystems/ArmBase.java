@@ -24,6 +24,7 @@ import com.ctre.phoenix6.controls.Follower;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
+import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.GenericPublisher;
 import edu.wpi.first.units.measure.Angle;
@@ -56,6 +57,7 @@ public class ArmBase extends SubsystemBase {
     private Angle m_goal = Degrees.of(0);
     private Timer m_timer = new Timer();
     private GenericPublisher m_GE_Timer;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
@@ -213,6 +215,14 @@ public class ArmBase extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (this.getError().in(Degree) <= m_kGoalTolerance) {
+            m_timer.stop();
+        }
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
+
         // Update PID?
         if (m_GE_bUpdatePID.getBoolean(false)) {
             Slot0Configs slot0 = new Slot0Configs();
@@ -232,10 +242,6 @@ public class ArmBase extends SubsystemBase {
         m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
         m_GE_Position.setDouble(m_LeftMotor.getPosition().getValue().in(Degree));
         m_GE_Timer.setDouble(m_timer.get());
-
-        if (this.getError().in(Degree) <= m_kGoalTolerance) {
-            m_timer.stop();
-        }
 
     }
 

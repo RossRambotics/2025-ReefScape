@@ -23,6 +23,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
+import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
@@ -53,6 +54,7 @@ public class Wrist extends SubsystemBase {
     private GenericEntry m_GE_Goal = null;
     private GenericEntry m_GE_Timer = null;
     private Timer m_timer = new Timer();
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     private Angle m_goal = Degrees.of(0);
 
@@ -171,6 +173,15 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (this.getError().in(Degree) <= m_kGoalTolerance) {
+            m_timer.stop();
+        }
+
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
+
         // Update PID?
         if (m_GE_bUpdatePID.getBoolean(false)) {
             Slot0Configs slot0 = new Slot0Configs();
@@ -189,9 +200,7 @@ public class Wrist extends SubsystemBase {
         // This method will be called once per scheduler run
         m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
         m_GE_Position.setDouble(m_LeftMotor.getPosition().getValue().in(Degree));
-        if (this.getError().in(Degree) <= m_kGoalTolerance) {
-            m_timer.stop();
-        }
+
         m_GE_Timer.setDouble(m_timer.get());
     }
 

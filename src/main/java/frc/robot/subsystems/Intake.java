@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
+import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -50,6 +51,7 @@ public class Intake extends SubsystemBase {
     private GenericEntry m_GE_Velocity_Right_RPS = null;
     private GenericEntry m_GE_Goal_Left_RPS = null;
     private GenericEntry m_GE_Goal_Right_RPS = null;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     /** Creates a new Intake. */
     public Intake() {
@@ -115,6 +117,10 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
         // Update PID?
         if (m_GE_bUpdatePID.getBoolean(false)) {
             Slot0Configs slot0 = new Slot0Configs();

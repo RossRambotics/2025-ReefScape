@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.units.measure.Angle;
 
 public class Targeting extends SubsystemBase {
@@ -53,6 +54,7 @@ public class Targeting extends SubsystemBase {
     private Alliance m_alliance = Alliance.Red;
     private AprilTagFieldLayout m_aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
     private double kAprilTagWidth = 0.17 / 2.0;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     private Pose2d m_TargetPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
@@ -76,6 +78,10 @@ public class Targeting extends SubsystemBase {
             }
         }
 
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
         // This method will be called once per scheduler run
         if (m_GE_bUpdateTarget.getBoolean(false)) {
             setTargetAngle();

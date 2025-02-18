@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
+import frc.util.RandomExecutionLimiter;
 import frc.util.GraphCommand.GraphCommand;
 import frc.util.GraphCommand.GraphCommand.GraphCommandNode;
 
@@ -26,6 +27,7 @@ public class ArmController extends SubsystemBase {
     private boolean m_isFirstTime = true;
     private GenericEntry m_GE_nodeName;
     private GenericEntry m_GE_nextNodeName;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     private GraphCommandNode BackScore_L4, BackScore_L3, BackScore_L2, BackScore_L1, Back_L4, Back_L3, Back_L2, Back_L1,
             BackAligment, Carry, FrontAligment, FrontScore_L3, Front_L3, S1, Start, FrontScore_L2, FrontScore_L1,
@@ -334,6 +336,11 @@ public class ArmController extends SubsystemBase {
 
         // send data to the SmartDashboard
         if (DriverStation.isDisabled()) {
+            return;
+        }
+
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
             return;
         }
 
