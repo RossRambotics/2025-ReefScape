@@ -6,13 +6,18 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.FovParamsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.ProximityParamsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.ToFParamsConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.UpdateModeValue;
 
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
@@ -22,11 +27,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import static edu.wpi.first.units.Units.*;
 
 public class Intake extends SubsystemBase {
     // Intake States
+    // private CANrange m_CoralSensor = new CANrange(99);
     private int m_CurrentState = 0;
     final private int m_kIdle = 0;
     final private int m_kIntake = 1;
@@ -113,6 +120,24 @@ public class Intake extends SubsystemBase {
         Shuffleboard.getTab("Intake").add(this.getStopCommand());
         Shuffleboard.getTab("Intake").add(this.getIntakeCommand());
         Shuffleboard.getTab("Intake").add(this.getOuttakeCommand());
+
+        // var cfgcs = m_CoralSensor.getConfigurator();
+        var prox = new ProximityParamsConfigs()
+                .withProximityThreshold(0.05)
+                .withProximityHysteresis(0.01);
+        var fov = new FovParamsConfigs()
+                .withFOVRangeX(6.75) // 6.75 is the minimum FOV value
+                .withFOVRangeY(6.75); // 27.0 is the maximum FOV value
+        var tof = new ToFParamsConfigs()
+                .withUpdateMode(UpdateModeValue.ShortRangeUserFreq)
+                .withUpdateFrequency(50);
+
+        // cfgcs.apply(prox);
+        // cfgcs.apply(fov);
+        // cfgcs.apply(tof);
+
+        Trigger coralSensorTrigger = new Trigger(this::isCoralSensorDetected);
+        coralSensorTrigger.onTrue(this.getIdleCommand());
     }
 
     @Override
@@ -143,6 +168,13 @@ public class Intake extends SubsystemBase {
 
     }
 
+    // Method to check if the m_CoralSensor is detected
+    private boolean isCoralSensorDetected() {
+        // return m_CoralSensor.getIsDetected().getValue(); // Replace with the actual
+        // method to check sensor state
+        return false;
+    }
+
     private void setGoal(double leftVelocityRPS, double rightVelocityRPS) {
         m_LeftMotor.setControl(m_velocityVoltage.withVelocity(leftVelocityRPS));
         m_GE_Goal_Left_RPS.setDouble(leftVelocityRPS);
@@ -160,7 +192,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command getIdleCommand() {
-        return this.runOnce(() -> setGoal(-0.003, -0.003)).withName("Intake.IdleCommand");
+        return this.runOnce(() -> setGoal(0.05, 0.05)).withName("Intake.IdleCommand");
     }
 
     public Command getIntakeCommand() {
@@ -168,7 +200,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command getOuttakeCommand() {
-        return this.runOnce(() -> setGoal(-15, -15)).withName("Intake.OuttakeCommand");
+        return this.runOnce(() -> setGoal(-10, -10)).withName("Intake.OuttakeCommand");
     }
 
     public Command getUnclogCommand() {

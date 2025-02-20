@@ -32,7 +32,7 @@ public class ArmController extends SubsystemBase {
     private GraphCommandNode BackScore_L4, BackScore_L3, BackScore_L2, BackScore_L1, Back_L4, Back_L3, Back_L2, Back_L1,
             BackAligment, Carry, FrontAligment, FrontScore_L3, Front_L3, S1, Start, FrontScore_L2, FrontScore_L1,
             Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae, ProcessorAlgae, NetAlgae, RemoveAlgaeHigh,
-            RemoveAlgaeLow, Climb;
+            RemoveAlgaeLow, Climb, BackAlignmentBack;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -50,7 +50,15 @@ public class ArmController extends SubsystemBase {
                 null,
                 null);
         BackAligment = m_armGraph.new GraphCommandNode("BackAlignment",
-                ArmController.getArmCommand(Degrees.of(90),
+                ArmController.getArmCommand(Degrees.of(85),
+                        Meters.of(-77.3),
+                        Degrees.of(-115))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0)))
+                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(0.5))),
+                null,
+                new PrintCommand("BackAlignment is done"));
+        BackAlignmentBack = m_armGraph.new GraphCommandNode("BackAlignmentBack",
+                ArmController.getArmCommand(Degrees.of(70),
                         Meters.of(-77.3),
                         Degrees.of(0))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0)))
@@ -119,9 +127,9 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("GroundCoral"));
 
         BackScore_L4 = m_armGraph.new GraphCommandNode("BackScore_L4",
-                ArmController.getArmCommand(Degrees.of(90),
+                ArmController.getArmCommand(Degrees.of(92.3),
                         Meters.of(0),
-                        Degrees.of(-115))
+                        Degrees.of(-122.1))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("BackScore_L4"));
@@ -298,6 +306,7 @@ public class ArmController extends SubsystemBase {
 
         Shuffleboard.getTab("ArmController").add(this.getTransition_Start());
         Shuffleboard.getTab("ArmController").add(this.getTransition_BackAligment());
+        // Shuffleboard.getTab("ArmController").add(this.getTransition_BackAligmentBack());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L4());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L2());
@@ -388,6 +397,12 @@ public class ArmController extends SubsystemBase {
 
     public Command getTransition_BackAligment() {
         Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackAligment));
+        c.setName("BackAligment");
+        return c;
+    }
+
+    public Command getTransition_BackAligmentBack() {
+        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackAlignmentBack));
         c.setName("BackAligment");
         return c;
     }

@@ -10,9 +10,6 @@
         "ArmBase": {
           "open": true
         },
-        "ArmExt": {
-          "open": true
-        },
         "Intake": {
           "Intake.IntakeCommand": {
             "open": true
@@ -23,9 +20,6 @@
           "Intake.StopCommand": {
             "open": true
           }
-        },
-        "Wrist": {
-          "open": true
         },
         "open": true
       }
@@ -61,6 +55,7 @@
       "/Shuffleboard/ArmController/GroundCoral": "Command",
       "/Shuffleboard/ArmController/HumanPlayerCoral": "Command",
       "/Shuffleboard/ArmController/NetAlgae": "Command",
+      "/Shuffleboard/ArmController/NextNode": "Command",
       "/Shuffleboard/ArmController/Processor": "Command",
       "/Shuffleboard/ArmController/ProcessorAlgae": "Command",
       "/Shuffleboard/ArmController/RemoveAlgaeHigh": "Command",
@@ -68,12 +63,19 @@
       "/Shuffleboard/ArmController/S1": "Command",
       "/Shuffleboard/ArmController/Start": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Calibrate": "Command",
+      "/Shuffleboard/ArmExt/ArmExt.Calibrate & Zero": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Stop": "Command",
       "/Shuffleboard/ArmExt/ArmExt.Zero": "Command",
       "/Shuffleboard/ButtonBox/Algae Reef": "Command",
+      "/Shuffleboard/ButtonBox/Back L1": "Command",
+      "/Shuffleboard/ButtonBox/Back L2": "Command",
+      "/Shuffleboard/ButtonBox/Back L3": "Command",
+      "/Shuffleboard/ButtonBox/Back L4": "Command",
+      "/Shuffleboard/ButtonBox/Backwards Orientation": "Command",
       "/Shuffleboard/ButtonBox/Calibrate Arm": "Command",
       "/Shuffleboard/ButtonBox/Climb": "Command",
       "/Shuffleboard/ButtonBox/Climb Arm": "Command",
+      "/Shuffleboard/ButtonBox/Forward Orientation": "Command",
       "/Shuffleboard/ButtonBox/High": "Command",
       "/Shuffleboard/ButtonBox/High Arm": "Command",
       "/Shuffleboard/ButtonBox/Intake Algae": "Command",
@@ -86,6 +88,8 @@
       "/Shuffleboard/ButtonBox/Net": "Command",
       "/Shuffleboard/ButtonBox/Player Station 1": "Command",
       "/Shuffleboard/ButtonBox/Player Station 2": "Command",
+      "/Shuffleboard/ButtonBox/Player Station Left": "Command",
+      "/Shuffleboard/ButtonBox/Player Station Right": "Command",
       "/Shuffleboard/ButtonBox/Processor": "Command",
       "/Shuffleboard/ButtonBox/Reef 1": "Command",
       "/Shuffleboard/ButtonBox/Reef 2": "Command",
@@ -178,7 +182,7 @@
           "visible": true
         }
       },
-      "/Shuffleboard/ArmExt/ArmExt.Calibrate": {
+      "/Shuffleboard/ArmExt/ArmExt.Calibrate & Zero": {
         "window": {
           "visible": true
         }
