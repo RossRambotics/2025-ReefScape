@@ -13,6 +13,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -462,7 +463,7 @@ public class ArmController extends SubsystemBase {
     }
 
     public Command getTransition_BackScore_L4() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackScore_L4));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L4));
         c.setName("BackScore_L4");
         return c;
     }

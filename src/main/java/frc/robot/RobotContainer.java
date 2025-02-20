@@ -12,6 +12,8 @@ import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -32,6 +34,7 @@ import frc.robot.Commands.ReefLineUp;
 import frc.robot.Commands.ReefLineUp2;
 import frc.robot.Commands.ReefLineUp3;
 import frc.robot.Commands.RunPathToTarget;
+import frc.robot.Commands.WaitForArm;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
 import frc.robot.subsystems.ArmExtension;
@@ -95,12 +98,22 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
-    public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public static CommandSwerveDrivetrain drivetrain;// = TunerConstants.createDrivetrain();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+        NamedCommands.registerCommand("Arm.WaitForArm", new WaitForArm());
+        NamedCommands.registerCommand("Arm.BackScore_L4", RobotContainer.m_armController.getTransition_BackScore_L4());
+        NamedCommands.registerCommand("Reef.1", RobotContainer.m_buttonBox.getReef1Cmd());
+        NamedCommands.registerCommand("Reef.Left", RobotContainer.m_buttonBox.getLeftReefCmd());
+        NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand());
+        NamedCommands.registerCommand("Intake.Stop", RobotContainer.m_intake.getStopCommand());
+        // NamedCommands.registerCommand("Reef.LineUp", new ReefLineUp(drivetrain,
+        // targetDrive));
+
+        drivetrain = TunerConstants.createDrivetrain();
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -266,6 +279,7 @@ public class RobotContainer {
         joystick.a().onFalse(m_intake.getStopCommand());
         joystick.b().onTrue(m_intake.getOuttakeCommand());
         joystick.b().onFalse(m_intake.getStopCommand());
+
     }
 
     public Command getAutonomousCommand() {

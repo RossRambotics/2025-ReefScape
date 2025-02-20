@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Reef.1.Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.LineUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.BackScore_L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.WaitForArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.OutTake"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

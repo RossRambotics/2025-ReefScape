@@ -17,6 +17,7 @@ public class WaitForArm extends Command {
     private final Wrist m_wrist = RobotContainer.m_wrist;
     private final ArmExtension m_armExtension = RobotContainer.m_armExtension;
     private final Timer m_timer = new Timer();
+    private boolean m_finished = false;
 
     /** Creates a new WaitForArm. */
     public WaitForArm() {
@@ -36,9 +37,9 @@ public class WaitForArm extends Command {
     public void execute() {
         if (m_armBase.isStationary() && m_wrist.isStationary() && m_armExtension.isStationary()) {
             // If all subsystems are stationary, check the timer
-            if (m_timer.hasElapsed(0.10)) {
+            if (m_timer.hasElapsed(0.5)) {
                 // If they have been stationary for X seconds, the command can finish
-                return;
+                m_finished = true;
             }
         } else {
             // If any subsystem is not stationary, reset the timer
@@ -55,6 +56,6 @@ public class WaitForArm extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_timer.hasElapsed(0.25);
+        return m_finished;
     }
 }
