@@ -93,7 +93,7 @@ public class Targeting extends SubsystemBase {
         m_ScoreTarget = target;
     }
 
-    private final double kCoralYoffset = 0.15; // left / right
+    private final double kCoralYoffset = 0.175; // left / right
     private final double kCoralXoffset = 0.03; // front / back
     private final double kAlgaeXoffset = 0.75;
 
