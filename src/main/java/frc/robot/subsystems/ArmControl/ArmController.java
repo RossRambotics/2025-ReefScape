@@ -33,7 +33,7 @@ public class ArmController extends SubsystemBase {
     private GraphCommandNode BackScore_L4, BackScore_L3, BackScore_L2, BackScore_L1, Back_L4, Back_L3, Back_L2, Back_L1,
             BackAligment, Carry, FrontAligment, FrontScore_L3, Front_L3, S1, Start, FrontScore_L2, FrontScore_L1,
             Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae, ProcessorAlgae, NetAlgae, RemoveAlgaeHigh,
-            RemoveAlgaeLow, Climb, BackAlignmentBack;
+            RemoveAlgaeLow, Climb, BackAlignmentBack, Processor;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -297,6 +297,7 @@ public class ArmController extends SubsystemBase {
         FrontAligment.AddNode(NetAlgae, 1);
         FrontAligment.AddNode(RemoveAlgaeHigh, 1);
         FrontAligment.AddNode(RemoveAlgaeLow, 1);
+        BackAligment.AddNode(BackAlignmentBack, 0);
 
         m_armGraph.setGraphRootNode(Start);
         m_armGraph.setCurrentNode(Start);
@@ -334,6 +335,7 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeLow());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Climb());
         Shuffleboard.getTab("ArmController").add(this.getNextNodeCmd());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_BackAligmentBack());
     }
 
     @Override
@@ -391,73 +393,73 @@ public class ArmController extends SubsystemBase {
     }
 
     public Command getTransition_Start() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Start));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Start));
         c.setName("Start");
         return c;
     }
 
     public Command getTransition_BackAligment() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackAligment));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackAligment));
         c.setName("BackAligment");
         return c;
     }
 
     public Command getTransition_BackAligmentBack() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackAlignmentBack));
-        c.setName("BackAligment");
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackAlignmentBack));
+        c.setName("BackAligmentBack");
         return c;
     }
 
     public Command getTransition_Back_L4() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_L4));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L4));
         c.setName("Back_L4");
         return c;
     }
 
     public Command getTransition_Back_L3() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_L3));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L3));
         c.setName("Back_L3");
         return c;
     }
 
     public Command getTransition_Back_L2() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_L2));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L2));
         c.setName("Back_L2");
         return c;
     }
 
     public Command getTransition_Back_L1() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Back_L1));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L1));
         c.setName("Back_L1");
         return c;
     }
 
     public Command getTransition_Front_L2() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_L2));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Front_L2));
         c.setName("Front_L2");
         return c;
     }
 
     public Command getTransition_Front_L3() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_L3));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Front_L3));
         c.setName("Front_L3");
         return c;
     }
 
     public Command getTransition_Front_L1() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Front_L1));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Front_L1));
         c.setName("Front_L1");
         return c;
     }
 
     public Command getTransition_HumanPlayerCoral() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(HumanPlayerCoral));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(HumanPlayerCoral));
         c.setName("HumanPlayerCoral");
         return c;
     }
 
     public Command getTransition_GroundCoral() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(GroundCoral));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(GroundCoral));
         c.setName("GroundCoral");
         return c;
     }
@@ -469,91 +471,91 @@ public class ArmController extends SubsystemBase {
     }
 
     public Command getTransition_BackScore_L3() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackScore_L3));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L3));
         c.setName("BackScore_L3");
         return c;
     }
 
     public Command getTransition_BackScore_L2() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackScore_L2));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L2));
         c.setName("BackScore_L2");
         return c;
     }
 
     public Command getTransition_BackScore_L1() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(BackScore_L1));
-        c.setName("BackScore_L1");
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L1));
+        c.setName("BackScoreBackScore_L1_L4");
         return c;
     }
 
     public Command getTransition_Climb() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Climb));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Climb));
         c.setName("Climb");
         return c;
     }
 
     public Command getTransition_Carry() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(Carry));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Carry));
         c.setName("Carry");
         return c;
     }
 
     public Command getTransition_FrontAligment() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontAligment));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(FrontAligment));
         c.setName("FrontAligment");
         return c;
     }
 
     public Command getTransition_S1() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(S1));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(S1));
         c.setName("S1");
         return c;
     }
 
     public Command getTransition_FrontScore_L2() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L2));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L2));
         c.setName("FrontScore_L2");
         return c;
     }
 
     public Command getTransition_FrontScore_L3() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L3));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L3));
         c.setName("FrontScore_L3");
         return c;
     }
 
     public Command getTransition_FrontScore_L1() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L1));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L1));
         c.setName("FrontScore_L1");
         return c;
     }
 
     public Command getTransition_GroundAlgae() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(GroundAlgae));
-        c.setName("GroundAlgae");
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L4));
+        c.setName("BackScore_L4");
         return c;
     }
 
     public Command getTransition_Processor() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(ProcessorAlgae));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Processor));
         c.setName("Processor");
         return c;
     }
 
     public Command getTransition_NetAlgae() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(NetAlgae));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(NetAlgae));
         c.setName("NetAlgae");
         return c;
     }
 
     public Command getTransition_RemoveAlgaeHigh() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(RemoveAlgaeHigh));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(RemoveAlgaeHigh));
         c.setName("RemoveAlgaeHigh");
         return c;
     }
 
     public Command getTransition_RemoveAlgaeLow() {
-        Command c = this.runOnce(() -> m_armGraph.setTargetNode(RemoveAlgaeLow));
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(RemoveAlgaeLow));
         c.setName("RemoveAlgaeLow");
         return c;
     }
