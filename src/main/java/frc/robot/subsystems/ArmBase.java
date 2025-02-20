@@ -309,4 +309,8 @@ public class ArmBase extends SubsystemBase {
 
         setGoal(newGoal);
     }
+
+    public boolean isStationary() {
+        return Math.abs(m_LeftMotor.getVelocity().getValue().in(RotationsPerSecond)) < 0.05;
+    }
 }
