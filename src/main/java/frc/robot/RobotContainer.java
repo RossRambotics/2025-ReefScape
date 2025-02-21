@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Set;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
@@ -27,6 +29,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
@@ -104,16 +108,16 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+        drivetrain = TunerConstants.createDrivetrain();
+
         NamedCommands.registerCommand("Arm.WaitForArm", new WaitForArm());
         NamedCommands.registerCommand("Arm.BackScore_L4", RobotContainer.m_armController.getTransition_BackScore_L4());
         NamedCommands.registerCommand("Reef.1", RobotContainer.m_buttonBox.getReef1Cmd());
         NamedCommands.registerCommand("Reef.Left", RobotContainer.m_buttonBox.getLeftReefCmd());
         NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand());
         NamedCommands.registerCommand("Intake.Stop", RobotContainer.m_intake.getStopCommand());
-        // NamedCommands.registerCommand("Reef.LineUp", new ReefLineUp(drivetrain,
-        // targetDrive));
-
-        drivetrain = TunerConstants.createDrivetrain();
+        NamedCommands.registerCommand("Reef.LineUp", new DeferredCommand(() -> new ReefLineUp(drivetrain,
+                targetDrive).withTimeout(0.5), Set.of(drivetrain)));
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);

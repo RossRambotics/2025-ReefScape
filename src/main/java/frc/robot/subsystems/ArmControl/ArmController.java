@@ -369,6 +369,10 @@ public class ArmController extends SubsystemBase {
         }
     }
 
+    public boolean isTransitioning() {
+        return m_armGraph.isTransitioning();
+    }
+
     public Command getNextNodeCmd() {
         Command c = this.runOnce(() -> advanceGraph());
         c.setName("NextNode");

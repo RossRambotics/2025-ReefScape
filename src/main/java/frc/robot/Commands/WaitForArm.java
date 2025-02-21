@@ -22,7 +22,7 @@ public class WaitForArm extends Command {
     /** Creates a new WaitForArm. */
     public WaitForArm() {
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(m_armBase, m_wrist, m_armExtension);
+        // addRequirements(m_armBase, m_wrist, m_armExtension);
     }
 
     // Called when the command is initially scheduled.
@@ -30,14 +30,23 @@ public class WaitForArm extends Command {
     public void initialize() {
         m_timer.reset();
         m_timer.start();
+        m_finished = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_armBase.isStationary() && m_wrist.isStationary() && m_armExtension.isStationary()) {
+        // System.out.println("Transitions?: " +
+        // RobotContainer.m_armController.isTransitioning()
+        // + " ArmBase: " + m_armBase.isStationary()
+        // + " Wirst: " + m_wrist.isStationary()
+        // + " ArmExt: " + m_armExtension.isStationary());
+        if (!RobotContainer.m_armController.isTransitioning()
+                && m_armBase.isStationary()
+                && m_wrist.isStationary()
+                && m_armExtension.isStationary()) {
             // If all subsystems are stationary, check the timer
-            if (m_timer.hasElapsed(0.5)) {
+            if (m_timer.hasElapsed(0.2)) {
                 // If they have been stationary for X seconds, the command can finish
                 m_finished = true;
             }
