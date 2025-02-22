@@ -297,7 +297,7 @@ public class ArmController extends SubsystemBase {
         FrontAligment.AddNode(NetAlgae, 1);
         FrontAligment.AddNode(RemoveAlgaeHigh, 1);
         FrontAligment.AddNode(RemoveAlgaeLow, 1);
-        BackAligment.AddNode(BackAlignmentBack, 0);
+        // BackAligment.AddNode(BackAlignmentBack, 0);
 
         m_armGraph.setGraphRootNode(Start);
         m_armGraph.setCurrentNode(Start);
@@ -535,8 +535,8 @@ public class ArmController extends SubsystemBase {
     }
 
     public Command getTransition_GroundAlgae() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L4));
-        c.setName("BackScore_L4");
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(GroundAlgae));
+        c.setName("GroundAlgae");
         return c;
     }
 

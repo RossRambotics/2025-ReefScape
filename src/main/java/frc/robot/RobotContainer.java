@@ -86,10 +86,11 @@ public class RobotContainer {
                                                                                       // max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    public final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.FieldCentricFacingAngle targetDrive = new SwerveRequest.FieldCentricFacingAngle()
+    public static SwerveRequest.FieldCentricFacingAngle theTargetDrive = null;
+    public final SwerveRequest.FieldCentricFacingAngle targetDrive = new SwerveRequest.FieldCentricFacingAngle()
             .withDeadband(MaxSpeed * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -111,17 +112,24 @@ public class RobotContainer {
         drivetrain = TunerConstants.createDrivetrain();
 
         NamedCommands.registerCommand("Arm.WaitForArm", new WaitForArm());
+        NamedCommands.registerCommand("Arm.Back_L4", RobotContainer.m_armController.getTransition_Back_L4());
+        NamedCommands.registerCommand("Arm.HumanPlayer",
+                RobotContainer.m_armController.getTransition_HumanPlayerCoral());
         NamedCommands.registerCommand("Arm.BackScore_L4", RobotContainer.m_armController.getTransition_BackScore_L4());
         NamedCommands.registerCommand("Reef.1", RobotContainer.m_buttonBox.getReef1Cmd());
         NamedCommands.registerCommand("Reef.Left", RobotContainer.m_buttonBox.getLeftReefCmd());
-        NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand());
+        NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand().withTimeout(0.5));
+        NamedCommands.registerCommand("Intake.InTake", RobotContainer.m_intake.getIntakeCommand().withTimeout(0.5));
         NamedCommands.registerCommand("Intake.Stop", RobotContainer.m_intake.getStopCommand());
-        NamedCommands.registerCommand("Reef.LineUp", new DeferredCommand(() -> new ReefLineUp(drivetrain,
-                targetDrive).withTimeout(0.5), Set.of(drivetrain)));
+        NamedCommands.registerCommand("Reef.LineUp", new ReefLineUp3(drivetrain,
+                targetDrive, RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.0));
+        NamedCommands.registerCommand("Arm.Carry", RobotContainer.m_armController.getTransition_Carry());
+        NamedCommands.registerCommand("Reef.3", RobotContainer.m_buttonBox.getReef3Cmd());
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
+        theTargetDrive = targetDrive;
         configureBindings();
     }
 

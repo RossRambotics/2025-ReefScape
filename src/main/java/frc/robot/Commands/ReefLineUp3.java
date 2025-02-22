@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.util.RandomExecutionLimiter;
 
@@ -71,6 +72,8 @@ public class ReefLineUp3 extends Command {
     @Override
     public void initialize() {
         m_targetPose = mSupplierTargetPose.get();
+        m_drivetrain = RobotContainer.drivetrain;
+        m_drive = RobotContainer.theTargetDrive;
         m_xPID.reset();
         m_yPID.reset();
     }
