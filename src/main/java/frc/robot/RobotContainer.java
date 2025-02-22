@@ -16,6 +16,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.events.EventTrigger;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
@@ -117,6 +119,11 @@ public class RobotContainer {
                 RobotContainer.m_armController.getTransition_HumanPlayerCoral());
         NamedCommands.registerCommand("Arm.BackScore_L4", RobotContainer.m_armController.getTransition_BackScore_L4());
         NamedCommands.registerCommand("Reef.1", RobotContainer.m_buttonBox.getReef1Cmd());
+        NamedCommands.registerCommand("Reef.2", RobotContainer.m_buttonBox.getReef2Cmd());
+        NamedCommands.registerCommand("Reef.3", RobotContainer.m_buttonBox.getReef3Cmd());
+        NamedCommands.registerCommand("Reef.4", RobotContainer.m_buttonBox.getReef4Cmd());
+        NamedCommands.registerCommand("Reef.5", RobotContainer.m_buttonBox.getReef5Cmd());
+        NamedCommands.registerCommand("Reef.6", RobotContainer.m_buttonBox.getReef6Cmd());
         NamedCommands.registerCommand("Reef.Left", RobotContainer.m_buttonBox.getLeftReefCmd());
         NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand().withTimeout(0.5));
         NamedCommands.registerCommand("Intake.InTake", RobotContainer.m_intake.getIntakeCommand().withTimeout(0.5));
@@ -124,7 +131,21 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reef.LineUp", new ReefLineUp3(drivetrain,
                 targetDrive, RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.0));
         NamedCommands.registerCommand("Arm.Carry", RobotContainer.m_armController.getTransition_Carry());
-        NamedCommands.registerCommand("Reef.3", RobotContainer.m_buttonBox.getReef3Cmd());
+
+        NamedCommands.registerCommand("Score.L4",
+                new ReefLineUp3(drivetrain,
+                        targetDrive, RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.0)
+                        .andThen(RobotContainer.m_armController.getTransition_Back_L4())
+                        .andThen(new WaitForArm())
+                        .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
+                        .andThen(new WaitForArm())
+                        .andThen(RobotContainer.m_intake.getOuttakeCommand())
+                        .andThen(new WaitCommand(0.5))
+                        .andThen(RobotContainer.m_intake.getStopCommand())
+                        .andThen(RobotContainer.m_armController.getTransition_Carry()));
+
+        new EventTrigger("Event.CoralStation").onTrue(
+                RobotContainer.m_armController.getTransition_HumanPlayerCoral());
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);

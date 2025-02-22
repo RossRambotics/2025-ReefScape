@@ -55,7 +55,7 @@ public class ArmController extends SubsystemBase {
                         Meters.of(-77.3),
                         Degrees.of(-115))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0)))
-                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(0.5))),
+                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(5.0))),
                 null,
                 new PrintCommand("BackAlignment is done"));
         BackAlignmentBack = m_armGraph.new GraphCommandNode("BackAlignmentBack",
@@ -63,7 +63,7 @@ public class ArmController extends SubsystemBase {
                         Meters.of(-77.3),
                         Degrees.of(0))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0)))
-                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(0.5))),
+                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(5.0))),
                 null,
                 new PrintCommand("BackAlignment is done"));
         Back_L4 = m_armGraph.new GraphCommandNode("Back_L4",
