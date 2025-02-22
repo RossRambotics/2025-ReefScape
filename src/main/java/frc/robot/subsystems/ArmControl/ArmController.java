@@ -33,7 +33,7 @@ public class ArmController extends SubsystemBase {
     private GraphCommandNode BackScore_L4, BackScore_L3, BackScore_L2, BackScore_L1, Back_L4, Back_L3, Back_L2, Back_L1,
             BackAligment, Carry, FrontAligment, FrontScore_L3, Front_L3, S1, Start, FrontScore_L2, FrontScore_L1,
             Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae, ProcessorAlgae, NetAlgae, RemoveAlgaeHigh,
-            RemoveAlgaeLow, Climb, BackAlignmentBack, Processor;
+            RemoveAlgaeLow, Climb, BackAlignmentBack, Processor, ClimbReady;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -160,12 +160,20 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackScore_L1"));
 
         Climb = m_armGraph.new GraphCommandNode("Climb",
-                ArmController.getArmCommand(Degrees.of(90),
+                ArmController.getArmCommand(Degrees.of(-25),
                         Meters.of(-77.3),
                         Degrees.of(-140))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("Climb"));
+
+        ClimbReady = m_armGraph.new GraphCommandNode("ClimbReady",
+                ArmController.getArmCommand(Degrees.of(45),
+                        Meters.of(-77.3),
+                        Degrees.of(-140))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("ClimbReady"));
 
         Carry = m_armGraph.new GraphCommandNode("Carry",
                 ArmController.getArmCommand(Degrees.of(-20),
@@ -261,7 +269,9 @@ public class ArmController extends SubsystemBase {
         BackAligment.AddNode(Back_L1, 1);
         BackAligment.AddNode(Front_L2, 1);
         BackAligment.AddNode(Front_L1, 1);
-        BackAligment.AddNode(Climb, 1);
+        BackAligment.AddNode(Carry, 1);
+        Carry.AddNode(ClimbReady, 1);
+        ClimbReady.AddNode(Climb, 1);
         Back_L4.AddNode(BackScore_L4, 1);
         Back_L4.setNextNode(BackScore_L4);
         BackScore_L4.setNextNode(Back_L4);
@@ -334,6 +344,7 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeHigh());
         Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeLow());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Climb());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_ClimbReady());
         Shuffleboard.getTab("ArmController").add(this.getNextNodeCmd());
         Shuffleboard.getTab("ArmController").add(this.getTransition_BackAligmentBack());
     }
@@ -495,6 +506,12 @@ public class ArmController extends SubsystemBase {
     public Command getTransition_Climb() {
         Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Climb));
         c.setName("Climb");
+        return c;
+    }
+
+    public Command getTransition_ClimbReady() {
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(ClimbReady));
+        c.setName("ClimbReady");
         return c;
     }
 
