@@ -140,9 +140,10 @@ public class RobotContainer {
                         .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
                         .andThen(new WaitForArm())
                         .andThen(RobotContainer.m_intake.getOuttakeCommand())
-                        .andThen(new WaitCommand(0.5))
-                        .andThen(RobotContainer.m_intake.getStopCommand())
-                        .andThen(RobotContainer.m_armController.getTransition_Carry()));
+                        .andThen(RobotContainer.m_armController.getTransition_Carry())
+        // .andThen(new WaitCommand(0.5))
+        // .andThen(RobotContainer.m_intake.getStopCommand())
+        );
 
         new EventTrigger("Event.CoralStation").onTrue(
                 RobotContainer.m_armController.getTransition_HumanPlayerCoral());
