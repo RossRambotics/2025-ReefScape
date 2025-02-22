@@ -217,54 +217,58 @@ public class RobotContainer {
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
                         .withTargetDirection(m_targeting.getTargetAngle())));
 
+        double nudge = 0.5;
         joystick.pov(0)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
-                        .withVelocityX(0.5)
+                        .withVelocityX(
+                                nudge)
                         .withVelocityY(0)));
         joystick.pov(180)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
-                        .withVelocityX(-0.5)
+                        .withVelocityX(-nudge)
                         .withVelocityY(0)));
         joystick.pov(90)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
                         .withVelocityX(0)
-                        .withVelocityY(-0.5)));
+                        .withVelocityY(-nudge)));
         joystick.pov(270)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
                         .withVelocityX(0)
-                        .withVelocityY(0.5)));
+                        .withVelocityY(nudge)));
         joystick.pov(45)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
-                        .withVelocityX(0.5)
-                        .withVelocityY(-.5)));
+                        .withVelocityX(
+                                nudge)
+                        .withVelocityY(-nudge)));
         joystick.pov(135)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
-                        .withVelocityX(-0.5)
-                        .withVelocityY(-.5)));
+                        .withVelocityX(-nudge)
+                        .withVelocityY(-nudge)));
         joystick.pov(225)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
-                        .withVelocityX(-0.5)
-                        .withVelocityY(.5)));
+                        .withVelocityX(-nudge)
+                        .withVelocityY(nudge)));
         joystick.pov(315)
                 .whileTrue(drivetrain.applyRequest(() -> drive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate * m_kNudgeRate)
-                        .withVelocityX(0.5)
-                        .withVelocityY(.5)));
+                        .withVelocityX(
+                                nudge)
+                        .withVelocityY(nudge)));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

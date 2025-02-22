@@ -23,6 +23,7 @@ import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
 import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -120,6 +121,7 @@ public class Intake extends SubsystemBase {
         Shuffleboard.getTab("Intake").add(this.getStopCommand());
         Shuffleboard.getTab("Intake").add(this.getIntakeCommand());
         Shuffleboard.getTab("Intake").add(this.getOuttakeCommand());
+        Shuffleboard.getTab("Intake").add(this.getOuttakeAlgaeCommand());
 
         // var cfgcs = m_CoralSensor.getConfigurator();
         var prox = new ProximityParamsConfigs()
@@ -138,6 +140,10 @@ public class Intake extends SubsystemBase {
 
         Trigger coralSensorTrigger = new Trigger(this::isCoralSensorDetected);
         coralSensorTrigger.onTrue(this.getIdleCommand());
+    }
+
+    private Sendable getOuttakeAlgaeCommand() {
+        return this.runOnce(() -> setGoal(-50, -50)).withName("Intake.OuttakeAlgaeCommand");
     }
 
     @Override

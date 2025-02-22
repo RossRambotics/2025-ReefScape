@@ -41,6 +41,7 @@ public class ReefLineUp3 extends Command {
     private static GenericEntry m_GE_bUpdatePID = null;
     private static GenericEntry m_GE_isAtGoal = null;
     private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
+    private boolean m_isFinished = false;
 
     /** Creates a new ReefLineUp. */
     public ReefLineUp3(CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentricFacingAngle drive,
@@ -76,6 +77,7 @@ public class ReefLineUp3 extends Command {
         m_drive = RobotContainer.theTargetDrive;
         m_xPID.reset();
         m_yPID.reset();
+        m_isFinished = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -90,6 +92,7 @@ public class ReefLineUp3 extends Command {
 
         if (Math.abs(distX) < kTolerance && Math.abs(distY) < kTolerance) {
             m_GE_isAtGoal.setBoolean(true);
+            m_isFinished = true;
             return;
         } else {
             m_GE_isAtGoal.setBoolean(false);
@@ -146,6 +149,6 @@ public class ReefLineUp3 extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return m_isFinished;
     }
 }

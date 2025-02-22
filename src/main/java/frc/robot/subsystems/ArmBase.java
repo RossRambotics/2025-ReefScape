@@ -124,7 +124,7 @@ public class ArmBase extends SubsystemBase {
         swLimits.ForwardSoftLimitEnable = true;
         swLimits.ForwardSoftLimitThreshold = Degrees.of(120).in(Rotations);
         swLimits.ReverseSoftLimitEnable = true;
-        swLimits.ReverseSoftLimitThreshold = Degrees.of(-10).in(Rotations);
+        swLimits.ReverseSoftLimitThreshold = Degrees.of(-30).in(Rotations);
         // fx_cfg.SoftwareLimitSwitch = swLimits;
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;

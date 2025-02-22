@@ -99,7 +99,7 @@ public class Wrist extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 60; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 50; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kG = 1.0;
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
