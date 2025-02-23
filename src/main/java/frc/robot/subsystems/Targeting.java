@@ -50,6 +50,8 @@ public class Targeting extends SubsystemBase {
     private GenericEntry m_TargetAngle = null;
     private GenericEntry m_TargetIDFound = null;
     private GenericEntry m_GE_bUpdateTarget = null;
+    private GenericEntry m_GE_Selected_PlayerStation = null;
+    private GenericEntry m_GE_Selected_Reef = null;
     private boolean m_isFirstTime = true;
     private Alliance m_alliance = Alliance.Red;
     private AprilTagFieldLayout m_aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
@@ -64,6 +66,8 @@ public class Targeting extends SubsystemBase {
         m_TargetAngle = Shuffleboard.getTab("Targeting").add("TargetAngle", 0.0).getEntry();
         m_TargetIDFound = Shuffleboard.getTab("Targeting").add("TargetIDFound", false).getEntry();
         m_GE_bUpdateTarget = Shuffleboard.getTab("Targeting").add("UpdateTarget", false).getEntry();
+        m_GE_Selected_PlayerStation = Shuffleboard.getTab("Targeting").add("Selected_PlayerStation", "Left").getEntry();
+        m_GE_Selected_Reef = Shuffleboard.getTab("Targeting").add("Selected_Reef", "Reef 4").getEntry();
 
         Shuffleboard.getTab("Targeting").add(this.getTargetLastReefIDCmd());
     }
@@ -98,7 +102,7 @@ public class Targeting extends SubsystemBase {
 
     private final double kCoralYoffset = 0.175; // left / right
     private final double kCoralXoffset = 0.03; // front / back
-    private final double kAlgaeXoffset = 0.75;
+    private final double kAlgaeXoffset = 0.03; // front / back
     private int m_ReefTargetID;
 
     public Pose2d getScoreTargetPose() {
@@ -172,6 +176,40 @@ public class Targeting extends SubsystemBase {
             m_TargetID.setDouble(blueID);
         }
         this.setTargetAngle();
+        this.updateSelectedReef();
+    }
+
+    public void updateSelectedReef() {
+        int targetID = (int) m_TargetID.getDouble(-1);
+        switch (targetID) {
+            case 21:
+            case 10:
+                m_GE_Selected_Reef.setString("Reef 1");
+                break;
+            case 22:
+            case 9:
+                m_GE_Selected_Reef.setString("Reef 2");
+                break;
+            case 17:
+            case 8:
+                m_GE_Selected_Reef.setString("Reef 3");
+                break;
+            case 18:
+            case 7:
+                m_GE_Selected_Reef.setString("Reef 4");
+                break;
+            case 19:
+            case 6:
+                m_GE_Selected_Reef.setString("Reef 5");
+                break;
+            case 20:
+            case 11:
+                m_GE_Selected_Reef.setString("Reef 6");
+                break;
+            default:
+                m_GE_Selected_Reef.setString("Unknown");
+                break;
+        }
     }
 
     public void targetLastReefID() {
@@ -231,6 +269,11 @@ public class Targeting extends SubsystemBase {
 
     public void setHumanPlayerStation(HumanPlayerStation station) {
         m_HumanPlayerStation = station;
+        if (station == HumanPlayerStation.kLeftStation) {
+            m_GE_Selected_PlayerStation.setString("Left");
+        } else {
+            m_GE_Selected_PlayerStation.setString("Right");
+        }
     }
 
     public void setLineUpOrientation(LineUpOrientation orientation) {
