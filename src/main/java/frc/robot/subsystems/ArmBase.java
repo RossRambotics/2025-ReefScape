@@ -90,9 +90,9 @@ public class ArmBase extends SubsystemBase {
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = fx_cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(0.5))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(2));
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
 
         // enable brake mode
         fx_cfg.MotorOutput = new MotorOutputConfigs()
@@ -170,7 +170,7 @@ public class ArmBase extends SubsystemBase {
     }
 
     public Command getSetGoalCommand(Angle angle) {
-        return this.runOnce(() -> setGoal(angle));
+        return Commands.runOnce(() -> setGoal(angle));
     }
 
     public Command getZeroArmAngleCmd() {

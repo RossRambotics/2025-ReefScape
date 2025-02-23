@@ -26,6 +26,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -143,7 +144,7 @@ public class Intake extends SubsystemBase {
     }
 
     private Sendable getOuttakeAlgaeCommand() {
-        return this.runOnce(() -> setGoal(-50, -50)).withName("Intake.OuttakeAlgaeCommand");
+        return Commands.runOnce(() -> setGoal(-50, -50)).withName("Intake.OuttakeAlgaeCommand");
     }
 
     @Override
@@ -190,37 +191,37 @@ public class Intake extends SubsystemBase {
     }
 
     public Command getSetGoalCommand(double leftVelocityRPS, double rightVelocityRPS) {
-        return this.runOnce(() -> setGoal(leftVelocityRPS, rightVelocityRPS));
+        return Commands.runOnce(() -> setGoal(leftVelocityRPS, rightVelocityRPS));
     }
 
     public Command getStopCommand() {
-        return this.runOnce(() -> setGoal(0, 0)).withName("Intake.StopCommand");
+        return Commands.runOnce(() -> setGoal(0, 0)).withName("Intake.StopCommand");
     }
 
     public Command getIdleCommand() {
-        return this.runOnce(() -> setGoal(0.05, 0.05)).withName("Intake.IdleCommand");
+        return Commands.runOnce(() -> setGoal(0.05, 0.05)).withName("Intake.IdleCommand");
     }
 
     public Command getIntakeCommand() {
-        return this.runOnce(() -> setGoal(20, 20)).withName("Intake.IntakeCommand");
+        return Commands.runOnce(() -> setGoal(20, 20)).withName("Intake.IntakeCommand");
     }
 
     public Command getOuttakeCommand() {
-        return this.runOnce(() -> setGoal(-10, -10)).withName("Intake.OuttakeCommand");
+        return Commands.runOnce(() -> setGoal(-10, -10)).withName("Intake.OuttakeCommand");
     }
 
     public Command getUnclogCommand() {
-        return this.runOnce(() -> setGoal(-8, -8))
+        return Commands.runOnce(() -> setGoal(-8, -8))
                 .andThen(new WaitCommand(3))
-                .andThen(this.runOnce(() -> setGoal(1, 1))).withName("Intake.UnclogCommand");
+                .andThen(Commands.runOnce(() -> setGoal(1, 1))).withName("Intake.UnclogCommand");
     }
 
     public Command getFastshootCommand() {
-        return this.runOnce(() -> setGoal(5, 5)).withName("Intake.FastshootCommand");
+        return Commands.runOnce(() -> setGoal(5, 5)).withName("Intake.FastshootCommand");
     }
 
     public Command getSlowshootCommand() {
-        return this.runOnce(() -> setGoal(.8, .8)).withName("Intake.SlowshootCommand");
+        return Commands.runOnce(() -> setGoal(.8, .8)).withName("Intake.SlowshootCommand");
     }
 
     public void simulationInit() {

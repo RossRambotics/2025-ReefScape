@@ -29,6 +29,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
@@ -168,7 +169,7 @@ public class Wrist extends SubsystemBase {
     }
 
     public Command getSetGoalCommand(Angle angle) {
-        return this.runOnce(() -> setGoal(angle));
+        return Commands.runOnce(() -> setGoal(angle));
     }
 
     @Override
@@ -213,7 +214,7 @@ public class Wrist extends SubsystemBase {
     }
 
     public Command getZeroWristAngleCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
+        Command c = Commands.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
         c.setName("Wrist.ZeroAngle");
         // c.ignoringDisable(true);
 
@@ -221,11 +222,11 @@ public class Wrist extends SubsystemBase {
     }
 
     public Command getOpenCommand() {
-        return this.runOnce(() -> setGoal(Degrees.of(0))).withName("Wrist.OpenCommand");
+        return Commands.runOnce(() -> setGoal(Degrees.of(0))).withName("Wrist.OpenCommand");
     }
 
     public Command getCloseCommand() {
-        return this.runOnce(() -> setGoal(Degrees.of(40))).withName("Wrist.CloseCommand");
+        return Commands.runOnce(() -> setGoal(Degrees.of(40))).withName("Wrist.CloseCommand");
     }
 
     @Override

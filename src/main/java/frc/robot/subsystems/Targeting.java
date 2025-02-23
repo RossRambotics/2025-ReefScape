@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.units.measure.Angle;
@@ -282,7 +283,7 @@ public class Targeting extends SubsystemBase {
     }
 
     public Command getTargetHumanPlayerStation() {
-        return this.runOnce(() -> setHumanPlayerStationAprilID(m_HumanPlayerStation))
+        return Commands.runOnce(() -> setHumanPlayerStationAprilID(m_HumanPlayerStation))
                 .withName("Targeting.HumanPlayerStation");
 
     }
@@ -309,7 +310,7 @@ public class Targeting extends SubsystemBase {
     }
 
     public Command getTargetLastReefIDCmd() {
-        return this.runOnce(() -> targetLastReefID())
+        return Commands.runOnce(() -> targetLastReefID())
                 .withName("Targeting.TargetLastReefID");
     }
 

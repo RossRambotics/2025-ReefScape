@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -181,7 +182,7 @@ public class ButtonBox extends SubsystemBase {
     public Command getPlayerStationLeftCmd() {
         Command c = new PrintCommand("Player Station Left");
         c = c.andThen(
-                this.runOnce(() -> RobotContainer.m_targeting
+                Commands.runOnce(() -> RobotContainer.m_targeting
                         .setHumanPlayerStation(HumanPlayerStation.kLeftStation)));
 
         c.setName("Player Station Left");
@@ -190,7 +191,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getPlayerStationRightCmd() {
         Command c = new PrintCommand("Player Station Right");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting
+        c = c.andThen(Commands.runOnce(() -> RobotContainer.m_targeting
                 .setHumanPlayerStation(HumanPlayerStation.kRightStation)));
 
         c.setName("Player Station Right");
@@ -199,7 +200,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getReef1Cmd() {
         Command c = new PrintCommand("Reef 1");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(10, 21)));
+        c = c.andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(10, 21)));
 
         c.setName("Reef 1");
         return c;
@@ -207,7 +208,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getReef2Cmd() {
         Command c = new PrintCommand("Reef 2");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(9, 22)));
+        c = c.andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(9, 22)));
 
         c.setName("Reef 2");
         return c;
@@ -215,7 +216,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getReef3Cmd() {
         Command c = new PrintCommand("Reef 3");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(8, 17)));
+        c = c.andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(8, 17)));
 
         c.setName("Reef 3");
         return c;
@@ -223,7 +224,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getReef4Cmd() {
         Command c = new PrintCommand("Reef 4");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(7, 18)));
+        c = c.andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(7, 18)));
 
         c.setName("Reef 4");
         return c;
@@ -231,7 +232,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getReef5Cmd() {
         Command c = new PrintCommand("Reef 5");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(6, 19)));
+        c = c.andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(6, 19)));
 
         c.setName("Reef 5");
         return c;
@@ -239,7 +240,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getReef6Cmd() {
         Command c = new PrintCommand("Reef 6");
-        c = c.andThen(this.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(11, 20)));
+        c = c.andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setTargetIDRedBlue(11, 20)));
 
         c.setName("Reef 6");
         return c;
@@ -253,7 +254,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getLeftReefCmd() {
         Command c = new PrintCommand("Left Reef")
-                .andThen(this.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kLeftCoral)));
+                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kLeftCoral)));
 
         c.setName("Left Reef");
         return c;
@@ -261,14 +262,14 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getRightReefCmd() {
         Command c = new PrintCommand("Right Reef")
-                .andThen(this.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kRightCoral)));
+                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kRightCoral)));
         c.setName("Right Reef");
         return c;
     }
 
     public Command getAlgaeReefCmd() {
         Command c = new PrintCommand("Algae Reef")
-                .andThen(this.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kCenterAlgae)));
+                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kCenterAlgae)));
         c.setName("Algae Reef");
         return c;
     }

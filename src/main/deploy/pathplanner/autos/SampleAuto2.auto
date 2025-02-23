@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Arm.Calibrate"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Reef.1.Left"

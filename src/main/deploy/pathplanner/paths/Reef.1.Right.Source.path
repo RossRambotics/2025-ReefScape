@@ -34,14 +34,14 @@
   "eventMarkers": [
     {
       "name": "Event.CoralStation",
-      "waypointRelativePos": 0.8997908464566932,
+      "waypointRelativePos": 0.9219872946611912,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,

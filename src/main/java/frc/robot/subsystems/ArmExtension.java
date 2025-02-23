@@ -43,8 +43,8 @@ public class ArmExtension extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(32, "rio");
     // final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
-    private final double m_kRotationsToMeters = (0.038 * Math.PI * 1.2 * 2.64) * (40.0 / 16.0); // 2" diameter pulley
-                                                                                                // (circumference = pi
+    private final double m_kRotationsToMeters = (0.038 * Math.PI * 1.2 * 2.64) * 2.5; // 2" diameter pulley
+                                                                                      // (circumference = pi
     // * d)
     private final double m_kGoalTolerance = 0.02; // 2 cm tolerance
     private final Timer m_timer = new Timer();
@@ -170,7 +170,7 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public Command getSetGoalCommand(Distance distance) {
-        return this.runOnce(() -> setGoal(distance));
+        return Commands.runOnce(() -> setGoal(distance));
     }
 
     public Command getExtendCommand() {
@@ -182,7 +182,7 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public Command getZeroArmExtCmd() {
-        Command c = this.runOnce(() -> {
+        Command c = Commands.runOnce(() -> {
             m_LeftMotor.setPosition(-78 / m_kRotationsToMeters);
             setGoal(Meters.of(-78));
         }).ignoringDisable(true);
@@ -292,7 +292,7 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public void doManualMove(double vel) {
-        double kManualMaxSpeed = 1.0;
+        double kManualMaxSpeed = 0.10;
         double change = vel * kManualMaxSpeed;
         Distance newGoal = m_goal.plus(Meters.of(change));
 

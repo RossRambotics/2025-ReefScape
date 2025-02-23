@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -113,6 +114,7 @@ public class RobotContainer {
     public RobotContainer() {
         drivetrain = TunerConstants.createDrivetrain();
 
+        NamedCommands.registerCommand("Arm.Calibrate", m_armExtension.getCalibrateAndZero().withTimeout(0.5));
         NamedCommands.registerCommand("Arm.WaitForArm", new WaitForArm());
         NamedCommands.registerCommand("Arm.Back_L4", RobotContainer.m_armController.getTransition_Back_L4());
         NamedCommands.registerCommand("Arm.HumanPlayer",
@@ -137,12 +139,16 @@ public class RobotContainer {
                         targetDrive, RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.0)
                         .andThen(RobotContainer.m_armController.getTransition_Back_L4())
                         .andThen(new WaitForArm())
+                        .andThen(new PrintCommand("Before ScoreL4"))
                         .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
+                        .andThen(new PrintCommand("After Score L4 beefore WaitForArm"))
                         .andThen(new WaitForArm())
+                        .andThen(new PrintCommand("Before Outtake"))
                         .andThen(RobotContainer.m_intake.getOuttakeCommand())
+                        .andThen(new PrintCommand("After Outtake"))
                         .andThen(RobotContainer.m_armController.getTransition_Carry())
-        // .andThen(new WaitCommand(0.5))
-        // .andThen(RobotContainer.m_intake.getStopCommand())
+                        .andThen(new WaitCommand(1.0))
+
         );
 
         new EventTrigger("Event.CoralStation").onTrue(
