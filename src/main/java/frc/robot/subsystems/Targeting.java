@@ -65,6 +65,7 @@ public class Targeting extends SubsystemBase {
         m_TargetIDFound = Shuffleboard.getTab("Targeting").add("TargetIDFound", false).getEntry();
         m_GE_bUpdateTarget = Shuffleboard.getTab("Targeting").add("UpdateTarget", false).getEntry();
 
+        Shuffleboard.getTab("Targeting").add(this.getTargetLastReefIDCmd());
     }
 
     @Override
@@ -73,8 +74,10 @@ public class Targeting extends SubsystemBase {
             m_isFirstTime = false;
             if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
                 this.setTargetID(9);
+                m_ReefTargetID = 9;
             } else {
                 this.setTargetID(18);
+                m_ReefTargetID = 18;
             }
         }
 
@@ -96,6 +99,7 @@ public class Targeting extends SubsystemBase {
     private final double kCoralYoffset = 0.175; // left / right
     private final double kCoralXoffset = 0.03; // front / back
     private final double kAlgaeXoffset = 0.75;
+    private int m_ReefTargetID;
 
     public Pose2d getScoreTargetPose() {
         // start with the target pose
@@ -161,10 +165,17 @@ public class Targeting extends SubsystemBase {
      */
     public void setTargetIDRedBlue(int redID, int blueID) {
         if (m_alliance == Alliance.Red) {
+            m_ReefTargetID = redID;
             m_TargetID.setDouble(redID);
         } else {
+            m_ReefTargetID = blueID;
             m_TargetID.setDouble(blueID);
         }
+        this.setTargetAngle();
+    }
+
+    public void targetLastReefID() {
+        m_TargetID.setDouble(m_ReefTargetID);
         this.setTargetAngle();
     }
 
@@ -252,6 +263,11 @@ public class Targeting extends SubsystemBase {
             default:
                 return;
         }
+    }
+
+    public Command getTargetLastReefIDCmd() {
+        return this.runOnce(() -> targetLastReefID())
+                .withName("Targeting.TargetLastReefID");
     }
 
 }

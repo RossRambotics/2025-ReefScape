@@ -43,8 +43,9 @@ public class ArmExtension extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(32, "rio");
     // final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
-    private final double m_kRotationsToMeters = 0.038 * Math.PI * 1.2 * 2.64; // 2" diameter pulley (circumference = pi
-                                                                              // * d)
+    private final double m_kRotationsToMeters = (0.038 * Math.PI * 1.2 * 2.64) * (40.0 / 16.0); // 2" diameter pulley
+                                                                                                // (circumference = pi
+    // * d)
     private final double m_kGoalTolerance = 0.02; // 2 cm tolerance
     private final Timer m_timer = new Timer();
 

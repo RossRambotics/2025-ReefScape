@@ -28,8 +28,6 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getTravelToProcessorCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getBackL4Cmd());
         Shuffleboard.getTab("ButtonBox").add(this.getBackL3Cmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getBackL2Cmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getBackL1Cmd());
         Shuffleboard.getTab("ButtonBox").add(this.getIntakeAlgaeCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getRemoveAlgaeCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReleaseClimbCmd());
@@ -140,20 +138,6 @@ public class ButtonBox extends SubsystemBase {
         Command c = new PrintCommand("Back L3")
                 .andThen(RobotContainer.m_armController.getTransition_Back_L3());
         c.setName("Back L3");
-        return c;
-    }
-
-    public Command getBackL2Cmd() {
-        Command c = new PrintCommand("Back L2")
-                .andThen(RobotContainer.m_armController.getTransition_Back_L2());
-        c.setName("Back L2");
-        return c;
-    }
-
-    public Command getBackL1Cmd() {
-        Command c = new PrintCommand("Back L1")
-                .andThen(RobotContainer.m_armController.getTransition_Back_L1());
-        c.setName("Back L1");
         return c;
     }
 

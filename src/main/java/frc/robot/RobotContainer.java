@@ -310,9 +310,13 @@ public class RobotContainer {
         joystick.rightBumper().onTrue(m_armController.getTransition_Carry());
         joystick.rightTrigger().onTrue(m_armController.getNextNodeCmd());
 
-        joystick.y().onTrue(m_armController.getTransition_HumanPlayerCoral()
+        joystick.y().onTrue(m_armController.getTransition_HPCarry()
                 .andThen(m_targeting.getTargetHumanPlayerStation()));
-        joystick.x().onTrue(m_armController.getTransition_GroundCoral());
+
+        // joystick.x().onTrue(m_armController.getTransition_GroundCoral());
+        joystick.x().onTrue(m_targeting.getTargetLastReefIDCmd()
+                .andThen(RobotContainer.m_armController.getTransition_Carry()));
+
         joystick.a().onTrue(m_intake.getIntakeCommand());
         joystick.a().onFalse(m_intake.getStopCommand());
         joystick.b().onTrue(m_intake.getOuttakeCommand());

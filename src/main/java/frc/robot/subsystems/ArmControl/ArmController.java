@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Targeting.LineUpOrientation;
 import frc.util.RandomExecutionLimiter;
 import frc.util.GraphCommand.GraphCommand;
 import frc.util.GraphCommand.GraphCommand.GraphCommandNode;
@@ -30,8 +31,8 @@ public class ArmController extends SubsystemBase {
     private GenericEntry m_GE_nextNodeName;
     private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
-    private GraphCommandNode BackScore_L4, BackScore_L3, BackScore_L2, BackScore_L1, Back_L4, Back_L3, Back_L2, Back_L1,
-            BackAligment, Carry, FrontAligment, FrontScore_L3, Front_L3, S1, Start, FrontScore_L2, FrontScore_L1,
+    private GraphCommandNode BackScore_L4, BackScore_L3, Back_L4, Back_L3,
+            BackAligment, Carry, FrontAligment, HPCarry, S1, Start, FrontScore_L2, FrontScore_L1,
             Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae, ProcessorAlgae, NetAlgae, RemoveAlgaeHigh,
             RemoveAlgaeLow, Climb, BackAlignmentBack, Processor, ClimbReady, ClimbLockOn;
 
@@ -80,20 +81,6 @@ public class ArmController extends SubsystemBase {
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
                 new PrintCommand("Back_L3 is done"));
-        Back_L2 = m_armGraph.new GraphCommandNode("Back_L2",
-                ArmController.getArmCommand(Degrees.of(85),
-                        Meters.of(-77.3),
-                        Degrees.of(-136))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
-                null,
-                new PrintCommand("Back_L2 is done"));
-        Back_L1 = m_armGraph.new GraphCommandNode("Back_L1",
-                ArmController.getArmCommand(Degrees.of(85),
-                        Meters.of(-77.3),
-                        Degrees.of(0))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
-                null,
-                new PrintCommand("Back_L1 is done"));
 
         Front_L2 = m_armGraph.new GraphCommandNode("Front_L2",
                 ArmController.getArmCommand(Degrees.of(35),
@@ -143,22 +130,6 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("BackScore_L3"));
 
-        BackScore_L2 = m_armGraph.new GraphCommandNode("BackScore_L2",
-                ArmController.getArmCommand(Degrees.of(90),
-                        Meters.of(-77.3),
-                        Degrees.of(-136))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
-                null,
-                new PrintCommand("BackScore_L2"));
-
-        BackScore_L1 = m_armGraph.new GraphCommandNode("BackScore_L1",
-                ArmController.getArmCommand(Degrees.of(90),
-                        Meters.of(-77.3),
-                        Degrees.of(-140))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
-                null,
-                new PrintCommand("BackScore_L1"));
-
         Climb = m_armGraph.new GraphCommandNode("Climb",
                 ArmController.getArmCommand(Degrees.of(-30),
                         Meters.of(-77.3),
@@ -190,6 +161,13 @@ public class ArmController extends SubsystemBase {
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("Carry"));
+        HPCarry = m_armGraph.new GraphCommandNode("HPCarry",
+                ArmController.getArmCommand(Degrees.of(-20),
+                        Meters.of(-77.3),
+                        Degrees.of(-130))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("HPCarry"));
         FrontAligment = m_armGraph.new GraphCommandNode("FrontAligment",
                 ArmController.getArmCommand(Degrees.of(0),
                         Meters.of(-77.3),
@@ -219,20 +197,7 @@ public class ArmController extends SubsystemBase {
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("FrontScore_L1"));
-        Front_L3 = m_armGraph.new GraphCommandNode("Front_L3",
-                ArmController.getArmCommand(Degrees.of(35),
-                        Meters.of(-66),
-                        Degrees.of(60))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
-                null,
-                new PrintCommand("Front_L3"));
-        FrontScore_L3 = m_armGraph.new GraphCommandNode("FrontScore_L3",
-                ArmController.getArmCommand(Degrees.of(10),
-                        Meters.of(-77.3),
-                        Degrees.of(20))
-                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
-                null,
-                new PrintCommand("FrontScore_L3"));
+
         GroundAlgae = m_armGraph.new GraphCommandNode("GroundAlgae",
                 ArmController.getArmCommand(Degrees.of(-11),
                         Meters.of(0.8),
@@ -273,29 +238,20 @@ public class ArmController extends SubsystemBase {
         Start.AddNode(BackAligment, 1);
         BackAligment.AddNode(Back_L4, 1);
         BackAligment.AddNode(Back_L3, 1);
-        BackAligment.AddNode(Back_L2, 1);
-        BackAligment.AddNode(Back_L1, 1);
         BackAligment.AddNode(Front_L2, 1);
         BackAligment.AddNode(Front_L1, 1);
         BackAligment.AddNode(Carry, 1);
         Carry.AddNode(ClimbReady, 1);
         ClimbReady.AddNode(ClimbLockOn, 1);
+        ClimbReady.setNextNode(ClimbLockOn);
         ClimbLockOn.AddNode(Climb, 1);
+        ClimbLockOn.setNextNode(Climb);
         Back_L4.AddNode(BackScore_L4, 1);
         Back_L4.setNextNode(BackScore_L4);
         BackScore_L4.setNextNode(Back_L4);
         Back_L3.AddNode(BackScore_L3, 1);
         Back_L3.setNextNode(BackScore_L3);
         BackScore_L3.setNextNode(Back_L3);
-        Back_L2.AddNode(BackScore_L2, 1);
-        Back_L2.setNextNode(BackScore_L2);
-        BackScore_L2.setNextNode(Back_L2);
-        Back_L1.AddNode(BackScore_L1, 1);
-        Back_L1.setNextNode(BackScore_L1);
-        BackScore_L1.setNextNode(Back_L1);
-        Front_L3.AddNode(FrontScore_L3, 1);
-        Front_L3.setNextNode(FrontScore_L3);
-        FrontScore_L3.setNextNode(Front_L3);
         Front_L2.AddNode(FrontScore_L2, 1);
         Front_L2.setNextNode(FrontScore_L2);
         FrontScore_L2.setNextNode(Front_L2);
@@ -306,10 +262,11 @@ public class ArmController extends SubsystemBase {
         BackAligment.AddNode(FrontAligment, 1);
         Carry.AddNode(FrontAligment, 1);
         Start.AddNode(FrontAligment, 1);
-        FrontAligment.AddNode(Front_L3, 1);
         FrontAligment.AddNode(Front_L2, 1);
         FrontAligment.AddNode(Front_L1, 1);
-        FrontAligment.AddNode(HumanPlayerCoral, 1);
+        FrontAligment.AddNode(HPCarry, 1);
+        HPCarry.AddNode(HumanPlayerCoral, 1);
+        HPCarry.setNextNode(HumanPlayerCoral);
         FrontAligment.AddNode(GroundAlgae, 1);
         FrontAligment.AddNode(GroundCoral, 1);
         FrontAligment.AddNode(ProcessorAlgae, 1);
@@ -330,21 +287,15 @@ public class ArmController extends SubsystemBase {
         // Shuffleboard.getTab("ArmController").add(this.getTransition_BackAligmentBack());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L4());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L3());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L2());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L2());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_HumanPlayerCoral());
         Shuffleboard.getTab("ArmController").add(this.getTransition_GroundCoral());
         Shuffleboard.getTab("ArmController").add(this.getTransition_BackScore_L4());
         Shuffleboard.getTab("ArmController").add(this.getTransition_BackScore_L3());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_BackScore_L2());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_BackScore_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Carry());
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontAligment());
         Shuffleboard.getTab("ArmController").add(this.getTransition_S1());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L2());
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_GroundAlgae());
@@ -436,49 +387,40 @@ public class ArmController extends SubsystemBase {
     }
 
     public Command getTransition_Back_L4() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L4));
+        Command c = Commands.runOnce(() -> Carry.setNextNode(Back_L4))
+                .andThen(Commands
+                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kBackward)));
         c.setName("Back_L4");
         return c;
     }
 
     public Command getTransition_Back_L3() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L3));
+        Command c = Commands.runOnce(() -> Carry.setNextNode(Back_L3))
+                .andThen(Commands
+                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kBackward)));
         c.setName("Back_L3");
         return c;
     }
 
-    public Command getTransition_Back_L2() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L2));
-        c.setName("Back_L2");
-        return c;
-    }
-
-    public Command getTransition_Back_L1() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L1));
-        c.setName("Back_L1");
-        return c;
-    }
-
     public Command getTransition_Front_L2() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Front_L2));
+        Command c = Commands.runOnce(() -> Carry.setNextNode(Front_L2))
+                .andThen(Commands
+                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward)));
         c.setName("Front_L2");
         return c;
     }
 
-    public Command getTransition_Front_L3() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Front_L3));
-        c.setName("Front_L3");
-        return c;
-    }
-
     public Command getTransition_Front_L1() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Front_L1));
+        Command c = Commands.runOnce(() -> Carry.setNextNode(Front_L1))
+                .andThen(Commands
+                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward)));
         c.setName("Front_L1");
         return c;
     }
 
     public Command getTransition_HumanPlayerCoral() {
         Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(HumanPlayerCoral));
+        // .andThen(RobotContainer.m_buttonBox.getBackWardsOrientationCmd());
         c.setName("HumanPlayerCoral");
         return c;
     }
@@ -498,18 +440,6 @@ public class ArmController extends SubsystemBase {
     public Command getTransition_BackScore_L3() {
         Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L3));
         c.setName("BackScore_L3");
-        return c;
-    }
-
-    public Command getTransition_BackScore_L2() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L2));
-        c.setName("BackScore_L2");
-        return c;
-    }
-
-    public Command getTransition_BackScore_L1() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(BackScore_L1));
-        c.setName("BackScoreBackScore_L1_L4");
         return c;
     }
 
@@ -537,6 +467,12 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
+    public Command getTransition_HPCarry() {
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(HPCarry));
+        c.setName("HPCarry");
+        return c;
+    }
+
     public Command getTransition_FrontAligment() {
         Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(FrontAligment));
         c.setName("FrontAligment");
@@ -552,12 +488,6 @@ public class ArmController extends SubsystemBase {
     public Command getTransition_FrontScore_L2() {
         Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L2));
         c.setName("FrontScore_L2");
-        return c;
-    }
-
-    public Command getTransition_FrontScore_L3() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(FrontScore_L3));
-        c.setName("FrontScore_L3");
         return c;
     }
 
