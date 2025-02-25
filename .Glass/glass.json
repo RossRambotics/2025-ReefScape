@@ -10,6 +10,12 @@
         "ArmBase": {
           "open": true
         },
+        "ArmController": {
+          "open": true
+        },
+        "ArmExt": {
+          "open": true
+        },
         "Intake": {
           "Intake.IntakeCommand": {
             "open": true
@@ -20,6 +26,9 @@
           "Intake.StopCommand": {
             "open": true
           }
+        },
+        "Wrist": {
+          "open": true
         },
         "open": true
       }
@@ -34,6 +43,8 @@
       "/Shuffleboard/ArmBase/ArmBase.Zero": "Command",
       "/Shuffleboard/ArmBase/ArmBaseZeroEncoder": "Command",
       "/Shuffleboard/ArmController/BackAligment": "Command",
+      "/Shuffleboard/ArmController/BackAligmentBack": "Command",
+      "/Shuffleboard/ArmController/BackScoreBackScore_L1_L4": "Command",
       "/Shuffleboard/ArmController/BackScore_L1": "Command",
       "/Shuffleboard/ArmController/BackScore_L2": "Command",
       "/Shuffleboard/ArmController/BackScore_L3": "Command",
@@ -44,6 +55,8 @@
       "/Shuffleboard/ArmController/Back_L4": "Command",
       "/Shuffleboard/ArmController/Carry": "Command",
       "/Shuffleboard/ArmController/Climb": "Command",
+      "/Shuffleboard/ArmController/ClimbLockOn": "Command",
+      "/Shuffleboard/ArmController/ClimbReady": "Command",
       "/Shuffleboard/ArmController/FrontAligment": "Command",
       "/Shuffleboard/ArmController/FrontScore_L1": "Command",
       "/Shuffleboard/ArmController/FrontScore_L2": "Command",
@@ -106,8 +119,10 @@
       "/Shuffleboard/ButtonBox/Travel To Reef": "Command",
       "/Shuffleboard/ButtonBox/Trough": "Command",
       "/Shuffleboard/Intake/Intake.IntakeCommand": "Command",
+      "/Shuffleboard/Intake/Intake.OuttakeAlgaeCommand": "Command",
       "/Shuffleboard/Intake/Intake.OuttakeCommand": "Command",
       "/Shuffleboard/Intake/Intake.StopCommand": "Command",
+      "/Shuffleboard/Targeting/Targeting.TargetLastReefID": "Command",
       "/Shuffleboard/Wrist/Wrist.ZeroAngle": "Command",
       "/SmartDashboard/Alerts": "Alerts",
       "/SmartDashboard/Auto Mode": "String Chooser",
@@ -117,6 +132,17 @@
       "/SmartDashboard/Module 3": "Mechanism2d"
     },
     "windows": {
+      "/Pose": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
       "/Shuffleboard/ArmBase/ArmBase.Zero": {
         "window": {
           "visible": true
@@ -162,6 +188,21 @@
           "visible": true
         }
       },
+      "/Shuffleboard/ArmController/Climb": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/ClimbLockOn": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/ArmController/ClimbReady": {
+        "window": {
+          "visible": true
+        }
+      },
       "/Shuffleboard/ArmController/FrontAligment": {
         "window": {
           "visible": true
@@ -188,6 +229,11 @@
         }
       },
       "/Shuffleboard/ArmExt/ArmExt.Zero": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Auto Mode": {
         "window": {
           "visible": true
         }
