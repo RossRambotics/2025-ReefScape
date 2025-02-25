@@ -296,16 +296,16 @@ public class ArmExtension extends SubsystemBase {
         double change = vel * kManualMaxSpeed;
         Distance newGoal = m_goal.plus(Meters.of(change));
 
-        if (newGoal.in(Meters) > 5) {
-            newGoal = Meters.of(5);
-        } else if (newGoal.in(Meters) < -80) {
-            newGoal = Meters.of(-80);
+        if (newGoal.in(Meters) > 10) {
+            newGoal = Meters.of(10);
+        } else if (newGoal.in(Meters) < -85) {
+            newGoal = Meters.of(-85);
         }
 
         setGoal(newGoal);
     }
 
     public boolean isStationary() {
-        return Math.abs(m_LeftMotor.getVelocity().getValue().in(RotationsPerSecond)) < 0.5;
+        return Math.abs(m_LeftMotor.getVelocity().getValue().in(RotationsPerSecond)) < 2.0;
     }
 }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.979977575234377,
-        "y": 3.8273021556776308
+        "x": 6.086,
+        "y": 3.848
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.188539777483259,
-        "y": 1.5071454729352682
+        "x": 6.294562202248882,
+        "y": 1.5278433172576373
       },
       "isLocked": false,
       "linkedName": null
@@ -34,14 +34,14 @@
   "eventMarkers": [
     {
       "name": "Event.CoralStation",
-      "waypointRelativePos": 0.9219872946611912,
+      "waypointRelativePos": 0.5709140785420945,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
