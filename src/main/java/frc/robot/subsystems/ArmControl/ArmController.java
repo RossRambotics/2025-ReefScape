@@ -47,8 +47,8 @@ public class ArmController extends SubsystemBase {
 
         Start = m_armGraph.new GraphCommandNode("Start",
                 ArmController.getArmCommand(Degrees.of(0),
-                        Meters.of(0),
-                        Degrees.of(0)),
+                        Meters.of(-78),
+                        Degrees.of(-130)),
                 null,
                 null);
         BackAligment = m_armGraph.new GraphCommandNode("BackAlignment",
@@ -61,7 +61,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackAlignment is done"));
         Back_L4 = m_armGraph.new GraphCommandNode("Back_L4",
                 ArmController.getArmCommand(Degrees.of(80),
-                        Meters.of(0),
+                        Meters.of(2),
                         Degrees.of(-126))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
@@ -108,7 +108,7 @@ public class ArmController extends SubsystemBase {
 
         BackScore_L4 = m_armGraph.new GraphCommandNode("BackScore_L4",
                 ArmController.getArmCommand(Degrees.of(87.0),
-                        Meters.of(0),
+                        Meters.of(2),
                         Degrees.of(-126))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
@@ -267,11 +267,11 @@ public class ArmController extends SubsystemBase {
         FrontAligment.AddNode(RemoveAlgaeLow, 1);
         // BackAligment.AddNode(BackAlignmentBack, 0);
 
-        m_armGraph.setGraphRootNode(Start);
-        m_armGraph.setCurrentNode(Start);
+        m_armGraph.setGraphRootNode(S1);
+        m_armGraph.setCurrentNode(S1);
         m_armGraph.initialize();
         m_armGraph.addRequirements(this);
-        m_armGraph.setTargetNode(Start);
+        m_armGraph.setTargetNode(S1);
         this.setDefaultCommand(m_armGraph);
 
         Shuffleboard.getTab("ArmController").add(this.getTransition_Start());
