@@ -82,18 +82,18 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Score.L4"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "RightSource.Reef3"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score.L4"
           }
         }
       ]
