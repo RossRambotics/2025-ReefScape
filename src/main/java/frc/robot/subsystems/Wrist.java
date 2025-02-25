@@ -23,11 +23,13 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
+import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
@@ -53,6 +55,7 @@ public class Wrist extends SubsystemBase {
     private GenericEntry m_GE_Goal = null;
     private GenericEntry m_GE_Timer = null;
     private Timer m_timer = new Timer();
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     private Angle m_goal = Degrees.of(0);
 
@@ -97,7 +100,7 @@ public class Wrist extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 60; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 50; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kG = 1.0;
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
@@ -166,11 +169,20 @@ public class Wrist extends SubsystemBase {
     }
 
     public Command getSetGoalCommand(Angle angle) {
-        return this.runOnce(() -> setGoal(angle));
+        return Commands.runOnce(() -> setGoal(angle));
     }
 
     @Override
     public void periodic() {
+        if (this.getError().in(Degree) <= m_kGoalTolerance) {
+            m_timer.stop();
+        }
+
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
+
         // Update PID?
         if (m_GE_bUpdatePID.getBoolean(false)) {
             Slot0Configs slot0 = new Slot0Configs();
@@ -189,9 +201,7 @@ public class Wrist extends SubsystemBase {
         // This method will be called once per scheduler run
         m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
         m_GE_Position.setDouble(m_LeftMotor.getPosition().getValue().in(Degree));
-        if (this.getError().in(Degree) <= m_kGoalTolerance) {
-            m_timer.stop();
-        }
+
         m_GE_Timer.setDouble(m_timer.get());
     }
 
@@ -204,7 +214,7 @@ public class Wrist extends SubsystemBase {
     }
 
     public Command getZeroWristAngleCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
+        Command c = Commands.runOnce(() -> m_LeftMotor.setPosition(Degrees.of(0)));
         c.setName("Wrist.ZeroAngle");
         // c.ignoringDisable(true);
 
@@ -212,11 +222,11 @@ public class Wrist extends SubsystemBase {
     }
 
     public Command getOpenCommand() {
-        return this.runOnce(() -> setGoal(Degrees.of(0))).withName("Wrist.OpenCommand");
+        return Commands.runOnce(() -> setGoal(Degrees.of(0))).withName("Wrist.OpenCommand");
     }
 
     public Command getCloseCommand() {
-        return this.runOnce(() -> setGoal(Degrees.of(40))).withName("Wrist.CloseCommand");
+        return Commands.runOnce(() -> setGoal(Degrees.of(40))).withName("Wrist.CloseCommand");
     }
 
     @Override
@@ -237,5 +247,9 @@ public class Wrist extends SubsystemBase {
         }
 
         setGoal(newGoal);
+    }
+
+    public boolean isStationary() {
+        return Math.abs(m_LeftMotor.getVelocity().getValue().in(RotationsPerSecond)) < 0.2;
     }
 }

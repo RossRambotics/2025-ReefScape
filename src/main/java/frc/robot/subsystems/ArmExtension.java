@@ -23,6 +23,7 @@ import com.ctre.phoenix6.controls.Follower;
 import frc.robot.RobotContainer;
 import frc.robot.Commands.CalibrateArmExtension;
 import frc.robot.sim.PhysicsSim;
+import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -42,8 +43,9 @@ public class ArmExtension extends SubsystemBase {
     final TalonFX m_LeftMotor = new TalonFX(32, "rio");
     // final TalonFX m_RightMotor = new TalonFX(33, "rio");
 
-    private final double m_kRotationsToMeters = 0.038 * Math.PI * 1.2 * 2.64; // 2" diameter pulley (circumference = pi
-                                                                              // * d)
+    private final double m_kRotationsToMeters = (0.038 * Math.PI * 1.2 * 2.64) * 2.5; // 2" diameter pulley
+                                                                                      // (circumference = pi
+    // * d)
     private final double m_kGoalTolerance = 0.02; // 2 cm tolerance
     private final Timer m_timer = new Timer();
 
@@ -60,6 +62,7 @@ public class ArmExtension extends SubsystemBase {
     private GenericEntry m_GE_Goal = null;
     private Distance m_goal = Meters.of(0);
     private GenericEntry m_GE_Timer = null;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     /** Creates a new ArmPivot. */
     public ArmExtension() {
@@ -124,7 +127,7 @@ public class ArmExtension extends SubsystemBase {
 
         // this.initSysID(); // used for system identification
         Shuffleboard.getTab("ArmExt").add(this.getZeroArmExtCmd().withName("ArmExt.Zero"));
-        Shuffleboard.getTab("ArmExt").add(this.GetCalibrateCmd().withName("ArmExt.Calibrate"));
+        Shuffleboard.getTab("ArmExt").add(this.getCalibrateAndZero().withName("ArmExt.Calibrate & Zero"));
         Shuffleboard.getTab("ArmExt").add(this.GetStopCmd().withName("ArmExt.Stop"));
     }
 
@@ -159,14 +162,15 @@ public class ArmExtension extends SubsystemBase {
     public Command getWaitUntilErrorLessThanCmd(Distance meters) {
         return new WaitUntilCommand(() -> {
             Distance error = getError();
-            if (error.baseUnitMagnitude() <= meters.baseUnitMagnitude())
+            if (error.baseUnitMagnitude() <= meters.baseUnitMagnitude()) {
                 return true;
+            }
             return false;
         });
     }
 
     public Command getSetGoalCommand(Distance distance) {
-        return this.runOnce(() -> setGoal(distance));
+        return Commands.runOnce(() -> setGoal(distance));
     }
 
     public Command getExtendCommand() {
@@ -178,15 +182,32 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public Command getZeroArmExtCmd() {
-        Command c = this.runOnce(() -> m_LeftMotor.setPosition(-78 / m_kRotationsToMeters)).ignoringDisable(true);
+        Command c = Commands.runOnce(() -> {
+            m_LeftMotor.setPosition(-78 / m_kRotationsToMeters);
+            setGoal(Meters.of(-78));
+        }).ignoringDisable(true);
         c.setName("ArmExt.Zero");
         // c.ignoringDisable(true);
 
         return c;
     }
 
+    public Command getCalibrateAndZero() {
+        return this.GetCalibrateCmd()
+                .andThen(this.getZeroArmExtCmd()).withName("Calibrate & Zero");
+    }
+
     @Override
     public void periodic() {
+        if (this.getError().in(Meters) <= m_kGoalTolerance) {
+            m_timer.stop();
+        }
+
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
+
         // Update PID?
         if (m_GE_bUpdatePID.getBoolean(false)) {
             Slot0Configs slot0 = new Slot0Configs();
@@ -205,9 +226,6 @@ public class ArmExtension extends SubsystemBase {
         m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
         m_GE_Position.setDouble(this.getPosition().in(Meter));
         m_GE_Timer.setDouble(m_timer.get());
-        if (this.getError().in(Meters) <= m_kGoalTolerance) {
-            m_timer.stop();
-        }
 
     }
 
@@ -274,16 +292,20 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public void doManualMove(double vel) {
-        double kManualMaxSpeed = 1.0;
+        double kManualMaxSpeed = 0.10;
         double change = vel * kManualMaxSpeed;
         Distance newGoal = m_goal.plus(Meters.of(change));
 
-        if (newGoal.in(Meters) > 5) {
-            newGoal = Meters.of(5);
-        } else if (newGoal.in(Meters) < -80) {
-            newGoal = Meters.of(-80);
+        if (newGoal.in(Meters) > 10) {
+            newGoal = Meters.of(10);
+        } else if (newGoal.in(Meters) < -85) {
+            newGoal = Meters.of(-85);
         }
 
         setGoal(newGoal);
+    }
+
+    public boolean isStationary() {
+        return Math.abs(m_LeftMotor.getVelocity().getValue().in(RotationsPerSecond)) < 2.0;
     }
 }

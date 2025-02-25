@@ -157,6 +157,12 @@ public class GraphCommand extends Command {
     }
 
     public void setTargetNode(GraphCommandNode node) {
+        // this is here to prevent a null pointer exception when the default next node
+        // for a node is null
+        if (node == null) {
+            return;
+        }
+
         // if the graph isn't transitioning set the next node and move on
         if (!m_isTransitioning) {
             m_targetNode = node;

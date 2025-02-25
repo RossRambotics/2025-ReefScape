@@ -16,9 +16,9 @@ import frc.robot.subsystems.ArmExtension;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CalibrateArmExtension extends Command {
     private double kStallVelocityThreshold = 0.25;
-    private double kStallCurrentThreshold = 7.0;
-    private double kStallTimeThreshold = 0.1;
-    private double kStallMotorPower = -0.5;
+    private double kStallCurrentThreshold = 45.0;
+    private double kStallTimeThreshold = 0.2;
+    private double kStallMotorPower = 50.0;
     private TalonFX m_motor = null;
     private Timer m_stallTimer = new Timer();
     private boolean m_isFinished = false;
@@ -44,7 +44,7 @@ public class CalibrateArmExtension extends Command {
         m_motor.getConfigurator().apply(currentConfig);
 
         // Set the motor to slowly retract
-        VelocityTorqueCurrentFOC request = new VelocityTorqueCurrentFOC(-5.0)
+        VelocityTorqueCurrentFOC request = new VelocityTorqueCurrentFOC(-1.0)
                 .withFeedForward(-kStallMotorPower);
         m_motor.setControl(request);
         m_stallTimer.reset();
@@ -65,8 +65,8 @@ public class CalibrateArmExtension extends Command {
                 "Calibrate Ext AMPs:" + currentAMPs + " Vel: " + currentVelocity + " Time: " + m_stallTimer.get());
 
         if (currentAMPs > kStallCurrentThreshold) {
-            m_motor.stopMotor();
-            m_isFinished = true;
+            // m_motor.stopMotor();
+            // m_isFinished = true;
             if (!m_stallTimer.isRunning()) {
                 m_stallTimer.start();
             }
@@ -87,6 +87,7 @@ public class CalibrateArmExtension extends Command {
     @Override
     public void end(boolean interrupted) {
         // Restore the original motor configuration
+        m_motor.stopMotor();
         m_motor.getConfigurator().apply(m_originalMotorConfig);
     }
 

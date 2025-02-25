@@ -24,6 +24,7 @@ import com.ctre.phoenix6.controls.Follower;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
+import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.GenericPublisher;
 import edu.wpi.first.units.measure.Angle;
@@ -56,6 +57,7 @@ public class ArmBase extends SubsystemBase {
     private Angle m_goal = Degrees.of(0);
     private Timer m_timer = new Timer();
     private GenericPublisher m_GE_Timer;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
@@ -63,7 +65,7 @@ public class ArmBase extends SubsystemBase {
         CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
         cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
         cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(109.0 - 216.0 - 5.5));
+        cc_cfg.MagnetSensor.withMagnetOffset(0.044);
         m_armBaseCANcoder.getConfigurator().apply(cc_cfg);
 
         TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
@@ -75,22 +77,22 @@ public class ArmBase extends SubsystemBase {
         FeedbackConfigs fdb = fx_cfg.Feedback;
         double gearRatio = 112.0;
 
-        if (Robot.isSimulation() || true) {
+        if (Robot.isSimulation()) {
             // needed for internal sensor
             fdb.SensorToMechanismRatio = gearRatio;
         } else {
             // // use external encoder (CANCoder)
-            // fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
-            // fdb.FeedbackRemoteSensorID = m_armBaseCANcoder.getDeviceID();
-            // fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-            // fdb.RotorToSensorRatio = gearRatio;
+            fdb.SensorToMechanismRatio = 1.0; // 1:1 ratio
+            fdb.FeedbackRemoteSensorID = m_armBaseCANcoder.getDeviceID();
+            fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+            fdb.RotorToSensorRatio = gearRatio;
         }
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = fx_cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(2.5))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(5));
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
+                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
+                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
 
         // enable brake mode
         fx_cfg.MotorOutput = new MotorOutputConfigs()
@@ -101,7 +103,7 @@ public class ArmBase extends SubsystemBase {
         slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 300.0; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = 65.0; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kD = 0.0; // A velocity error of 1 rps results in 0.5 V output
 
@@ -122,7 +124,7 @@ public class ArmBase extends SubsystemBase {
         swLimits.ForwardSoftLimitEnable = true;
         swLimits.ForwardSoftLimitThreshold = Degrees.of(120).in(Rotations);
         swLimits.ReverseSoftLimitEnable = true;
-        swLimits.ReverseSoftLimitThreshold = Degrees.of(-10).in(Rotations);
+        swLimits.ReverseSoftLimitThreshold = Degrees.of(-30).in(Rotations);
         // fx_cfg.SoftwareLimitSwitch = swLimits;
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -168,7 +170,7 @@ public class ArmBase extends SubsystemBase {
     }
 
     public Command getSetGoalCommand(Angle angle) {
-        return this.runOnce(() -> setGoal(angle));
+        return Commands.runOnce(() -> setGoal(angle));
     }
 
     public Command getZeroArmAngleCmd() {
@@ -213,6 +215,14 @@ public class ArmBase extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (this.getError().in(Degree) <= m_kGoalTolerance) {
+            m_timer.stop();
+        }
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
+
         // Update PID?
         if (m_GE_bUpdatePID.getBoolean(false)) {
             Slot0Configs slot0 = new Slot0Configs();
@@ -232,10 +242,6 @@ public class ArmBase extends SubsystemBase {
         m_GE_Velocity.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
         m_GE_Position.setDouble(m_LeftMotor.getPosition().getValue().in(Degree));
         m_GE_Timer.setDouble(m_timer.get());
-
-        if (this.getError().in(Degree) <= m_kGoalTolerance) {
-            m_timer.stop();
-        }
 
     }
 
@@ -302,5 +308,9 @@ public class ArmBase extends SubsystemBase {
         }
 
         setGoal(newGoal);
+    }
+
+    public boolean isStationary() {
+        return Math.abs(m_LeftMotor.getVelocity().getValue().in(RotationsPerSecond)) < 0.2;
     }
 }

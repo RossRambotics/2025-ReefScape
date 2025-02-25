@@ -30,28 +30,41 @@ public class RunPathToTarget extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-
+        Pose2d pose = RobotContainer.drivetrain.getState().Pose;
         Pose2d targetPose = RobotContainer.m_targeting.getTargetPose();
-        // Create the constraints to use while pathfinding
-        PathConstraints constraints = new PathConstraints(
-                2.0, 3.0,
-                Units.degreesToRadians(540), Units.degreesToRadians(720));
+        double distance = pose.getTranslation().getDistance(targetPose.getTranslation());
+        Command c = null;
 
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        Command c = AutoBuilder.pathfindToPose(
-                targetPose,
-                constraints // Goal end velocity in meters/sec
-        );
+        // if less than 1 meter away, just drive to the score pose target
+        if (distance > 1.0) {
+            // Create the constraints to use while pathfinding
+            PathConstraints constraints = new PathConstraints(
+                    2.0, 2.0,
+                    Units.degreesToRadians(540), Units.degreesToRadians(720));
 
-        m_pathFindingCommand = c
-                .andThen(new ReefLineUp3(m_drivetrain, m_drive, RobotContainer.m_targeting::getScoreTargetPose));
+            // Since AutoBuilder is configured, we can use it to build pathfinding commands
+            c = AutoBuilder
+                    .pathfindToPose(
+                            targetPose,
+                            constraints // Goal end velocity in meters/sec
+                    );
+        }
+
+        if (c == null) {
+            m_pathFindingCommand = new ReefLineUp3(m_drivetrain, m_drive,
+                    RobotContainer.m_targeting::getScoreTargetPose);
+        } else {
+            m_pathFindingCommand = c
+                    .andThen(new ReefLineUp3(m_drivetrain, m_drive, RobotContainer.m_targeting::getScoreTargetPose));
+        }
+
+        m_pathFindingCommand.schedule();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
 
-        m_pathFindingCommand.schedule();
     }
 
     // Called once the command ends or is interrupted.

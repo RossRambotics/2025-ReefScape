@@ -15,7 +15,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.util.RandomExecutionLimiter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ReefLineUp3 extends Command {
@@ -23,7 +25,7 @@ public class ReefLineUp3 extends Command {
     private SwerveRequest.FieldCentricFacingAngle m_drive;
     private Pose2d m_targetPose;
     private Supplier<Pose2d> mSupplierTargetPose;
-    private final double kP = 7.5;
+    private final double kP = 6.5;
     private final double kI = 0.0;
     private final double kD = 0.1;
     private double kS = 0.15;
@@ -38,6 +40,8 @@ public class ReefLineUp3 extends Command {
     private static GenericEntry m_yError = null;
     private static GenericEntry m_GE_bUpdatePID = null;
     private static GenericEntry m_GE_isAtGoal = null;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
+    private boolean m_isFinished = false;
 
     /** Creates a new ReefLineUp. */
     public ReefLineUp3(CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentricFacingAngle drive,
@@ -69,23 +73,16 @@ public class ReefLineUp3 extends Command {
     @Override
     public void initialize() {
         m_targetPose = mSupplierTargetPose.get();
+        m_drivetrain = RobotContainer.drivetrain;
+        m_drive = RobotContainer.theTargetDrive;
         m_xPID.reset();
         m_yPID.reset();
+        m_isFinished = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_GE_bUpdatePID.getBoolean(false)) {
-            kS = m_GE_PID_kS.getDouble(0.15);
-            m_xPID.setP(m_GE_PID_kP.getDouble(kP));
-            m_xPID.setI(m_GE_PID_kI.getDouble(kI));
-            m_xPID.setD(m_GE_PID_kD.getDouble(kD));
-            m_yPID.setP(m_GE_PID_kP.getDouble(kP));
-            m_yPID.setI(m_GE_PID_kI.getDouble(kI));
-            m_yPID.setD(m_GE_PID_kD.getDouble(kD));
-            m_GE_bUpdatePID.setBoolean(false);
-        }
 
         // calculate error
         double distX = m_targetPose.getTranslation().getX() - m_drivetrain.getState().Pose.getX();
@@ -95,6 +92,7 @@ public class ReefLineUp3 extends Command {
 
         if (Math.abs(distX) < kTolerance && Math.abs(distY) < kTolerance) {
             m_GE_isAtGoal.setBoolean(true);
+            m_isFinished = true;
             return;
         } else {
             m_GE_isAtGoal.setBoolean(false);
@@ -119,6 +117,21 @@ public class ReefLineUp3 extends Command {
                 .withVelocityY(-velY) // Drive left with negative X (left)
                 .withTargetDirection(m_targetPose.getRotation()));
 
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
+        if (m_GE_bUpdatePID.getBoolean(false)) {
+            kS = m_GE_PID_kS.getDouble(0.15);
+            m_xPID.setP(m_GE_PID_kP.getDouble(kP));
+            m_xPID.setI(m_GE_PID_kI.getDouble(kI));
+            m_xPID.setD(m_GE_PID_kD.getDouble(kD));
+            m_yPID.setP(m_GE_PID_kP.getDouble(kP));
+            m_yPID.setI(m_GE_PID_kI.getDouble(kI));
+            m_yPID.setD(m_GE_PID_kD.getDouble(kD));
+            m_GE_bUpdatePID.setBoolean(false);
+        }
+
         // DataLogManager.log("Vel X: " + velX + " Y: " + velY + " Error X: " + distX +
         // " Y:" + distY);
     }
@@ -136,6 +149,6 @@ public class ReefLineUp3 extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return m_isFinished;
     }
 }

@@ -6,26 +6,40 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.FovParamsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.ProximityParamsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.ToFParamsConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.UpdateModeValue;
 
 import frc.robot.RobotContainer;
 import frc.robot.sim.PhysicsSim;
+import frc.util.RandomExecutionLimiter;
+import edu.wpi.first.networktables.BooleanEntry;
+import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import static edu.wpi.first.units.Units.*;
 
 public class Intake extends SubsystemBase {
     // Intake States
+    // private CANrange m_CoralSensor = new CANrange(99);
     private int m_CurrentState = 0;
     final private int m_kIdle = 0;
     final private int m_kIntake = 1;
@@ -38,18 +52,18 @@ public class Intake extends SubsystemBase {
     TalonFX m_RightMotor = new TalonFX(36, "rio");
 
     private final VelocityVoltage m_velocityVoltage = new VelocityVoltage(0).withSlot(0);
-    private GenericEntry m_GE_PID_kS = null;
-    private GenericEntry m_GE_PID_kV = null;
-    private GenericEntry m_GE_PID_kP = null;
-    private GenericEntry m_GE_PID_kI = null;
-    private GenericEntry m_GE_PID_kD = null;
-    private GenericEntry m_GE_bUpdatePID = null;
-    private GenericEntry m_GE_bUpdateGoals = null;
-    private GenericEntry m_GE_Position = null;
-    private GenericEntry m_GE_Velocity_Left_RPS = null;
-    private GenericEntry m_GE_Velocity_Right_RPS = null;
-    private GenericEntry m_GE_Goal_Left_RPS = null;
-    private GenericEntry m_GE_Goal_Right_RPS = null;
+    private DoubleEntry m_PID_kS = null;
+    private DoubleEntry m_PID_kV = null;
+    private DoubleEntry m_PID_kP = null;
+    private DoubleEntry m_PID_kI = null;
+    private DoubleEntry m_PID_kD = null;
+    private BooleanEntry m_bUpdatePID = null;
+    private BooleanEntry m_bUpdateGoals = null;
+    private DoubleEntry m_Velocity_Left_RPS = null;
+    private DoubleEntry m_Velocity_Right_RPS = null;
+    private DoubleEntry m_Goal_Left_RPS = null;
+    private DoubleEntry m_Goal_Right_RPS = null;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     /** Creates a new Intake. */
     public Intake() {
@@ -72,18 +86,31 @@ public class Intake extends SubsystemBase {
         slot0.kI = 0; // No output for integrated error
         slot0.kD = 0; // No output for error derivative
 
-        m_GE_PID_kS = Shuffleboard.getTab("Intake").add("Intake_kS", slot0.kS).getEntry();
-        m_GE_PID_kV = Shuffleboard.getTab("Intake").add("Intake_kV", slot0.kV).getEntry();
-        m_GE_PID_kP = Shuffleboard.getTab("Intake").add("Intake_kP", slot0.kP).getEntry();
-        m_GE_PID_kI = Shuffleboard.getTab("Intake").add("Intake_kI", slot0.kI).getEntry();
-        m_GE_PID_kD = Shuffleboard.getTab("Intake").add("Intake_kD", slot0.kD).getEntry();
-        m_GE_bUpdatePID = Shuffleboard.getTab("Intake").add("Intake_UpdatePID", false).getEntry();
-        m_GE_bUpdateGoals = Shuffleboard.getTab("Intake").add("Intake_UpdateGoals", false).getEntry();
-        m_GE_Position = Shuffleboard.getTab("Intake").add("Intake_Position", 0).getEntry();
-        m_GE_Velocity_Left_RPS = Shuffleboard.getTab("Intake").add("Intake_Velocity_Left_RPS", 0).getEntry();
-        m_GE_Velocity_Right_RPS = Shuffleboard.getTab("Intake").add("Intake_Velocity_Right_RPS", 0).getEntry();
-        m_GE_Goal_Left_RPS = Shuffleboard.getTab("Intake").add("Intake_Goal_Left_RPS", 0).getEntry();
-        m_GE_Goal_Right_RPS = Shuffleboard.getTab("Intake").add("Intake_Goal_Right_RPS", 0).getEntry();
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("Intake");
+
+        m_PID_kS = table.getDoubleTopic("Intake_kS").getEntry(slot0.kS);
+        m_PID_kS.set(slot0.kS);
+        m_PID_kV = table.getDoubleTopic("Intake_kV").getEntry(slot0.kV);
+        m_PID_kV.set(slot0.kV);
+        m_PID_kP = table.getDoubleTopic("Intake_kP").getEntry(slot0.kP);
+        m_PID_kP.set(slot0.kP);
+        m_PID_kI = table.getDoubleTopic("Intake_kI").getEntry(slot0.kI);
+        m_PID_kI.set(slot0.kI);
+        m_PID_kD = table.getDoubleTopic("Intake_kD").getEntry(slot0.kD);
+        m_PID_kD.set(slot0.kD);
+        m_bUpdatePID = table.getBooleanTopic("Intake_UpdatePID").getEntry(false);
+        m_bUpdatePID.set(false);
+        m_bUpdateGoals = table.getBooleanTopic("Intake_UpdateGoals").getEntry(false);
+        m_bUpdateGoals.set(false);
+        m_Goal_Left_RPS = table.getDoubleTopic("Intake_Goal_Left_RPS").getEntry(0);
+        m_Goal_Left_RPS.set(0);
+        m_Goal_Right_RPS = table.getDoubleTopic("Intake_Goal_Right_RPS").getEntry(0);
+        m_Goal_Right_RPS.set(0);
+        m_Velocity_Left_RPS = table.getDoubleTopic("Intake_Velocity_Left_RPS").getEntry(0);
+        m_Velocity_Left_RPS.set(0);
+        m_Velocity_Right_RPS = table.getDoubleTopic("Intake_Velocity_Right_RPS").getEntry(0);
+        m_Velocity_Right_RPS.set(0);
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
@@ -111,72 +138,106 @@ public class Intake extends SubsystemBase {
         Shuffleboard.getTab("Intake").add(this.getStopCommand());
         Shuffleboard.getTab("Intake").add(this.getIntakeCommand());
         Shuffleboard.getTab("Intake").add(this.getOuttakeCommand());
+        Shuffleboard.getTab("Intake").add(this.getOuttakeAlgaeCommand());
+
+        // var cfgcs = m_CoralSensor.getConfigurator();
+        var prox = new ProximityParamsConfigs()
+                .withProximityThreshold(0.05)
+                .withProximityHysteresis(0.01);
+        var fov = new FovParamsConfigs()
+                .withFOVRangeX(6.75) // 6.75 is the minimum FOV value
+                .withFOVRangeY(6.75); // 27.0 is the maximum FOV value
+        var tof = new ToFParamsConfigs()
+                .withUpdateMode(UpdateModeValue.ShortRangeUserFreq)
+                .withUpdateFrequency(50);
+
+        // cfgcs.apply(prox);
+        // cfgcs.apply(fov);
+        // cfgcs.apply(tof);
+
+        Trigger coralSensorTrigger = new Trigger(this::isCoralSensorDetected);
+        coralSensorTrigger.onTrue(this.getIdleCommand());
+    }
+
+    private Sendable getOuttakeAlgaeCommand() {
+        return Commands.runOnce(() -> setGoal(-50, -50)).withName("Intake.OuttakeAlgaeCommand");
     }
 
     @Override
     public void periodic() {
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
         // Update PID?
-        if (m_GE_bUpdatePID.getBoolean(false)) {
+        if (m_bUpdatePID.get(false)) {
             Slot0Configs slot0 = new Slot0Configs();
             m_LeftMotor.getConfigurator().refresh(slot0);
-            slot0.kS = m_GE_PID_kS.getDouble(slot0.kS);
-            slot0.kV = m_GE_PID_kV.getDouble(slot0.kV);
-            slot0.kP = m_GE_PID_kP.getDouble(slot0.kP);
-            slot0.kI = m_GE_PID_kI.getDouble(slot0.kI);
-            slot0.kD = m_GE_PID_kD.getDouble(slot0.kD);
+            slot0.kS = m_PID_kS.get(slot0.kS);
+            slot0.kV = m_PID_kV.get(slot0.kV);
+            slot0.kP = m_PID_kP.get(slot0.kP);
+            slot0.kI = m_PID_kI.get(slot0.kI);
+            slot0.kD = m_PID_kD.get(slot0.kD);
             m_LeftMotor.getConfigurator().apply(slot0);
-            m_GE_bUpdatePID.setBoolean(false);
+            m_bUpdatePID.set(false);
 
         }
         // update goals
-        if (m_GE_bUpdateGoals.getBoolean(false)) {
-            setGoal(m_GE_Goal_Left_RPS.getDouble(0), m_GE_Goal_Right_RPS.getDouble(0));
-            m_GE_bUpdateGoals.setBoolean(false);
+        if (m_bUpdateGoals.get(false)) {
+            setGoal(m_Goal_Left_RPS.get(0), m_Goal_Right_RPS.get(0));
+            m_bUpdateGoals.set(false);
         }
         // This method will be called once per scheduler run
 
     }
 
+    // Method to check if the m_CoralSensor is detected
+    private boolean isCoralSensorDetected() {
+        // return m_CoralSensor.getIsDetected().getValue(); // Replace with the actual
+        // method to check sensor state
+        return false;
+    }
+
     private void setGoal(double leftVelocityRPS, double rightVelocityRPS) {
         m_LeftMotor.setControl(m_velocityVoltage.withVelocity(leftVelocityRPS));
-        m_GE_Goal_Left_RPS.setDouble(leftVelocityRPS);
+        m_Goal_Left_RPS.set(leftVelocityRPS);
 
         m_RightMotor.setControl(m_velocityVoltage.withVelocity(-rightVelocityRPS));
-        m_GE_Goal_Right_RPS.setDouble(rightVelocityRPS);
+        m_Goal_Right_RPS.set(rightVelocityRPS);
     }
 
     public Command getSetGoalCommand(double leftVelocityRPS, double rightVelocityRPS) {
-        return this.runOnce(() -> setGoal(leftVelocityRPS, rightVelocityRPS));
+        return Commands.runOnce(() -> setGoal(leftVelocityRPS, rightVelocityRPS));
     }
 
     public Command getStopCommand() {
-        return this.runOnce(() -> setGoal(0, 0)).withName("Intake.StopCommand");
+        return Commands.runOnce(() -> setGoal(0, 0)).withName("Intake.StopCommand");
     }
 
     public Command getIdleCommand() {
-        return this.runOnce(() -> setGoal(-0.003, -0.003)).withName("Intake.IdleCommand");
+        return Commands.runOnce(() -> setGoal(0.05, 0.05)).withName("Intake.IdleCommand");
     }
 
     public Command getIntakeCommand() {
-        return this.runOnce(() -> setGoal(15, 15)).withName("Intake.IntakeCommand");
+        return Commands.runOnce(() -> setGoal(20, 20)).withName("Intake.IntakeCommand");
     }
 
     public Command getOuttakeCommand() {
-        return this.runOnce(() -> setGoal(-10, -10)).withName("Intake.OuttakeCommand");
+        return Commands.runOnce(() -> setGoal(-10, -10)).withName("Intake.OuttakeCommand");
     }
 
     public Command getUnclogCommand() {
-        return this.runOnce(() -> setGoal(-8, -8))
+        return Commands.runOnce(() -> setGoal(-8, -8))
                 .andThen(new WaitCommand(3))
-                .andThen(this.runOnce(() -> setGoal(1, 1))).withName("Intake.UnclogCommand");
+                .andThen(Commands.runOnce(() -> setGoal(1, 1))).withName("Intake.UnclogCommand");
     }
 
     public Command getFastshootCommand() {
-        return this.runOnce(() -> setGoal(5, 5)).withName("Intake.FastshootCommand");
+        return Commands.runOnce(() -> setGoal(5, 5)).withName("Intake.FastshootCommand");
     }
 
     public Command getSlowshootCommand() {
-        return this.runOnce(() -> setGoal(.8, .8)).withName("Intake.SlowshootCommand");
+        return Commands.runOnce(() -> setGoal(.8, .8)).withName("Intake.SlowshootCommand");
     }
 
     public void simulationInit() {
@@ -193,8 +254,8 @@ public class Intake extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
 
-        m_GE_Velocity_Left_RPS.setDouble(m_LeftMotor.getVelocity().getValueAsDouble());
-        m_GE_Velocity_Right_RPS.setDouble(m_RightMotor.getVelocity().getValueAsDouble());
+        m_Velocity_Left_RPS.set(m_LeftMotor.getVelocity().getValueAsDouble());
+        m_Velocity_Right_RPS.set(m_RightMotor.getVelocity().getValueAsDouble());
 
         RobotContainer.m_mechanisms.updateIntake(m_LeftMotor.getPosition(), m_RightMotor.getPosition());
     }

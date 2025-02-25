@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.units.measure.Angle;
 
 public class Targeting extends SubsystemBase {
@@ -49,10 +51,13 @@ public class Targeting extends SubsystemBase {
     private GenericEntry m_TargetAngle = null;
     private GenericEntry m_TargetIDFound = null;
     private GenericEntry m_GE_bUpdateTarget = null;
+    private GenericEntry m_GE_Selected_PlayerStation = null;
+    private GenericEntry m_GE_Selected_Reef = null;
     private boolean m_isFirstTime = true;
     private Alliance m_alliance = Alliance.Red;
     private AprilTagFieldLayout m_aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
     private double kAprilTagWidth = 0.17 / 2.0;
+    private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
     private Pose2d m_TargetPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
@@ -62,7 +67,10 @@ public class Targeting extends SubsystemBase {
         m_TargetAngle = Shuffleboard.getTab("Targeting").add("TargetAngle", 0.0).getEntry();
         m_TargetIDFound = Shuffleboard.getTab("Targeting").add("TargetIDFound", false).getEntry();
         m_GE_bUpdateTarget = Shuffleboard.getTab("Targeting").add("UpdateTarget", false).getEntry();
+        m_GE_Selected_PlayerStation = Shuffleboard.getTab("Targeting").add("Selected_PlayerStation", "Left").getEntry();
+        m_GE_Selected_Reef = Shuffleboard.getTab("Targeting").add("Selected_Reef", "Reef 4").getEntry();
 
+        Shuffleboard.getTab("Targeting").add(this.getTargetLastReefIDCmd());
     }
 
     @Override
@@ -71,11 +79,17 @@ public class Targeting extends SubsystemBase {
             m_isFirstTime = false;
             if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
                 this.setTargetID(9);
+                m_ReefTargetID = 9;
             } else {
                 this.setTargetID(18);
+                m_ReefTargetID = 18;
             }
         }
 
+        // Check if we should execute this cycle
+        if (!m_executionLimiter.shouldExecute()) {
+            return;
+        }
         // This method will be called once per scheduler run
         if (m_GE_bUpdateTarget.getBoolean(false)) {
             setTargetAngle();
@@ -87,9 +101,10 @@ public class Targeting extends SubsystemBase {
         m_ScoreTarget = target;
     }
 
-    private final double kCoralYoffset = 0.10;
-    private final double kCoralXoffset = 0.15;
-    private final double kAlgaeXoffset = 0.75;
+    private final double kCoralYoffset = 0.175; // left / right
+    private final double kCoralXoffset = 0.03; // front / back
+    private final double kAlgaeXoffset = 0.03; // front / back
+    private int m_ReefTargetID;
 
     public Pose2d getScoreTargetPose() {
         // start with the target pose
@@ -155,10 +170,51 @@ public class Targeting extends SubsystemBase {
      */
     public void setTargetIDRedBlue(int redID, int blueID) {
         if (m_alliance == Alliance.Red) {
+            m_ReefTargetID = redID;
             m_TargetID.setDouble(redID);
         } else {
+            m_ReefTargetID = blueID;
             m_TargetID.setDouble(blueID);
         }
+        this.setTargetAngle();
+        this.updateSelectedReef();
+    }
+
+    public void updateSelectedReef() {
+        int targetID = (int) m_TargetID.getDouble(-1);
+        switch (targetID) {
+            case 21:
+            case 10:
+                m_GE_Selected_Reef.setString("Reef 1");
+                break;
+            case 22:
+            case 9:
+                m_GE_Selected_Reef.setString("Reef 2");
+                break;
+            case 17:
+            case 8:
+                m_GE_Selected_Reef.setString("Reef 3");
+                break;
+            case 18:
+            case 7:
+                m_GE_Selected_Reef.setString("Reef 4");
+                break;
+            case 19:
+            case 6:
+                m_GE_Selected_Reef.setString("Reef 5");
+                break;
+            case 20:
+            case 11:
+                m_GE_Selected_Reef.setString("Reef 6");
+                break;
+            default:
+                m_GE_Selected_Reef.setString("Unknown");
+                break;
+        }
+    }
+
+    public void targetLastReefID() {
+        m_TargetID.setDouble(m_ReefTargetID);
         this.setTargetAngle();
     }
 
@@ -214,6 +270,11 @@ public class Targeting extends SubsystemBase {
 
     public void setHumanPlayerStation(HumanPlayerStation station) {
         m_HumanPlayerStation = station;
+        if (station == HumanPlayerStation.kLeftStation) {
+            m_GE_Selected_PlayerStation.setString("Left");
+        } else {
+            m_GE_Selected_PlayerStation.setString("Right");
+        }
     }
 
     public void setLineUpOrientation(LineUpOrientation orientation) {
@@ -222,7 +283,7 @@ public class Targeting extends SubsystemBase {
     }
 
     public Command getTargetHumanPlayerStation() {
-        return this.runOnce(() -> setHumanPlayerStationAprilID(m_HumanPlayerStation))
+        return Commands.runOnce(() -> setHumanPlayerStationAprilID(m_HumanPlayerStation))
                 .withName("Targeting.HumanPlayerStation");
 
     }
@@ -246,6 +307,11 @@ public class Targeting extends SubsystemBase {
             default:
                 return;
         }
+    }
+
+    public Command getTargetLastReefIDCmd() {
+        return Commands.runOnce(() -> targetLastReefID())
+                .withName("Targeting.TargetLastReefID");
     }
 
 }
