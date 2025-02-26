@@ -141,7 +141,7 @@ public class RobotContainer {
                 // RobotContainer.m_targeting::getScoreTargetPose).withTimeout(0.01)
                 new WaitCommand(0.1)
                         .andThen(RobotContainer.m_armController.getTransition_Back_L4()
-                                .andThen(new WaitForArm())
+                                .andThen(new WaitCommand(1.0))
                                 .andThen(new PrintCommand("Before ScoreL4"))
                                 .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
                                 .andThen(new PrintCommand("After Score L4 beefore WaitForArm"))
@@ -150,7 +150,7 @@ public class RobotContainer {
                                 .andThen(RobotContainer.m_intake.getOuttakeCommand())
                                 .andThen(new PrintCommand("After Outtake"))
                                 .andThen(RobotContainer.m_armController.getTransition_Carry())
-                                .andThen(new WaitCommand(1.0))
+                                .andThen(new WaitCommand(0.5))
 
                         ));
 

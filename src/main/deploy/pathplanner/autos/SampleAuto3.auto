@@ -86,14 +86,14 @@
                 "data": {
                   "pathName": "RightSource.Reef3"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Score.L4"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score.L4"
           }
         }
       ]
