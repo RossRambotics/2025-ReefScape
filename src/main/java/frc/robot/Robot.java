@@ -5,96 +5,154 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Commands.ReefLineUp;
+import frc.robot.Commands.WaitForArm;
+import frc.robot.sim.PhysicsSim;
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+    private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
+    private final RobotContainer m_robotContainer;
 
-  private final boolean kUseLimelight = false;
+    private final boolean kUseLimelight = true;
 
-  public Robot() {
-    m_robotContainer = new RobotContainer();
-  }
-
-  @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-
-    /*
-     * This example of adding Limelight is very simple and may not be sufficient for on-field use.
-     * Users typically need to provide a standard deviation that scales with the distance to target
-     * and changes with number of tags available.
-     *
-     * This example is sufficient to show that vision integration is possible, though exact implementation
-     * of how to use vision should be tuned per-robot and to the team's specification.
-     */
-    if (kUseLimelight) {
-      var driveState = m_robotContainer.drivetrain.getState();
-      double headingDeg = driveState.Pose.getRotation().getDegrees();
-      double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
-
-      LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
-      var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-      if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 2.0) {
-        m_robotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose, Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
-      }
+    public Robot() {
+        m_robotContainer = new RobotContainer();
     }
-  }
 
-  @Override
-  public void disabledInit() {}
+    StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
+            .getStructTopic("AdvMyPose", Pose2d.struct).publish();
 
-  @Override
-  public void disabledPeriodic() {}
+    @Override
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
 
-  @Override
-  public void disabledExit() {}
+        publisher.set(RobotContainer.drivetrain.getState().Pose);
 
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        /*
+         * This example of adding Limelight is very simple and may not be sufficient for
+         * on-field use.
+         * Users typically need to provide a standard deviation that scales with the
+         * distance to target
+         * and changes with number of tags available.
+         *
+         * This example is sufficient to show that vision integration is possible,
+         * though exact implementation
+         * of how to use vision should be tuned per-robot and to the team's
+         * specification.
+         */
+        // if (kUseLimelight) {
+        // var driveState = m_robotContainer.drivetrain.getState();
+        // double headingDeg = driveState.Pose.getRotation().getDegrees();
+        // double omegaRps =
+        // Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+        // LimelightHelpers.SetRobotOrientation("limelight-back", headingDeg, 0, 0, 0,
+        // 0, 0);
+        // var llMeasurement =
+        // LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+        // if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 2.0) {
+        // // DataLogManager.log("Updating odometry from vision.");
+        // m_robotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose,
+        // Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
+        // }
+        // }
     }
-  }
 
-  @Override
-  public void autonomousPeriodic() {}
-
-  @Override
-  public void autonomousExit() {}
-
-  @Override
-  public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    @Override
+    public void disabledInit() {
     }
-  }
 
-  @Override
-  public void teleopPeriodic() {}
+    @Override
+    public void disabledPeriodic() {
+    }
 
-  @Override
-  public void teleopExit() {}
+    @Override
+    public void disabledExit() {
+    }
 
-  @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
+    @Override
+    public void autonomousInit() {
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-  @Override
-  public void testPeriodic() {}
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.schedule();
+        }
+    }
 
-  @Override
-  public void testExit() {}
+    @Override
+    public void autonomousPeriodic() {
+    }
 
-  @Override
-  public void simulationPeriodic() {}
+    @Override
+    public void autonomousExit() {
+    }
+
+    @Override
+    public void teleopInit() {
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.cancel();
+        }
+    }
+
+    @Override
+    public void teleopPeriodic() {
+    }
+
+    @Override
+    public void teleopExit() {
+    }
+
+    @Override
+    public void testInit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void testPeriodic() {
+    }
+
+    @Override
+    public void testExit() {
+    }
+
+    @Override
+    public void robotInit() {
+        // ... all other robot initialization
+
+        FollowPathCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().schedule();
+    }
+
+    public void simulationInit() {
+        RobotContainer.m_armBase.simulationInit();
+        RobotContainer.m_armExtension.simulationInit();
+        RobotContainer.m_wrist.simulationInit();
+        RobotContainer.m_intake.simulationInit();
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        RobotContainer.m_armBase.simulationPeriodic();
+        RobotContainer.m_armExtension.simulationPeriodic();
+        RobotContainer.m_wrist.simulationPeriodic();
+        RobotContainer.m_intake.simulationPeriodic();
+        PhysicsSim.getInstance().run();
+
+    }
+
 }
