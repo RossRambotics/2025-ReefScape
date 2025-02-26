@@ -82,6 +82,9 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(1).onTrue(RobotContainer.m_buttonBox.getReef5Cmd());
         joystick2.button(8).onTrue(RobotContainer.m_buttonBox.getReef6Cmd());
 
+        // TODO fix this example
+        joystick1.axisGreaterThan(1, 0.75).onTrue(this.getLeftReefCmd());
+
     }
 
     @Override
