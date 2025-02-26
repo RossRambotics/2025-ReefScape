@@ -306,6 +306,6 @@ public class ArmExtension extends SubsystemBase {
     }
 
     public boolean isStationary() {
-        return Math.abs(m_LeftMotor.getVelocity().getValue().in(RotationsPerSecond)) < 2.0;
+        return Math.abs(m_LeftMotor.getVelocity().getValue().in(RotationsPerSecond)) < 0.5;
     }
 }
