@@ -11,11 +11,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Targeting.HumanPlayerStation;
 import frc.robot.subsystems.Targeting.ScoreTarget;
 
 public class ButtonBox extends SubsystemBase {
+
+    private final CommandXboxController joystick1 = new CommandXboxController(1);
+    private final CommandXboxController joystick2 = new CommandXboxController(2);
 
     /** Creates a new ButtonBox. */
     public ButtonBox() {
@@ -51,6 +55,45 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getIntakeStopCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getBackWardsOrientationCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getForwardOrientationCmd());
+
+        joystick2.button(1).onTrue(RobotContainer.m_armController.getTransition_ClimbReady());
+        joystick2.button(2).onTrue(RobotContainer.m_armController.getTransition_ClimbLockOn());
+        joystick2.button(3).onTrue(RobotContainer.m_armController.getTransition_Climb());
+        joystick1.button(9).onTrue(RobotContainer.m_armController.getTransition_Front_L1());
+        joystick1.button(10).onTrue(RobotContainer.m_armController.getTransition_Front_L2());
+        joystick1.button(11).onTrue(RobotContainer.m_armController.getTransition_Back_L3());
+        joystick1.button(12).onTrue(RobotContainer.m_armController.getTransition_Back_L4());
+        joystick1.button(7).onTrue(RobotContainer.m_armController.getTransition_NetAlgae());
+        joystick1.button(8).onTrue(RobotContainer.m_armController.getTransition_GroundAlgae());
+        joystick1.button(6).onTrue(RobotContainer.m_intake.getIntakeCommand());
+        joystick1.button(6).onFalse(RobotContainer.m_intake.getStopCommand());
+        joystick1.button(5).onTrue(RobotContainer.m_intake.getOuttakeCommand());
+        joystick1.button(5).onFalse(RobotContainer.m_intake.getStopCommand());
+        joystick1.button(2).onTrue(RobotContainer.m_intake.getStopCommand());
+        joystick1.button(4).onTrue(RobotContainer.m_armExtension.getCalibrateAndZero());
+        joystick1.button(4).onFalse(RobotContainer.m_armExtension.GetStopCmd());
+
+        // reset arm
+        // joystick1.button(3).onTrue(RobotContainer.m_armController.getTransition_BackAligment());
+
+        joystick2.button(7).onTrue(this.getPlayerStationLeftCmd());
+        joystick2.button(6).onTrue(this.getPlayerStationRightCmd());
+        joystick2.button(9).onTrue(this.getReef1Cmd());
+        joystick2.button(10).onTrue(this.getReef2Cmd());
+        joystick2.button(11).onTrue(this.getReef3Cmd());
+        joystick2.button(12).onTrue(this.getReef4Cmd());
+        joystick1.button(1).onTrue(this.getReef5Cmd());
+        joystick2.button(8).onTrue(this.getReef6Cmd());
+
+        // not using this
+        // joystick2.axisLessThan(0, -0.5).onTrue(this.getBackWardsOrientationCmd());
+        // joystick2.axisGreaterThan(0, -0.5).onTrue(this.getForwardOrientationCmd());
+        joystick2.axisLessThan(1, -0.5).onTrue(this.getLeftReefCmd());
+        joystick2.axisLessThan(1, -0.5).onFalse(this.getAlgaeReefCmd());
+        joystick2.axisGreaterThan(1, 0.5).onTrue(this.getRightReefCmd());
+        joystick2.axisGreaterThan(1, 0.5).onFalse(this.getAlgaeReefCmd());
+        joystick1.axisLessThan(0, -0.5).onTrue(RobotContainer.m_armController.getTransition_ProcessorAglae());
+
     }
 
     @Override
@@ -91,7 +134,7 @@ public class ButtonBox extends SubsystemBase {
      */
     public Command getCalibrateArmCmd() {
         Command c = new PrintCommand("Calibrate Arm")
-                .andThen(RobotContainer.m_intake.getIntakeCommand());
+                .andThen(RobotContainer.m_armExtension.getCalibrateAndZero());
         c.setName("Calibrate Arm");
         return c;
     }
