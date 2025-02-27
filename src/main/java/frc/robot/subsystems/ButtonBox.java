@@ -85,8 +85,9 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(1).onTrue(this.getReef5Cmd());
         joystick2.button(8).onTrue(this.getReef6Cmd());
 
-        joystick2.axisLessThan(0, -0.5).onTrue(this.getBackWardsOrientationCmd());
-        joystick2.axisGreaterThan(0, -0.5).onTrue(this.getForwardOrientationCmd());
+        // not using this
+        // joystick2.axisLessThan(0, -0.5).onTrue(this.getBackWardsOrientationCmd());
+        // joystick2.axisGreaterThan(0, -0.5).onTrue(this.getForwardOrientationCmd());
         joystick2.axisLessThan(1, -0.5).onTrue(this.getLeftReefCmd());
         joystick2.axisLessThan(1, -0.5).onFalse(this.getAlgaeReefCmd());
         joystick2.axisGreaterThan(1, 0.5).onTrue(this.getRightReefCmd());
