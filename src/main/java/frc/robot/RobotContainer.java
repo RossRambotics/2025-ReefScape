@@ -128,6 +128,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reef.5", RobotContainer.m_buttonBox.getReef5Cmd());
         NamedCommands.registerCommand("Reef.6", RobotContainer.m_buttonBox.getReef6Cmd());
         NamedCommands.registerCommand("Reef.Left", RobotContainer.m_buttonBox.getLeftReefCmd());
+        NamedCommands.registerCommand("Reef.Right", RobotContainer.m_buttonBox.getRightReefCmd());
         NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand().withTimeout(0.5));
         NamedCommands.registerCommand("Intake.InTake", RobotContainer.m_intake.getIntakeCommand().withTimeout(0.5));
         NamedCommands.registerCommand("Intake.Stop", RobotContainer.m_intake.getStopCommand());
