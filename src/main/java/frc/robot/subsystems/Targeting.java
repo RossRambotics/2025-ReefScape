@@ -12,7 +12,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -53,6 +56,10 @@ public class Targeting extends SubsystemBase {
     private GenericEntry m_GE_bUpdateTarget = null;
     private GenericEntry m_GE_Selected_PlayerStation = null;
     private GenericEntry m_GE_Selected_Reef = null;
+    private BooleanEntry m_alignCenter = null;
+    private BooleanEntry m_alignLeft = null;
+    private BooleanEntry m_alignRight = null;
+
     private boolean m_isFirstTime = true;
     private Alliance m_alliance = Alliance.Red;
     private AprilTagFieldLayout m_aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
@@ -69,6 +76,16 @@ public class Targeting extends SubsystemBase {
         m_GE_bUpdateTarget = Shuffleboard.getTab("Targeting").add("UpdateTarget", false).getEntry();
         m_GE_Selected_PlayerStation = Shuffleboard.getTab("Targeting").add("Selected_PlayerStation", "Left").getEntry();
         m_GE_Selected_Reef = Shuffleboard.getTab("Targeting").add("Selected_Reef", "Reef 4").getEntry();
+
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("Targeting");
+
+        m_alignCenter = table.getBooleanTopic("AlignCenter").getEntry(false);
+        m_alignCenter.set(false);
+        m_alignRight = table.getBooleanTopic("AlignRight").getEntry(false);
+        m_alignRight.set(false);
+        m_alignLeft = table.getBooleanTopic("AlignLeft").getEntry(false);
+        m_alignLeft.set(false);
 
         Shuffleboard.getTab("Targeting").add(this.getTargetLastReefIDCmd());
     }
@@ -99,6 +116,29 @@ public class Targeting extends SubsystemBase {
 
     public void setScoreTarget(ScoreTarget target) {
         m_ScoreTarget = target;
+
+        switch (target) {
+            case kLeftCoral:
+                m_alignCenter.set(false);
+                m_alignLeft.set(true);
+                m_alignRight.set(false);
+                break;
+
+            case kCenterAlgae:
+                m_alignCenter.set(true);
+                m_alignLeft.set(false);
+                m_alignRight.set(false);
+                break;
+
+            case kRightCoral:
+                m_alignCenter.set(false);
+                m_alignLeft.set(false);
+                m_alignRight.set(true);
+                break;
+
+            default:
+                return;
+        }
     }
 
     private final double kCoralYoffset = 0.175; // left / right
@@ -126,14 +166,23 @@ public class Targeting extends SubsystemBase {
         switch (target) {
             case kLeftCoral:
                 offset = new Translation2d(kCoralXoffset, kCoralYoffset);
+                m_alignCenter.set(false);
+                m_alignLeft.set(true);
+                m_alignRight.set(false);
                 break;
 
             case kCenterAlgae:
                 offset = new Translation2d(kAlgaeXoffset, 0);
+                m_alignCenter.set(true);
+                m_alignLeft.set(false);
+                m_alignRight.set(false);
                 break;
 
             case kRightCoral:
                 offset = new Translation2d(kCoralXoffset, -kCoralYoffset);
+                m_alignCenter.set(false);
+                m_alignLeft.set(false);
+                m_alignRight.set(true);
                 break;
             case kPlayerStation:
                 offset = new Translation2d(0, 0);
