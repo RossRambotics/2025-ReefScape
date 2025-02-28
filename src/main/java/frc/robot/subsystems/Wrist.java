@@ -72,13 +72,6 @@ public class Wrist extends SubsystemBase {
         // TalonFX configuration
         TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
 
-        // Configure stator current limits
-        CurrentLimitsConfigs statorCurrentLimit = new CurrentLimitsConfigs();
-        statorCurrentLimit.StatorCurrentLimitEnable = true;
-        statorCurrentLimit.StatorCurrentLimit = 15; // Current limit in amps
-
-        fx_cfg.CurrentLimits = statorCurrentLimit;
-
         /* Configure gear ratio */
         FeedbackConfigs fdb = fx_cfg.Feedback;
         double gearRatio = 25.0;

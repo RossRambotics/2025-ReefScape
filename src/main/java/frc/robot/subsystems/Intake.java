@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.FovParamsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
@@ -68,6 +69,12 @@ public class Intake extends SubsystemBase {
     /** Creates a new Intake. */
     public Intake() {
         TalonFXConfiguration cfg = new TalonFXConfiguration();
+
+        // Configure stator current limits
+        CurrentLimitsConfigs statorCurrentLimit = new CurrentLimitsConfigs();
+        statorCurrentLimit.StatorCurrentLimitEnable = true;
+        statorCurrentLimit.StatorCurrentLimit = 15; // Current limit in amps
+        cfg.CurrentLimits = statorCurrentLimit;
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = cfg.Feedback;
