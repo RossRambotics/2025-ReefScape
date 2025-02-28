@@ -60,7 +60,7 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("BackAlignment is done"));
         Back_L4 = m_armGraph.new GraphCommandNode("Back_L4",
-                ArmController.getArmCommand(Degrees.of(80),
+                ArmController.getArmCommand(Degrees.of(85),
                         Meters.of(2),
                         Degrees.of(-126))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
@@ -91,7 +91,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("Front_L1 is done"));
 
         HumanPlayerCoral = m_armGraph.new GraphCommandNode("HumanPlayerCoral",
-                ArmController.getArmCommand(Degrees.of(19),
+                ArmController.getArmCommand(Degrees.of(21.5),
                         Meters.of(-77),
                         Degrees.of(-23))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -107,7 +107,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("GroundCoral"));
 
         BackScore_L4 = m_armGraph.new GraphCommandNode("BackScore_L4",
-                ArmController.getArmCommand(Degrees.of(87.0),
+                ArmController.getArmCommand(Degrees.of(90.0),
                         Meters.of(2),
                         Degrees.of(-126))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -198,9 +198,9 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("GroundAlgae"));
         ProcessorAlgae = m_armGraph.new GraphCommandNode("ProcessorAlgae",
-                ArmController.getArmCommand(Degrees.of(0),
-                        Meters.of(0.5),
-                        Degrees.of(-90))
+                ArmController.getArmCommand(Degrees.of(-17.5),
+                        Meters.of(-68.5),
+                        Degrees.of(-22.63))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("ProcessorAlgae"));
@@ -212,16 +212,16 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("NetAlgae"));
         RemoveAlgaeHigh = m_armGraph.new GraphCommandNode("RemoveAlgaeHigh",
-                ArmController.getArmCommand(Degrees.of(53.5),
-                        Meters.of(-67.6),
+                ArmController.getArmCommand(Degrees.of(49.26),
+                        Meters.of(-63),
                         Degrees.of(60))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("RemoveAlgaeHigh"));
         RemoveAlgaeLow = m_armGraph.new GraphCommandNode("RemoveAlgaeLow",
-                ArmController.getArmCommand(Degrees.of(28),
+                ArmController.getArmCommand(Degrees.of(22.13),
                         Meters.of(-77.3),
-                        Degrees.of(33))
+                        Degrees.of(27.7))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("RemoveAlgaeLow"));

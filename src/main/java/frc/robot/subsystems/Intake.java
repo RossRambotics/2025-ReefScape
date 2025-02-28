@@ -132,6 +132,7 @@ public class Intake extends SubsystemBase {
         if (!status.isOK()) {
             System.out.println("Could not configure device. Error: " + status.toString());
             // hi
+            // hello
 
         }
 
@@ -139,6 +140,7 @@ public class Intake extends SubsystemBase {
         Shuffleboard.getTab("Intake").add(this.getIntakeCommand());
         Shuffleboard.getTab("Intake").add(this.getOuttakeCommand());
         Shuffleboard.getTab("Intake").add(this.getOuttakeAlgaeCommand());
+        Shuffleboard.getTab("Intake").add(this.getIdleCommand());
 
         // var cfgcs = m_CoralSensor.getConfigurator();
         var prox = new ProximityParamsConfigs()
@@ -215,7 +217,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command getIdleCommand() {
-        return Commands.runOnce(() -> setGoal(0.05, 0.05)).withName("Intake.IdleCommand");
+        return Commands.runOnce(() -> setGoal(5, 5)).withName("Intake.IdleCommand");
     }
 
     public Command getIntakeCommand() {
