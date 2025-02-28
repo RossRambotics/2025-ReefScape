@@ -18,8 +18,8 @@ import frc.robot.subsystems.Targeting.ScoreTarget;
 
 public class ButtonBox extends SubsystemBase {
 
-    private final CommandXboxController joystick1 = new CommandXboxController(1);
-    private final CommandXboxController joystick2 = new CommandXboxController(2);
+    private final CommandXboxController joystick1 = new CommandXboxController(2);
+    private final CommandXboxController joystick2 = new CommandXboxController(1);
 
     /** Creates a new ButtonBox. */
     public ButtonBox() {
