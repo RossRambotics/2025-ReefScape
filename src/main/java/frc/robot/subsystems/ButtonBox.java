@@ -297,7 +297,7 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getLeftReefCmd() {
         Command c = new PrintCommand("Left Reef")
-                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kLeftCoral)));
+                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kCoralLeft)));
 
         c.setName("Left Reef");
         return c;
@@ -305,14 +305,14 @@ public class ButtonBox extends SubsystemBase {
 
     public Command getRightReefCmd() {
         Command c = new PrintCommand("Right Reef")
-                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kRightCoral)));
+                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kCoralRight)));
         c.setName("Right Reef");
         return c;
     }
 
     public Command getAlgaeReefCmd() {
         Command c = new PrintCommand("Algae Reef")
-                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kCenterAlgae)));
+                .andThen(Commands.runOnce(() -> RobotContainer.m_targeting.setScoreTarget(ScoreTarget.kAlgaeCenter)));
         c.setName("Algae Reef");
         return c;
     }

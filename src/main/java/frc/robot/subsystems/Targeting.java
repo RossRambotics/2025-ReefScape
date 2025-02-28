@@ -32,10 +32,15 @@ public class Targeting extends SubsystemBase {
 
     // Define the enumerated type
     public enum ScoreTarget {
-        kLeftCoral,
-        kCenterAlgae,
-        kRightCoral,
-        kPlayerStation
+        kCoralLeft,
+        kAlgaeCenter,
+        kCoralRight,
+        kPlayerStation,
+        kProcessor,
+        kNetLeft,
+        kNetCenter,
+        kNetRight,
+        kCage
     }
 
     // Define the enumerated type
@@ -52,7 +57,7 @@ public class Targeting extends SubsystemBase {
 
     private LineUpOrientation m_lineUpOrientation = LineUpOrientation.kBackward;
     private HumanPlayerStation m_HumanPlayerStation = HumanPlayerStation.kLeftStation;
-    private ScoreTarget m_ScoreTarget = ScoreTarget.kLeftCoral;
+    private ScoreTarget m_ScoreTarget = ScoreTarget.kCoralLeft;
     private IntegerEntry m_TargetID = null;
     private DoubleEntry m_TargetAngle = null;
     private BooleanEntry m_TargetIDFound = null;
@@ -147,19 +152,22 @@ public class Targeting extends SubsystemBase {
         m_ScoreTarget = target;
 
         switch (target) {
-            case kLeftCoral:
+            case kCoralLeft:
+            case kNetLeft:
                 m_alignCenter.set(false);
                 m_alignLeft.set(true);
                 m_alignRight.set(false);
                 break;
 
-            case kCenterAlgae:
+            case kAlgaeCenter:
+            case kNetCenter:
                 m_alignCenter.set(true);
                 m_alignLeft.set(false);
                 m_alignRight.set(false);
                 break;
 
-            case kRightCoral:
+            case kCoralRight:
+            case kNetRight:
                 m_alignCenter.set(false);
                 m_alignLeft.set(false);
                 m_alignRight.set(true);
@@ -173,6 +181,8 @@ public class Targeting extends SubsystemBase {
     private final double kCoralYoffset = 0.175; // left / right
     private final double kCoralXoffset = 0.03; // front / back
     private final double kAlgaeXoffset = 0.03; // front / back
+    private final double kNetYoffset = 1.0; // left / right
+    private final double kNetXoffset = 0.00; // front / back
     private int m_ReefTargetID;
 
     public Pose2d getScoreTargetPose() {
@@ -193,21 +203,21 @@ public class Targeting extends SubsystemBase {
                 break;
         }
         switch (target) {
-            case kLeftCoral:
+            case kCoralLeft:
                 offset = new Translation2d(kCoralXoffset, kCoralYoffset);
                 m_alignCenter.set(false);
                 m_alignLeft.set(true);
                 m_alignRight.set(false);
                 break;
 
-            case kCenterAlgae:
+            case kAlgaeCenter:
                 offset = new Translation2d(kAlgaeXoffset, 0);
                 m_alignCenter.set(true);
                 m_alignLeft.set(false);
                 m_alignRight.set(false);
                 break;
 
-            case kRightCoral:
+            case kCoralRight:
                 offset = new Translation2d(kCoralXoffset, -kCoralYoffset);
                 m_alignCenter.set(false);
                 m_alignLeft.set(false);
@@ -216,6 +226,30 @@ public class Targeting extends SubsystemBase {
             case kPlayerStation:
                 offset = new Translation2d(0, 0);
                 break;
+            case kProcessor:
+                offset = new Translation2d(0, 0);
+                break;
+            case kNetLeft:
+                offset = new Translation2d(kNetXoffset, kNetYoffset);
+                m_alignCenter.set(false);
+                m_alignLeft.set(true);
+                m_alignRight.set(false);
+                break;
+            case kNetCenter:
+                offset = new Translation2d(kNetXoffset, 0);
+                m_alignCenter.set(true);
+                m_alignLeft.set(false);
+                m_alignRight.set(false);
+                break;
+            case kNetRight:
+                offset = new Translation2d(kNetXoffset, -kNetYoffset);
+                m_alignCenter.set(false);
+                m_alignLeft.set(false);
+                m_alignRight.set(true);
+            case kCage:
+                offset = new Translation2d(0, 0);
+                break;
+
             default:
                 return m_TargetPose;
         }

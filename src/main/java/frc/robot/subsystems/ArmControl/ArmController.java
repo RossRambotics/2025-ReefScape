@@ -489,7 +489,9 @@ public class ArmController extends SubsystemBase {
     }
 
     public Command getTransition_ProcessorAglae() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(ProcessorAlgae));
+        Command c = Commands.runOnce(() -> Carry.setNextNode(ProcessorAlgae))
+                .andThen(Commands
+                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward)));
         c.setName("ProcessorAlgae");
         return c;
     }
