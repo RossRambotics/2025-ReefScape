@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -70,6 +71,13 @@ public class Wrist extends SubsystemBase {
 
         // TalonFX configuration
         TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
+
+        // Configure stator current limits
+        CurrentLimitsConfigs statorCurrentLimit = new CurrentLimitsConfigs();
+        statorCurrentLimit.StatorCurrentLimitEnable = true;
+        statorCurrentLimit.StatorCurrentLimit = 15; // Current limit in amps
+
+        fx_cfg.CurrentLimits = statorCurrentLimit;
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = fx_cfg.Feedback;
