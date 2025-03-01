@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase {
         // Configure stator current limits
         CurrentLimitsConfigs statorCurrentLimit = new CurrentLimitsConfigs();
         statorCurrentLimit.StatorCurrentLimitEnable = true;
-        statorCurrentLimit.StatorCurrentLimit = 15; // Current limit in amps
+        statorCurrentLimit.StatorCurrentLimit = 25; // Current limit in amps
         cfg.CurrentLimits = statorCurrentLimit;
 
         /* Configure gear ratio */

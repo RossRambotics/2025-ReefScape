@@ -34,6 +34,9 @@
           "open": true
         },
         "open": true
+      },
+      "limelight": {
+        "open": true
       }
     },
     "types": {
@@ -121,6 +124,7 @@
       "/Shuffleboard/ButtonBox/Travel To Processor": "Command",
       "/Shuffleboard/ButtonBox/Travel To Reef": "Command",
       "/Shuffleboard/ButtonBox/Trough": "Command",
+      "/Shuffleboard/Intake/Intake.IdleCommand": "Command",
       "/Shuffleboard/Intake/Intake.IntakeCommand": "Command",
       "/Shuffleboard/Intake/Intake.OuttakeAlgaeCommand": "Command",
       "/Shuffleboard/Intake/Intake.OuttakeCommand": "Command",
