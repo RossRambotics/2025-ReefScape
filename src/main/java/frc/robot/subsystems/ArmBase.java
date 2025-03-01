@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
 
 import frc.robot.Robot;
@@ -58,6 +59,9 @@ public class ArmBase extends SubsystemBase {
     private Timer m_timer = new Timer();
     private GenericPublisher m_GE_Timer;
     private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
+
+    final DynamicMotionMagicVoltage m_requestCoral = new DynamicMotionMagicVoltage(0, 3, 10, 20);
+    final DynamicMotionMagicVoltage m_requestAlgae = new DynamicMotionMagicVoltage(0, 3, 2, 5);
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
@@ -152,7 +156,11 @@ public class ArmBase extends SubsystemBase {
             m_timer.reset();
             m_timer.start();
         }
-        m_LeftMotor.setControl(m_mmReq.withPosition(angle.in(Rotations)).withSlot(0));
+        if (RobotContainer.m_buttonBox.isCoralMode()) {
+            m_LeftMotor.setControl(m_requestCoral.withPosition(angle.in(Rotations)).withSlot(0));
+        } else {
+            m_LeftMotor.setControl(m_requestAlgae.withPosition(angle.in(Rotations)).withSlot(0));
+        }
         m_GE_Goal.setDouble(angle.in(Degrees));
         m_goal = angle;
     }
