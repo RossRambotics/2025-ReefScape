@@ -18,8 +18,8 @@ import frc.robot.subsystems.Targeting.ScoreTarget;
 
 public class ButtonBox extends SubsystemBase {
 
-    private final CommandXboxController joystick1 = new CommandXboxController(2);
-    private final CommandXboxController joystick2 = new CommandXboxController(1);
+    private final CommandXboxController joystick2 = new CommandXboxController(2);
+    private final CommandXboxController joystick1 = new CommandXboxController(1);
 
     private boolean m_isCoralMode = true;
 
@@ -58,16 +58,16 @@ public class ButtonBox extends SubsystemBase {
         Shuffleboard.getTab("ButtonBox").add(this.getBackWardsOrientationCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getForwardOrientationCmd());
 
-        joystick2.button(1).onTrue(RobotContainer.m_armController.getTransition_ClimbReady());
-        joystick2.button(2).onTrue(RobotContainer.m_armController.getTransition_ClimbLockOn());
-        joystick2.button(3).onTrue(RobotContainer.m_armController.getTransition_Climb());
-        joystick2.button(4).onTrue(RobotContainer.m_armLocker.getArmLockCmd());
-        joystick2.button(5).onTrue(RobotContainer.m_armLocker.getArmUnlockCmd());
+        joystick1.button(1).onTrue(RobotContainer.m_armController.getTransition_ClimbReady());
+        joystick1.button(2).onTrue(RobotContainer.m_armController.getTransition_ClimbLockOn());
+        joystick1.button(3).onTrue(RobotContainer.m_armController.getTransition_Climb());
+        joystick1.button(4).onTrue(RobotContainer.m_armLocker.getArmLockCmd());
+        joystick1.button(5).onTrue(RobotContainer.m_armLocker.getArmUnlockCmd());
 
-        joystick1.button(9).onTrue(Commands.runOnce(() -> doL1()));
-        joystick1.button(10).onTrue(Commands.runOnce(() -> doL2()));
-        joystick1.button(11).onTrue(Commands.runOnce(() -> doL3()));
-        joystick1.button(12).onTrue(Commands.runOnce(() -> doL4()));
+        joystick2.button(9).onTrue(Commands.runOnce(() -> doL1()));
+        joystick2.button(10).onTrue(Commands.runOnce(() -> doL2()));
+        joystick2.button(11).onTrue(Commands.runOnce(() -> doL3()));
+        joystick2.button(12).onTrue(Commands.runOnce(() -> doL4()));
 
         // Net on button box
         // joystick1.button(7).onTrue(RobotContainer.m_armController.getTransition_NetAlgae());
@@ -75,41 +75,41 @@ public class ButtonBox extends SubsystemBase {
         // Intake algae Shoot algae
         // joystick1.button(8).onTrue(RobotContainer.m_armController.getTransition_GroundAlgae());
 
-        joystick1.button(6).onTrue(RobotContainer.m_intake.getIntakeCommand());
-        joystick1.button(6).onFalse(RobotContainer.m_intake.getStopCommand());
-        joystick1.button(5).onTrue(RobotContainer.m_intake.getOuttakeCommand());
-        joystick1.button(5).onFalse(RobotContainer.m_intake.getStopCommand());
-        joystick1.button(2).onTrue(RobotContainer.m_intake.getStopCommand());
-        joystick1.button(4).onTrue(RobotContainer.m_armExtension.getCalibrateAndZero());
+        joystick2.button(6).onTrue(RobotContainer.m_intake.getIntakeCommand());
+        joystick2.button(6).onFalse(RobotContainer.m_intake.getStopCommand());
+        joystick2.button(5).onTrue(RobotContainer.m_intake.getOuttakeCommand());
+        joystick2.button(5).onFalse(RobotContainer.m_intake.getStopCommand());
+        joystick2.button(2).onTrue(RobotContainer.m_intake.getStopCommand());
+        joystick2.button(4).onTrue(RobotContainer.m_armExtension.getCalibrateAndZero());
 
         // reset arm
         // joystick1.button(3).onTrue(RobotContainer.m_armController.getTransition_BackAligment());
 
-        joystick2.button(7).onTrue(this.getPlayerStationLeftCmd());
-        joystick2.button(6).onTrue(this.getPlayerStationRightCmd());
-        joystick2.button(9).onTrue(this.getReef1Cmd());
-        joystick2.button(10).onTrue(this.getReef2Cmd());
-        joystick2.button(11).onTrue(this.getReef3Cmd());
-        joystick2.button(12).onTrue(this.getReef4Cmd());
-        joystick1.button(1).onTrue(this.getReef5Cmd());
-        joystick2.button(8).onTrue(this.getReef6Cmd());
+        joystick1.button(7).onTrue(this.getPlayerStationLeftCmd());
+        joystick1.button(6).onTrue(this.getPlayerStationRightCmd());
+        joystick1.button(9).onTrue(this.getReef1Cmd());
+        joystick1.button(10).onTrue(this.getReef2Cmd());
+        joystick1.button(11).onTrue(this.getReef3Cmd());
+        joystick1.button(12).onTrue(this.getReef4Cmd());
+        joystick2.button(1).onTrue(this.getReef5Cmd());
+        joystick1.button(8).onTrue(this.getReef6Cmd());
 
         // toggle Coral Mode
-        joystick2.axisLessThan(0, 0.5).onTrue(Commands.runOnce(() -> {
+        joystick1.axisLessThan(0, 0.5).onTrue(Commands.runOnce(() -> {
             m_isCoralMode = false;
             // RobotContainer.m_armBase.algaeMode();
         }));
 
-        joystick2.axisGreaterThan(0, 0.5).onTrue(Commands.runOnce(() -> {
+        joystick1.axisGreaterThan(0, 0.5).onTrue(Commands.runOnce(() -> {
             m_isCoralMode = true;
             // RobotContainer.m_armBase.coralMode();
         }));
 
-        joystick2.axisLessThan(1, -0.5).onTrue(this.getLeftReefCmd());
-        joystick2.axisLessThan(1, -0.5).onFalse(this.getAlgaeReefCmd());
-        joystick2.axisGreaterThan(1, 0.5).onTrue(this.getRightReefCmd());
-        joystick2.axisGreaterThan(1, 0.5).onFalse(this.getAlgaeReefCmd());
-        joystick1.axisLessThan(0, -0.5).onTrue(RobotContainer.m_armController.getTransition_ProcessorAlgae());
+        joystick1.axisLessThan(1, -0.5).onTrue(this.getLeftReefCmd());
+        joystick1.axisLessThan(1, -0.5).onFalse(this.getAlgaeReefCmd());
+        joystick1.axisGreaterThan(1, 0.5).onTrue(this.getRightReefCmd());
+        joystick1.axisGreaterThan(1, 0.5).onFalse(this.getAlgaeReefCmd());
+        joystick2.axisLessThan(0, -0.5).onTrue(RobotContainer.m_armController.getTransition_ProcessorAlgae());
 
     }
 
