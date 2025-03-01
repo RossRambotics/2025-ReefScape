@@ -69,8 +69,12 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(11).onTrue(Commands.runOnce(() -> doL3()));
         joystick1.button(12).onTrue(Commands.runOnce(() -> doL4()));
 
-        joystick1.button(7).onTrue(RobotContainer.m_armController.getTransition_NetAlgae());
-        joystick1.button(8).onTrue(RobotContainer.m_armController.getTransition_GroundAlgae());
+        // Net on button box
+        // joystick1.button(7).onTrue(RobotContainer.m_armController.getTransition_NetAlgae());
+
+        // Intake algae Shoot algae
+        // joystick1.button(8).onTrue(RobotContainer.m_armController.getTransition_GroundAlgae());
+
         joystick1.button(6).onTrue(RobotContainer.m_intake.getIntakeCommand());
         joystick1.button(6).onFalse(RobotContainer.m_intake.getStopCommand());
         joystick1.button(5).onTrue(RobotContainer.m_intake.getOuttakeCommand());
