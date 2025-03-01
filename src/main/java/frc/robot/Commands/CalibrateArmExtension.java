@@ -34,6 +34,8 @@ public class CalibrateArmExtension extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_motor.stopMotor();
+
         // Retrieve the current motor configuration
         TalonFXConfiguration currentConfig = new TalonFXConfiguration();
         m_motor.getConfigurator().refresh(currentConfig);
