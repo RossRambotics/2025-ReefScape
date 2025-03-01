@@ -151,27 +151,39 @@ public class ArmBase extends SubsystemBase {
         Shuffleboard.getTab("ArmBase").add(this.getTestAngleCommand());
     }
 
-    public void coralMode() {
-        TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
+    // public void coralMode() {
+    // TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
 
-        MotionMagicConfigs mm = fx_cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
+    // MotionMagicConfigs mm = fx_cfg.MotionMagic;
+    // mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
+    // .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
+    // .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
 
-        m_LeftMotor.getConfigurator().apply(mm);
-    }
+    // // m_LeftMotor.getConfigurator().apply(mm);
+    // StatusCode status = StatusCode.StatusCodeNotInitialized;
+    // for (int i = 0; i < 5; ++i) {
+    // status = m_LeftMotor.getConfigurator().apply(fx_cfg);
+    // if (status.isOK())
+    // break;
+    // }
+    // }
 
-    public void algaeMode() {
-        TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
+    // public void algaeMode() {
+    // TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
 
-        MotionMagicConfigs mm = fx_cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1.0))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(1.0))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(1.0));
+    // MotionMagicConfigs mm = fx_cfg.MotionMagic;
+    // mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1.0))
+    // .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(1.0))
+    // .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(1.0));
 
-        m_LeftMotor.getConfigurator().apply(mm);
-    }
+    // // m_LeftMotor.getConfigurator().apply(mm);
+    // StatusCode status = StatusCode.StatusCodeNotInitialized;
+    // for (int i = 0; i < 5; ++i) {
+    // status = m_LeftMotor.getConfigurator().apply(fx_cfg);
+    // if (status.isOK())
+    // break;
+    // }
+    // }
 
     private void setGoal(Angle angle) {
         if (angle.baseUnitMagnitude() != m_goal.baseUnitMagnitude()) {
