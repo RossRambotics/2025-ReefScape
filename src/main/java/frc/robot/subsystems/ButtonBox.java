@@ -65,7 +65,7 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(9).onTrue(Commands.runOnce(() -> doL1()));
         joystick1.button(10).onTrue(Commands.runOnce(() -> doL2()));
         joystick1.button(11).onTrue(Commands.runOnce(() -> doL3()));
-        joystick1.button(12).onTrue(RobotContainer.m_armController.getTransition_Back_L4());
+        joystick1.button(12).onTrue(Commands.runOnce(() -> doL4()));
 
         joystick1.button(7).onTrue(RobotContainer.m_armController.getTransition_NetAlgae());
         joystick1.button(8).onTrue(RobotContainer.m_armController.getTransition_GroundAlgae());
@@ -365,5 +365,9 @@ public class ButtonBox extends SubsystemBase {
                 .andThen(RobotContainer.m_intake.getStopCommand());
         c.setName("Intake Stop");
         return c;
+    }
+
+    public boolean isCoralMode() {
+        return m_isCoralMode;
     }
 }

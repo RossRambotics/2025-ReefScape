@@ -220,7 +220,15 @@ public class Intake extends SubsystemBase {
     }
 
     public Command getStopCommand() {
-        return Commands.runOnce(() -> setGoal(0, 0)).withName("Intake.StopCommand");
+        return Commands.runOnce(() -> doStop()).withName("Intake.StopCommand");
+    }
+
+    private void doStop() {
+        if (RobotContainer.m_buttonBox.isCoralMode()) {
+            setGoal(0, 0);
+        } else {
+            setGoal(5, 5);
+        }
     }
 
     public Command getIdleCommand() {
@@ -228,11 +236,27 @@ public class Intake extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        return Commands.runOnce(() -> setGoal(20, 20)).withName("Intake.IntakeCommand");
+        return Commands.runOnce(() -> doIntake()).withName("Intake.IntakeCommand");
+    }
+
+    private void doIntake() {
+        if (RobotContainer.m_buttonBox.isCoralMode()) {
+            setGoal(20, 20);
+        } else {
+            setGoal(5, 5);
+        }
     }
 
     public Command getOuttakeCommand() {
-        return Commands.runOnce(() -> setGoal(-10, -10)).withName("Intake.OuttakeCommand");
+        return Commands.runOnce(() -> doOuttake()).withName("Intake.OuttakeCommand");
+    }
+
+    private void doOuttake() {
+        if (RobotContainer.m_buttonBox.isCoralMode()) {
+            setGoal(-10, -10);
+        } else {
+            setGoal(-50, -50);
+        }
     }
 
     public Command getUnclogCommand() {
