@@ -205,9 +205,9 @@ public class ArmController extends SubsystemBase {
                 null,
                 new PrintCommand("ProcessorAlgae"));
         NetAlgae = m_armGraph.new GraphCommandNode("NetAlgae",
-                ArmController.getArmCommand(Degrees.of(95),
-                        Meters.of(3),
-                        Degrees.of(-95))
+                ArmController.getArmCommand(Degrees.of(85),
+                        Meters.of(6),
+                        Degrees.of(45))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("NetAlgae"));
@@ -262,7 +262,7 @@ public class ArmController extends SubsystemBase {
         FrontAligment.AddNode(GroundAlgae, 1);
         FrontAligment.AddNode(GroundCoral, 1);
         FrontAligment.AddNode(ProcessorAlgae, 1);
-        FrontAligment.AddNode(NetAlgae, 1);
+        BackAligment.AddNode(NetAlgae, 1);
         FrontAligment.AddNode(RemoveAlgaeHigh, 1);
         FrontAligment.AddNode(RemoveAlgaeLow, 1);
         // BackAligment.AddNode(BackAlignmentBack, 0);
@@ -519,7 +519,7 @@ public class ArmController extends SubsystemBase {
     }
 
     public void doNetAlgae() {
-        m_armGraph.setTargetNode(NetAlgae);
+        Carry.setNextNode(NetAlgae);
         RobotContainer.m_targeting.setTargetIDRedBlue(5, 14);
     }
 

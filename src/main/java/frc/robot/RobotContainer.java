@@ -45,6 +45,7 @@ import frc.robot.Commands.WaitForArm;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
 import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmLocker;
 import frc.robot.subsystems.ButtonBox;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -68,6 +69,7 @@ public class RobotContainer {
     final static public ArmController m_armController = new ArmController();
     final static public VisionForOdometry m_visionForOdometry = new VisionForOdometry();
     final static public ManualArmControl m_manualArmControl = new ManualArmControl();
+    final static public ArmLocker m_armLocker = new ArmLocker();
 
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
 

@@ -27,7 +27,7 @@ public class ArmLocker extends SubsystemBase {
      * Locks the hook by setting the servo to the lock position.
      */
     public void lock() {
-        m_servo.setAngle(0); // Adjust the angle as needed for the lock position
+        m_servo.setAngle(10); // Adjust the angle as needed for the lock position
     }
 
     /**

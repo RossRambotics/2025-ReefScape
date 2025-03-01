@@ -61,6 +61,8 @@ public class ButtonBox extends SubsystemBase {
         joystick2.button(1).onTrue(RobotContainer.m_armController.getTransition_ClimbReady());
         joystick2.button(2).onTrue(RobotContainer.m_armController.getTransition_ClimbLockOn());
         joystick2.button(3).onTrue(RobotContainer.m_armController.getTransition_Climb());
+        joystick2.button(4).onTrue(RobotContainer.m_armLocker.getArmLockCmd());
+        joystick2.button(5).onTrue(RobotContainer.m_armLocker.getArmUnlockCmd());
 
         joystick1.button(9).onTrue(Commands.runOnce(() -> doL1()));
         joystick1.button(10).onTrue(Commands.runOnce(() -> doL2()));
@@ -89,8 +91,8 @@ public class ButtonBox extends SubsystemBase {
         joystick2.button(8).onTrue(this.getReef6Cmd());
 
         // toggle Coral Mode
-        joystick2.axisLessThan(0, -0.5).onTrue(Commands.runOnce(() -> m_isCoralMode = false));
-        joystick2.axisGreaterThan(0, -0.5).onTrue(Commands.runOnce(() -> m_isCoralMode = true));
+        joystick2.axisLessThan(0, 0.5).onTrue(Commands.runOnce(() -> m_isCoralMode = false));
+        joystick2.axisGreaterThan(0, 0.5).onTrue(Commands.runOnce(() -> m_isCoralMode = true));
 
         joystick2.axisLessThan(1, -0.5).onTrue(this.getLeftReefCmd());
         joystick2.axisLessThan(1, -0.5).onFalse(this.getAlgaeReefCmd());
