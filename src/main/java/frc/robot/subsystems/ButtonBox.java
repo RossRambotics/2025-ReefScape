@@ -21,24 +21,26 @@ public class ButtonBox extends SubsystemBase {
     private final CommandXboxController joystick1 = new CommandXboxController(2);
     private final CommandXboxController joystick2 = new CommandXboxController(1);
 
+    private boolean m_isCoralMode = true;
+
     /** Creates a new ButtonBox. */
     public ButtonBox() {
 
-        Shuffleboard.getTab("ButtonBox").add(this.getResetArmCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getResetArmCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getCalibrateArmCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getIntakeInCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getIntakeOutCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getShootProcessorCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getTravelToReefCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getTravelToProcessorCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getBackL4Cmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getBackL3Cmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getIntakeAlgaeCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getRemoveAlgaeCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getIntakeInCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getIntakeOutCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getShootProcessorCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getTravelToReefCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getTravelToProcessorCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getBackL4Cmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getBackL3Cmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getIntakeAlgaeCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getRemoveAlgaeCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReleaseClimbCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getClimbCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getClimbArmCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getHighArmCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getClimbCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getClimbArmCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getHighArmCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getPlayerStationLeftCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getPlayerStationRightCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReef1Cmd());
@@ -59,10 +61,12 @@ public class ButtonBox extends SubsystemBase {
         joystick2.button(1).onTrue(RobotContainer.m_armController.getTransition_ClimbReady());
         joystick2.button(2).onTrue(RobotContainer.m_armController.getTransition_ClimbLockOn());
         joystick2.button(3).onTrue(RobotContainer.m_armController.getTransition_Climb());
-        joystick1.button(9).onTrue(RobotContainer.m_armController.getTransition_Front_L1());
-        joystick1.button(10).onTrue(RobotContainer.m_armController.getTransition_Front_L2());
-        joystick1.button(11).onTrue(RobotContainer.m_armController.getTransition_Back_L3());
-        joystick1.button(12).onTrue(RobotContainer.m_armController.getTransition_Back_L4());
+
+        joystick1.button(9).onTrue(Commands.runOnce(() -> doL1()));
+        joystick1.button(10).onTrue(Commands.runOnce(() -> doL2()));
+        joystick1.button(11).onTrue(Commands.runOnce(() -> doL3()));
+        joystick1.button(12).onTrue(Commands.runOnce(() -> doL4()));
+
         joystick1.button(7).onTrue(RobotContainer.m_armController.getTransition_NetAlgae());
         joystick1.button(8).onTrue(RobotContainer.m_armController.getTransition_GroundAlgae());
         joystick1.button(6).onTrue(RobotContainer.m_intake.getIntakeCommand());
@@ -71,7 +75,6 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(5).onFalse(RobotContainer.m_intake.getStopCommand());
         joystick1.button(2).onTrue(RobotContainer.m_intake.getStopCommand());
         joystick1.button(4).onTrue(RobotContainer.m_armExtension.getCalibrateAndZero());
-        joystick1.button(4).onFalse(RobotContainer.m_armExtension.GetStopCmd());
 
         // reset arm
         // joystick1.button(3).onTrue(RobotContainer.m_armController.getTransition_BackAligment());
@@ -85,20 +88,53 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(1).onTrue(this.getReef5Cmd());
         joystick2.button(8).onTrue(this.getReef6Cmd());
 
-        // not using this
-        // joystick2.axisLessThan(0, -0.5).onTrue(this.getBackWardsOrientationCmd());
-        // joystick2.axisGreaterThan(0, -0.5).onTrue(this.getForwardOrientationCmd());
+        // toggle Coral Mode
+        joystick2.axisLessThan(0, -0.5).onTrue(Commands.runOnce(() -> m_isCoralMode = false));
+        joystick2.axisGreaterThan(0, -0.5).onTrue(Commands.runOnce(() -> m_isCoralMode = true));
+
         joystick2.axisLessThan(1, -0.5).onTrue(this.getLeftReefCmd());
         joystick2.axisLessThan(1, -0.5).onFalse(this.getAlgaeReefCmd());
         joystick2.axisGreaterThan(1, 0.5).onTrue(this.getRightReefCmd());
         joystick2.axisGreaterThan(1, 0.5).onFalse(this.getAlgaeReefCmd());
-        joystick1.axisLessThan(0, -0.5).onTrue(RobotContainer.m_armController.getTransition_ProcessorAglae());
+        joystick1.axisLessThan(0, -0.5).onTrue(RobotContainer.m_armController.getTransition_ProcessorAlgae());
 
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+    }
+
+    public void doL1() {
+        if (m_isCoralMode) {
+            RobotContainer.m_armController.doTransition_Front_L1();
+        } else {
+            RobotContainer.m_armController.doProcessorAlgae();
+        }
+    }
+
+    public void doL2() {
+        if (m_isCoralMode) {
+            RobotContainer.m_armController.doTransition_Front_L2();
+        } else {
+            RobotContainer.m_armController.doRemoveAlgaeLow();
+        }
+    }
+
+    public void doL3() {
+        if (m_isCoralMode) {
+            RobotContainer.m_armController.doTransition_Back_L3();
+        } else {
+            RobotContainer.m_armController.doRemoveAlgaeHigh();
+        }
+    }
+
+    public void doL4() {
+        if (m_isCoralMode) {
+            RobotContainer.m_armController.doTransition_Back_L4();
+        } else {
+            RobotContainer.m_armController.doNetAlgae();
+        }
     }
 
     public Command getBackWardsOrientationCmd() {
@@ -328,5 +364,9 @@ public class ButtonBox extends SubsystemBase {
                 .andThen(RobotContainer.m_intake.getStopCommand());
         c.setName("Intake Stop");
         return c;
+    }
+
+    public boolean isCoralMode() {
+        return m_isCoralMode;
     }
 }

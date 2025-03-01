@@ -61,7 +61,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackAlignment is done"));
         Back_L4 = m_armGraph.new GraphCommandNode("Back_L4",
                 ArmController.getArmCommand(Degrees.of(85),
-                        Meters.of(2),
+                        Meters.of(5),
                         Degrees.of(-126))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(45.0))),
                 null,
@@ -108,7 +108,7 @@ public class ArmController extends SubsystemBase {
 
         BackScore_L4 = m_armGraph.new GraphCommandNode("BackScore_L4",
                 ArmController.getArmCommand(Degrees.of(90.0),
-                        Meters.of(2),
+                        Meters.of(5),
                         Degrees.of(-126))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
@@ -291,7 +291,7 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L2());
         Shuffleboard.getTab("ArmController").add(this.getTransition_FrontScore_L1());
         Shuffleboard.getTab("ArmController").add(this.getTransition_GroundAlgae());
-        Shuffleboard.getTab("ArmController").add(this.getTransition_ProcessorAglae());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_ProcessorAlgae());
         Shuffleboard.getTab("ArmController").add(this.getTransition_NetAlgae());
         Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeHigh());
         Shuffleboard.getTab("ArmController").add(this.getTransition_RemoveAlgaeLow());
@@ -372,35 +372,47 @@ public class ArmController extends SubsystemBase {
     }
 
     public Command getTransition_Back_L4() {
-        Command c = Commands.runOnce(() -> Carry.setNextNode(Back_L4))
-                .andThen(Commands
-                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kBackward)));
+        Command c = Commands.runOnce(() -> doTransition_Back_L4());
         c.setName("Back_L4");
         return c;
     }
 
+    public void doTransition_Back_L4() {
+        Carry.setNextNode(Back_L4);
+        RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kBackward);
+    }
+
     public Command getTransition_Back_L3() {
-        Command c = Commands.runOnce(() -> Carry.setNextNode(Back_L3))
-                .andThen(Commands
-                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kBackward)));
+        Command c = Commands.runOnce(() -> doTransition_Back_L3());
         c.setName("Back_L3");
         return c;
     }
 
+    public void doTransition_Back_L3() {
+        Carry.setNextNode(Back_L3);
+        RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kBackward);
+    }
+
     public Command getTransition_Front_L2() {
-        Command c = Commands.runOnce(() -> Carry.setNextNode(Front_L2))
-                .andThen(Commands
-                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward)));
+        Command c = Commands.runOnce(() -> doTransition_Front_L2());
         c.setName("Front_L2");
         return c;
     }
 
+    public void doTransition_Front_L2() {
+        Carry.setNextNode(Front_L2);
+        RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
+    }
+
     public Command getTransition_Front_L1() {
-        Command c = Commands.runOnce(() -> Carry.setNextNode(Front_L1))
-                .andThen(Commands
-                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward)));
+        Command c = Commands.runOnce(() -> doTransition_Front_L1());
         c.setName("Front_L1");
         return c;
+    }
+
+    public void doTransition_Front_L1() {
+        Carry.setNextNode(Front_L1);
+        RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
     }
 
     public Command getTransition_HumanPlayerCoral() {
@@ -488,30 +500,47 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
-    public Command getTransition_ProcessorAglae() {
-        Command c = Commands.runOnce(() -> Carry.setNextNode(ProcessorAlgae))
-                .andThen(Commands
-                        .runOnce(() -> RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward)));
+    public Command getTransition_ProcessorAlgae() {
+        Command c = Commands.runOnce(() -> doProcessorAlgae());
         c.setName("ProcessorAlgae");
         return c;
     }
 
+    public void doProcessorAlgae() {
+        Carry.setNextNode(ProcessorAlgae);
+        RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
+        RobotContainer.m_targeting.setTargetIDRedBlue(3, 16);
+    }
+
     public Command getTransition_NetAlgae() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(NetAlgae));
+        Command c = Commands.runOnce(() -> doNetAlgae());
         c.setName("NetAlgae");
         return c;
     }
 
+    public void doNetAlgae() {
+        m_armGraph.setTargetNode(NetAlgae);
+        RobotContainer.m_targeting.setTargetIDRedBlue(5, 14);
+    }
+
     public Command getTransition_RemoveAlgaeHigh() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(RemoveAlgaeHigh));
+        Command c = Commands.runOnce(() -> doRemoveAlgaeHigh());
         c.setName("RemoveAlgaeHigh");
         return c;
     }
 
+    public void doRemoveAlgaeHigh() {
+        m_armGraph.setTargetNode(RemoveAlgaeHigh);
+    }
+
     public Command getTransition_RemoveAlgaeLow() {
-        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(RemoveAlgaeLow));
+        Command c = Commands.runOnce(() -> doRemoveAlgaeLow());
         c.setName("RemoveAlgaeLow");
         return c;
+    }
+
+    public void doRemoveAlgaeLow() {
+        m_armGraph.setTargetNode(RemoveAlgaeLow);
     }
 
     final static public Command getArmCommand(Angle armBaseAngle, Distance armLength, Angle wristAngle) {
