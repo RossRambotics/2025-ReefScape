@@ -179,13 +179,18 @@ public class Targeting extends SubsystemBase {
     }
 
     private final double kCoralYoffset = 0.175; // left / right
-    private final double kCoralXoffset = 0.03; // front / back
+    private final double kCcoralXoffset = 0.03; // front / back
     private final double kAlgaeXoffset = 0.03; // front / back
     private final double kNetYoffset = 1.0; // left / right
     private final double kNetXoffset = 0.00; // front / back
     private int m_ReefTargetID;
 
     public Pose2d getScoreTargetPose() {
+        double coralXoffset = kCcoralXoffset;
+        if (m_lineUpOrientation == LineUpOrientation.kForward) {
+            coralXoffset = -kCcoralXoffset;
+        }
+
         // start with the target pose
         Pose2d pose = new Pose2d(m_TargetPose.getTranslation().getX(), m_TargetPose.getTranslation().getY(),
                 m_TargetPose.getRotation());
@@ -204,7 +209,7 @@ public class Targeting extends SubsystemBase {
         }
         switch (target) {
             case kCoralLeft:
-                offset = new Translation2d(kCoralXoffset, kCoralYoffset);
+                offset = new Translation2d(coralXoffset, kCoralYoffset);
                 m_alignCenter.set(false);
                 m_alignLeft.set(true);
                 m_alignRight.set(false);
@@ -218,7 +223,7 @@ public class Targeting extends SubsystemBase {
                 break;
 
             case kCoralRight:
-                offset = new Translation2d(kCoralXoffset, -kCoralYoffset);
+                offset = new Translation2d(coralXoffset, -kCoralYoffset);
                 m_alignCenter.set(false);
                 m_alignLeft.set(false);
                 m_alignRight.set(true);
