@@ -26,21 +26,21 @@ public class ButtonBox extends SubsystemBase {
     /** Creates a new ButtonBox. */
     public ButtonBox() {
 
-        Shuffleboard.getTab("ButtonBox").add(this.getResetArmCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getResetArmCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getCalibrateArmCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getIntakeInCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getIntakeOutCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getShootProcessorCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getTravelToReefCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getTravelToProcessorCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getBackL4Cmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getBackL3Cmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getIntakeAlgaeCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getRemoveAlgaeCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getIntakeInCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getIntakeOutCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getShootProcessorCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getTravelToReefCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getTravelToProcessorCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getBackL4Cmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getBackL3Cmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getIntakeAlgaeCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getRemoveAlgaeCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReleaseClimbCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getClimbCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getClimbArmCmd());
-        Shuffleboard.getTab("ButtonBox").add(this.getHighArmCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getClimbCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getClimbArmCmd());
+        // Shuffleboard.getTab("ButtonBox").add(this.getHighArmCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getPlayerStationLeftCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getPlayerStationRightCmd());
         Shuffleboard.getTab("ButtonBox").add(this.getReef1Cmd());
@@ -75,7 +75,6 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(5).onFalse(RobotContainer.m_intake.getStopCommand());
         joystick1.button(2).onTrue(RobotContainer.m_intake.getStopCommand());
         joystick1.button(4).onTrue(RobotContainer.m_armExtension.getCalibrateAndZero());
-        joystick1.button(4).onFalse(RobotContainer.m_armExtension.GetStopCmd());
 
         // reset arm
         // joystick1.button(3).onTrue(RobotContainer.m_armController.getTransition_BackAligment());
