@@ -366,7 +366,7 @@ public class Targeting extends SubsystemBase {
         // we need to be
         // 16 (half of length) + 14 inches from the reef or 30 inches from the reef. 30
         // inches in meters is 0.762.
-        double distance = -0.762; // distance in meters
+        double distance = -0.762 + 0.127; // distance in meters
         Rotation2d rotation = pose.getRotation(); // get the rotation
 
         // Calculate the new x and y coordinates using the rotation

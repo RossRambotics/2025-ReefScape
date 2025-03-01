@@ -139,10 +139,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("Arm.Carry", RobotContainer.m_armController.getTransition_Carry());
 
         NamedCommands.registerCommand("Score.L4",
-                // new ReefLineUp3(drivetrain,
-                // targetDrive,
-                // RobotContainer.m_targeting::getScoreTargetPose).withTimeout(0.01)
                 new WaitCommand(0.1)
+                        .andThen(new ReefLineUp3(drivetrain,
+                                targetDrive,
+                                RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.01))
                         .andThen(RobotContainer.m_armController.getTransition_Back_L4()
                                 .andThen(new WaitCommand(1.0))
                                 .andThen(new PrintCommand("Before ScoreL4"))

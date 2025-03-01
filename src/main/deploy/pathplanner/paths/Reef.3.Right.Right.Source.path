@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.2894,
-        "y": 2.868
+        "x": 5.31,
+        "y": 2.818
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.026750300603451,
-        "y": 2.7188560061053777
+        "x": 5.047350300603451,
+        "y": 2.668856006105378
       },
       "isLocked": false,
       "linkedName": "Reef2Right"
@@ -32,28 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.5674295774647877,
-        "y": 1.7432218309859138
+        "x": 1.187029109589041,
+        "y": 1.2076840753424654
       },
       "prevControl": {
-        "x": 3.139700449096584,
-        "y": 1.9603987256665498
-      },
-      "nextControl": {
-        "x": 1.9951587058329916,
-        "y": 1.526044936305276
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.17,
-        "y": 1.2
-      },
-      "prevControl": {
-        "x": 2.043045774647886,
-        "y": 1.4455985915492944
+        "x": 2.060074884236927,
+        "y": 1.4532826668917598
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.35,
+      "waypointRelativePos": 1.2,
       "rotationDegrees": -59.99999999999999
     }
   ],
@@ -78,7 +62,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,

@@ -92,7 +92,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("Front_L1 is done"));
 
         HumanPlayerCoral = m_armGraph.new GraphCommandNode("HumanPlayerCoral",
-                ArmController.getArmCommand(Degrees.of(21.5),
+                ArmController.getArmCommand(Degrees.of(22),
                         Meters.of(-77),
                         Degrees.of(-23))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),

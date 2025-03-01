@@ -18,6 +18,8 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.UpdateModeValue;
 
 import frc.robot.RobotContainer;
@@ -69,11 +71,11 @@ public class Intake extends SubsystemBase {
     /** Creates a new Intake. */
     public Intake() {
         TalonFXConfiguration cfg = new TalonFXConfiguration();
-
+        cfg.MotorOutput = cfg.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
         // Configure stator current limits
         CurrentLimitsConfigs statorCurrentLimit = new CurrentLimitsConfigs();
         statorCurrentLimit.StatorCurrentLimitEnable = true;
-        statorCurrentLimit.StatorCurrentLimit = 25; // Current limit in amps
+        statorCurrentLimit.StatorCurrentLimit = 40; // Current limit in amps
         cfg.CurrentLimits = statorCurrentLimit;
 
         /* Configure gear ratio */
