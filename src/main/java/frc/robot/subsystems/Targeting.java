@@ -187,9 +187,9 @@ public class Targeting extends SubsystemBase {
 
     public Pose2d getScoreTargetPose() {
         double coralXoffset = kCcoralXoffset;
-        if (m_lineUpOrientation == LineUpOrientation.kForward) {
-            coralXoffset = kCcoralXoffset * 2;
-        }
+        // if (m_lineUpOrientation == LineUpOrientation.kForward) {
+        // coralXoffset = kCcoralXoffset * 2;
+        // }
 
         // start with the target pose
         Pose2d pose = new Pose2d(m_TargetPose.getTranslation().getX(), m_TargetPose.getTranslation().getY(),
