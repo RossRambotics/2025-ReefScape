@@ -221,9 +221,10 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("NetAlgaeAlignment1"));
         NetAlgaeAlignment2 = m_armGraph.new GraphCommandNode("NetAlgaeAlignment2",
                 ArmController.getArmCommand(Degrees.of(85),
-                        Meters.of(-30),
+                        Meters.of(-60),
                         Degrees.of(-15))
-                        .andThen(new WaitCommand(1.0)),
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(
+                                20.0))),
                 null,
                 new PrintCommand("NetAlgaeAlignment2"));
         RemoveAlgaeHigh = m_armGraph.new GraphCommandNode("RemoveAlgaeHigh",
@@ -268,6 +269,7 @@ public class ArmController extends SubsystemBase {
         BackAligment.AddNode(Carry, 1);
         BackAligment.AddNode(FrontAligment, 1);
         Carry.AddNode(FrontAligment, 1);
+        Carry.AddNode(ProcessorAlgae, 1);
         Start.AddNode(FrontAligment, 1);
         FrontAligment.AddNode(Front_L2, 1);
         FrontAligment.AddNode(Front_L1, 1);
