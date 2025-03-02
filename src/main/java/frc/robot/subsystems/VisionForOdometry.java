@@ -10,6 +10,9 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
@@ -20,6 +23,8 @@ public class VisionForOdometry extends SubsystemBase {
     private GenericEntry m_GE_Back_TagCount = null;
     private GenericEntry m_GE_Back_IgnoredCount = null;
     private Pose2d m_LastBackPose = new Pose2d();
+    private NetworkTable m_LL_Back = null;
+    private NetworkTableEntry m_throttle = null;
 
     /** Creates a new Vision. */
     public VisionForOdometry() {
@@ -28,6 +33,17 @@ public class VisionForOdometry extends SubsystemBase {
         m_GE_Back_IgnoredCount.setDouble(0);
         m_GE_Back_TagCount.setDouble(0);
 
+        m_LL_Back = NetworkTableInstance.getDefault().getTable("limelight-back");
+        m_throttle = m_LL_Back.getEntry("throttle_set");
+
+    }
+
+    public void fullSpeed() {
+        m_throttle.setDouble(0);
+    }
+
+    public void idle() {
+        m_throttle.setDouble(50);
     }
 
     @Override

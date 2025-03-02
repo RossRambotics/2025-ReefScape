@@ -75,6 +75,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        m_robotContainer.m_visionForOdometry.idle();
     }
 
     @Override
@@ -83,6 +84,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledExit() {
+        m_robotContainer.m_visionForOdometry.fullSpeed();
+
     }
 
     @Override
