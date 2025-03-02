@@ -39,9 +39,9 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import static edu.wpi.first.units.Units.*;
 
 public class ArmBase extends SubsystemBase {
-    final TalonFX m_LeftMotor = new TalonFX(30, "usb");
-    final TalonFX m_RightMotor = new TalonFX(31, "usb");
-    final CANcoder m_armBaseCANcoder = new CANcoder(12, "usb");
+    final TalonFX m_LeftMotor = new TalonFX(30, "Default Name");
+    final TalonFX m_RightMotor = new TalonFX(31, "Default Name");
+    final CANcoder m_armBaseCANcoder = new CANcoder(12, "Default Name");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
@@ -60,8 +60,9 @@ public class ArmBase extends SubsystemBase {
     private GenericPublisher m_GE_Timer;
     private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
 
-    final DynamicMotionMagicVoltage m_requestCoral = new DynamicMotionMagicVoltage(0, 3, 10, 20);
-    final DynamicMotionMagicVoltage m_requestAlgae = new DynamicMotionMagicVoltage(0, 3, 2, 5);
+    final DynamicMotionMagicVoltage m_request = new DynamicMotionMagicVoltage(0, 3, 10, 20);
+    // final DynamicMotionMagicVoltage m_requestAlgae = new
+    // DynamicMotionMagicVoltage(0, 0.5, 2, 5);
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
@@ -93,10 +94,10 @@ public class ArmBase extends SubsystemBase {
         }
 
         /* Configure Motion Magic */
-        MotionMagicConfigs mm = fx_cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
+        // MotionMagicConfigs mm = fx_cfg.MotionMagic;
+        // mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
+        // .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
+        // .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
 
         // enable brake mode
         fx_cfg.MotorOutput = new MotorOutputConfigs()
@@ -191,9 +192,15 @@ public class ArmBase extends SubsystemBase {
             m_timer.start();
         }
         if (RobotContainer.m_buttonBox.isCoralMode()) {
-            m_LeftMotor.setControl(m_requestCoral.withPosition(angle.in(Rotations)).withSlot(0));
+            m_request.Velocity = 3; // rps
+            m_request.Acceleration = 10; // rot/s^2
+            m_request.Jerk = 20; // rot/s^3
+            m_LeftMotor.setControl(m_request.withPosition(angle.in(Rotations)));
         } else {
-            m_LeftMotor.setControl(m_requestAlgae.withPosition(angle.in(Rotations)).withSlot(0));
+            m_request.Velocity = 0.5; // rps
+            m_request.Acceleration = 0.5; // rot/s^2
+            m_request.Jerk = 0.5; // rot/s^3
+            m_LeftMotor.setControl(m_request.withPosition(angle.in(Rotations)));
         }
         m_GE_Goal.setDouble(angle.in(Degrees));
         m_goal = angle;

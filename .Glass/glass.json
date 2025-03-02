@@ -10,12 +10,6 @@
         "ArmBase": {
           "open": true
         },
-        "ArmController": {
-          "open": true
-        },
-        "ArmExt": {
-          "open": true
-        },
         "Intake": {
           "Intake.IntakeCommand": {
             "open": true
@@ -30,12 +24,6 @@
         "Targeting": {
           "open": true
         },
-        "Wrist": {
-          "open": true
-        },
-        "open": true
-      },
-      "Targeting": {
         "open": true
       }
     },

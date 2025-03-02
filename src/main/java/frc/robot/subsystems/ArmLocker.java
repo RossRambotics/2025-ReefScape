@@ -34,7 +34,7 @@ public class ArmLocker extends SubsystemBase {
      * Unlocks the hook by setting the servo to the unlock position.
      */
     public void unlock() {
-        m_servo.setAngle(90); // Adjust the angle as needed for the unlock position
+        m_servo.setAngle(80); // Adjust the angle as needed for the unlock position
     }
 
     Command getArmLockCmd() {
