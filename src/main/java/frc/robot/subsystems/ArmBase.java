@@ -39,9 +39,9 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import static edu.wpi.first.units.Units.*;
 
 public class ArmBase extends SubsystemBase {
-    final TalonFX m_LeftMotor = new TalonFX(30, "rio");
-    final TalonFX m_RightMotor = new TalonFX(31, "rio");
-    final CANcoder m_armBaseCANcoder = new CANcoder(12, "rio");
+    final TalonFX m_LeftMotor = new TalonFX(30, "usb");
+    final TalonFX m_RightMotor = new TalonFX(31, "usb");
+    final CANcoder m_armBaseCANcoder = new CANcoder(12, "usb");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
