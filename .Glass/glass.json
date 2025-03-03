@@ -23,7 +23,9 @@
         },
         "Targeting": {
           "open": true
-        },
+        }
+      },
+      "limelight-back": {
         "open": true
       }
     },

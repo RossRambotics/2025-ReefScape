@@ -107,7 +107,7 @@ public class ButtonBox extends SubsystemBase {
         joystick1.axisLessThan(1, -0.5).onFalse(this.getAlgaeReefCmd());
         joystick1.axisGreaterThan(1, 0.5).onTrue(this.getRightReefCmd());
         joystick1.axisGreaterThan(1, 0.5).onFalse(this.getAlgaeReefCmd());
-        joystick2.axisLessThan(0, -0.5).onTrue(RobotContainer.m_armController.getTransition_ProcessorAlgae());
+        joystick2.axisLessThan(0, -0.5).onTrue(RobotContainer.m_armController.getTransition_GroundAlgae());
 
     }
 

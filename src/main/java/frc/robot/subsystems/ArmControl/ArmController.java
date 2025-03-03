@@ -192,9 +192,9 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("FrontScore_L1"));
 
         GroundAlgae = m_armGraph.new GraphCommandNode("GroundAlgae",
-                ArmController.getArmCommand(Degrees.of(-11),
-                        Meters.of(0.8),
-                        Degrees.of(-85))
+                ArmController.getArmCommand(Degrees.of(-24.5),
+                        Meters.of(-68.5),
+                        Degrees.of(-5.25))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("GroundAlgae"));
@@ -287,6 +287,8 @@ public class ArmController extends SubsystemBase {
         FrontAligment.AddNode(RemoveAlgaeHigh, 1);
         FrontAligment.AddNode(RemoveAlgaeLow, 1);
         NetAlgaeAlignment2.AddNode(NetAlgae, 1);
+        GroundAlgae.AddNode(ProcessorAlgae, 1);
+        GroundAlgae.setNextNode(ProcessorAlgae);
         // BackAligment.AddNode(BackAlignmentBack, 0);
 
         m_armGraph.setGraphRootNode(S1);
@@ -553,6 +555,7 @@ public class ArmController extends SubsystemBase {
 
     public void doRemoveAlgaeHigh() {
         Carry.setNextNode(RemoveAlgaeHigh);
+        RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
     }
 
     public Command getTransition_RemoveAlgaeLow() {
@@ -563,6 +566,7 @@ public class ArmController extends SubsystemBase {
 
     public void doRemoveAlgaeLow() {
         Carry.setNextNode(RemoveAlgaeLow);
+        RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
     }
 
     final static public Command getArmCommand(Angle armBaseAngle, Distance armLength, Angle wristAngle) {
