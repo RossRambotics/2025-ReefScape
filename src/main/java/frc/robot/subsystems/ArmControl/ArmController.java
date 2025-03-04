@@ -124,7 +124,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackScore_L3"));
 
         Climb = m_armGraph.new GraphCommandNode("Climb",
-                ArmController.getArmCommand(Degrees.of(-30),
+                ArmController.getArmCommand(Degrees.of(-29),
                         Meters.of(-77.3),
                         Degrees.of(-140))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -132,7 +132,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("Climb"));
 
         ClimbLockOn = m_armGraph.new GraphCommandNode("ClimbLockOn",
-                ArmController.getArmCommand(Degrees.of(54),
+                ArmController.getArmCommand(Degrees.of(65),
                         Meters.of(-77.3),
                         Degrees.of(-140))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),

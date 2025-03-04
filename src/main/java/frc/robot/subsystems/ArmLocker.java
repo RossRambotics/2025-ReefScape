@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class ArmLocker extends SubsystemBase {
     private final Servo m_servo;
@@ -27,7 +28,8 @@ public class ArmLocker extends SubsystemBase {
      * Locks the hook by setting the servo to the lock position.
      */
     public void lock() {
-        m_servo.setAngle(10); // Adjust the angle as needed for the lock position
+        m_servo.setAngle(23); // Adjust the angle as needed for the lock position
+        RobotContainer.m_armBase.climbMode();
     }
 
     /**
@@ -35,6 +37,7 @@ public class ArmLocker extends SubsystemBase {
      */
     public void unlock() {
         m_servo.setAngle(80); // Adjust the angle as needed for the unlock position
+        RobotContainer.m_armBase.normalMode();
     }
 
     Command getArmLockCmd() {
