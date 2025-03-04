@@ -245,7 +245,7 @@ public class Intake extends SubsystemBase {
         if (RobotContainer.m_buttonBox.isCoralMode()) {
             setGoal(20, 20);
         } else {
-            setGoal(5, 5);
+            setGoal(10, 10);
         }
     }
 
