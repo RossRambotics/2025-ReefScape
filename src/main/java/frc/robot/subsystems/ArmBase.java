@@ -294,6 +294,22 @@ public class ArmBase extends SubsystemBase {
 
     }
 
+    public void climbMode() {
+        Slot0Configs slot0 = new Slot0Configs();
+        m_LeftMotor.getConfigurator().refresh(slot0);
+        m_GE_PID_kI.setDouble(40);
+        slot0.kI = 40;
+        m_LeftMotor.getConfigurator().apply(slot0);
+    }
+
+    public void normalMode() {
+        Slot0Configs slot0 = new Slot0Configs();
+        m_LeftMotor.getConfigurator().refresh(slot0);
+        m_GE_PID_kI.setDouble(0);
+        slot0.kI = 0;
+        m_LeftMotor.getConfigurator().apply(slot0);
+    }
+
     public Command getUpCommand() {
         return this.runOnce(() -> setGoal(Degrees.of(90))).withName("ArmBase.UpCommand");
     }
