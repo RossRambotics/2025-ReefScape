@@ -140,22 +140,23 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("Score.L4",
                 new WaitCommand(0.1)
+                        .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
                         .andThen(new ReefLineUp3(drivetrain,
                                 targetDrive,
-                                RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.01))
-                        .andThen(RobotContainer.m_armController.getTransition_Back_L4()
-                                .andThen(new WaitCommand(1.0))
-                                .andThen(new PrintCommand("Before ScoreL4"))
-                                .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
-                                .andThen(new PrintCommand("After Score L4 beefore WaitForArm"))
-                                .andThen(new WaitForArm())
-                                .andThen(new PrintCommand("Before Outtake"))
-                                .andThen(RobotContainer.m_intake.getOuttakeCommand())
-                                .andThen(new PrintCommand("After Outtake"))
-                                .andThen(RobotContainer.m_armController.getTransition_Carry())
-                                .andThen(new WaitCommand(0.5))
+                                RobotContainer.m_targeting::getScoreTargetPose).withTimeout(5.01))
+                        // .andThen(RobotContainer.m_armController.getTransition_Back_L4())
+                        // .andThen(new WaitCommand(1.0))
+                        .andThen(new PrintCommand("Before ScoreL4"))
+                        // .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
+                        .andThen(new PrintCommand("After Score L4 beefore WaitForArm"))
+                        .andThen(new WaitForArm())
+                        .andThen(new PrintCommand("Before Outtake"))
+                        .andThen(RobotContainer.m_intake.getOuttakeCommand())
+                        .andThen(new PrintCommand("After Outtake"))
+                        .andThen(RobotContainer.m_armController.getTransition_Carry())
+                        .andThen(new WaitCommand(0.5))
 
-                        ));
+        );
 
         new EventTrigger("Event.CoralStation").onTrue(
                 RobotContainer.m_armController.getTransition_HumanPlayerCoral());

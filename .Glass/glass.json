@@ -10,6 +10,9 @@
         "ArmBase": {
           "open": true
         },
+        "ArmController": {
+          "open": true
+        },
         "Intake": {
           "Intake.IntakeCommand": {
             "open": true
@@ -23,7 +26,8 @@
         },
         "Targeting": {
           "open": true
-        }
+        },
+        "open": true
       },
       "limelight-back": {
         "open": true

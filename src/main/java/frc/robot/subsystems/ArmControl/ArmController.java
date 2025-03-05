@@ -35,7 +35,7 @@ public class ArmController extends SubsystemBase {
     private GraphCommandNode BackScore_L4, BackScore_L3, Back_L4, Back_L3,
             BackAligment, Carry, FrontAligment, HPCarry, S1, Start, FrontScore_L2, FrontScore_L1,
             Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae, ProcessorAlgae, NetAlgae, RemoveAlgaeHigh,
-            RemoveAlgaeLow, Climb, ClimbReady, ClimbLockOn, NetAlgaeAlignment1, NetAlgaeAlignment2;
+            RemoveAlgaeLow, Climb, ClimbReady, ClimbLockOn, NetAlgaeAlignment1, NetAlgaeAlignment2, AlgaeCarry;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -241,6 +241,13 @@ public class ArmController extends SubsystemBase {
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("RemoveAlgaeLow"));
+        AlgaeCarry = m_armGraph.new GraphCommandNode("AlgaeCarry",
+                ArmController.getArmCommand(Degrees.of(-12.4),
+                        Meters.of(-77.3),
+                        Degrees.of(-83.62))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
+                null,
+                new PrintCommand("AlgaeCarry"));
 
         S1.AddNode(Start, 1, true);
         Start.AddNode(BackAligment, 1);
@@ -278,17 +285,18 @@ public class ArmController extends SubsystemBase {
         HPCarry.setNextNode(HumanPlayerCoral);
         FrontAligment.AddNode(GroundAlgae, 1);
         FrontAligment.AddNode(GroundCoral, 1);
-        RemoveAlgaeHigh.AddNode(ProcessorAlgae, 1);
-        RemoveAlgaeHigh.setNextNode(ProcessorAlgae);
-        RemoveAlgaeLow.AddNode(ProcessorAlgae, 1);
-        RemoveAlgaeLow.setNextNode(ProcessorAlgae);
-        ProcessorAlgae.AddNode(NetAlgaeAlignment2, 1);
+        RemoveAlgaeHigh.AddNode(AlgaeCarry, 1);
+        RemoveAlgaeHigh.setNextNode(AlgaeCarry);
+        RemoveAlgaeLow.AddNode(AlgaeCarry, 1);
+        RemoveAlgaeLow.setNextNode(AlgaeCarry);
+        AlgaeCarry.AddNode(NetAlgaeAlignment2, 1);
+        AlgaeCarry.AddNode(ProcessorAlgae, 1);
         NetAlgae.AddNode(BackAligment, 1);
         FrontAligment.AddNode(RemoveAlgaeHigh, 1);
         FrontAligment.AddNode(RemoveAlgaeLow, 1);
         NetAlgaeAlignment2.AddNode(NetAlgae, 1);
-        GroundAlgae.AddNode(ProcessorAlgae, 1);
-        GroundAlgae.setNextNode(ProcessorAlgae);
+        GroundAlgae.AddNode(AlgaeCarry, 1);
+        GroundAlgae.setNextNode(AlgaeCarry);
         // BackAligment.AddNode(BackAlignmentBack, 0);
 
         m_armGraph.setGraphRootNode(S1);
@@ -531,7 +539,7 @@ public class ArmController extends SubsystemBase {
     }
 
     public void doProcessorAlgae() {
-        Carry.setNextNode(ProcessorAlgae);
+        GroundAlgae.setNextNode(ProcessorAlgae);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
         RobotContainer.m_targeting.setTargetIDRedBlue(3, 16);
     }
@@ -543,7 +551,7 @@ public class ArmController extends SubsystemBase {
     }
 
     public void doNetAlgae() {
-        ProcessorAlgae.setNextNode(NetAlgae);
+        GroundAlgae.setNextNode(NetAlgae);
         RobotContainer.m_targeting.setTargetIDRedBlue(5, 14);
     }
 
