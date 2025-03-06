@@ -97,10 +97,12 @@ public class ButtonBox extends SubsystemBase {
         // toggle Coral Mode
         joystick1.axisLessThan(0, 0.5).onTrue(Commands.runOnce(() -> {
             m_isCoralMode = false;
+            RobotContainer.m_wrist.coralMode();
         }));
 
         joystick1.axisGreaterThan(0, 0.5).onTrue(Commands.runOnce(() -> {
             m_isCoralMode = true;
+            RobotContainer.m_wrist.algaeMode();
         }));
 
         joystick1.axisLessThan(1, -0.5).onTrue(this.getLeftReefCmd());
