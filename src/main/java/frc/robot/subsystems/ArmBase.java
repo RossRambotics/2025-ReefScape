@@ -264,9 +264,14 @@ public class ArmBase extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (!RobotContainer.isTuning) {
+            return;
+        }
+
         if (this.getError().in(Degree) <= m_kGoalTolerance) {
             m_timer.stop();
         }
+
         // Check if we should execute this cycle
         if (!m_executionLimiter.shouldExecute()) {
             return;

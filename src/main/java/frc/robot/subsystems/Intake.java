@@ -167,7 +167,7 @@ public class Intake extends SubsystemBase {
         // cfgcs.apply(tof);
 
         Trigger coralSensorTrigger = new Trigger(this::isCoralSensorDetected);
-        coralSensorTrigger.onTrue(this.getIdleCommand());
+        coralSensorTrigger.onTrue(this.getStopCommand());
     }
 
     private Sendable getOuttakeAlgaeCommand() {
@@ -176,6 +176,11 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        if (!RobotContainer.isTuning) {
+            return;
+        }
+
         // Check if we should execute this cycle
         if (!m_executionLimiter.shouldExecute()) {
             return;
@@ -203,7 +208,7 @@ public class Intake extends SubsystemBase {
     }
 
     // Method to check if the m_CoralSensor is detected
-    private boolean isCoralSensorDetected() {
+    public boolean isCoralSensorDetected() {
         // return m_CoralSensor.getIsDetected().getValue(); // Replace with the actual
         // method to check sensor state
         return false;
