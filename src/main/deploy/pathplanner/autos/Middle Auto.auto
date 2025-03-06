@@ -7,6 +7,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Arm.Calibrate"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Reef.1"
           }
         },
@@ -20,12 +26,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Arm.Calibrate"
-                }
-              },
               {
                 "type": "path",
                 "data": {

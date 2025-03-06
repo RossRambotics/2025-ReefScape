@@ -178,8 +178,8 @@ public class Targeting extends SubsystemBase {
         }
     }
 
-    private final double kCoralYoffset = 0.175; // left / right
-    private final double kCcoralXoffset = 0.03 - 0.08; // front / back
+    private final double kCoralYoffset = 0.175 + 0.05; // left / right
+    private final double kCcoralXoffset = 0.03 - 0.127; // front / back
     private final double kAlgaeXoffset = 0.03; // front / back
     private final double kNetYoffset = 1.0; // left / right
     private final double kNetXoffset = 0.00; // front / back
