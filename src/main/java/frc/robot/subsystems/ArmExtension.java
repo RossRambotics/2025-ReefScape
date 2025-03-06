@@ -199,6 +199,10 @@ public class ArmExtension extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (!RobotContainer.isTuning) {
+            return;
+        }
+
         if (this.getError().in(Meters) <= m_kGoalTolerance) {
             m_timer.stop();
         }

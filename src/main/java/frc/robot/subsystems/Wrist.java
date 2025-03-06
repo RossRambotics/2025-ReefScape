@@ -175,6 +175,10 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (!RobotContainer.isTuning) {
+            return;
+        }
+
         if (this.getError().in(Degree) <= m_kGoalTolerance) {
             m_timer.stop();
         }

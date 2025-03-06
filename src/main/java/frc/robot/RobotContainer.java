@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import frc.robot.Commands.AutoCreepIntake;
 import frc.robot.Commands.ReefLineUp;
 import frc.robot.Commands.ReefLineUp2;
 import frc.robot.Commands.ReefLineUp3;
@@ -61,6 +62,7 @@ import frc.util.SlewRateLimiterWithSupplier;
 
 public class RobotContainer {
     // Subsystems
+    final static public boolean isTuning = false;
 
     final static public ArmBase m_armBase = new ArmBase();
     final static public ArmExtension m_armExtension = new ArmExtension();
@@ -102,7 +104,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-    private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric();
+    public static SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -292,6 +294,8 @@ public class RobotContainer {
 
         // reset the field-centric heading on back press
         joystick.back().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        joystick.start().whileTrue(new AutoCreepIntake());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
