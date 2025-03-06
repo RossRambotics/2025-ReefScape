@@ -229,8 +229,8 @@ public class Wrist extends SubsystemBase {
     public void algaeMode() {
         Slot0Configs slot0 = new Slot0Configs();
         m_LeftMotor.getConfigurator().refresh(slot0);
-        m_GE_PID_kP.setDouble(10);
-        slot0.kP = 10;
+        m_GE_PID_kP.setDouble(25);
+        slot0.kP = 25;
         m_LeftMotor.getConfigurator().apply(slot0);
     }
 
