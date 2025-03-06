@@ -124,7 +124,7 @@ public class ArmController extends SubsystemBase {
                 new PrintCommand("BackScore_L3"));
 
         Climb = m_armGraph.new GraphCommandNode("Climb",
-                ArmController.getArmCommand(Degrees.of(-29),
+                ArmController.getArmCommand(Degrees.of(-27),
                         Meters.of(-77.3),
                         Degrees.of(-140))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
@@ -539,7 +539,7 @@ public class ArmController extends SubsystemBase {
     }
 
     public void doProcessorAlgae() {
-        GroundAlgae.setNextNode(ProcessorAlgae);
+        AlgaeCarry.setNextNode(ProcessorAlgae);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
         RobotContainer.m_targeting.setTargetIDRedBlue(3, 16);
     }
@@ -551,7 +551,7 @@ public class ArmController extends SubsystemBase {
     }
 
     public void doNetAlgae() {
-        GroundAlgae.setNextNode(NetAlgae);
+        AlgaeCarry.setNextNode(NetAlgae);
         RobotContainer.m_targeting.setTargetIDRedBlue(5, 14);
     }
 
