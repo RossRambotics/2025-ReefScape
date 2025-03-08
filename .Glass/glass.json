@@ -6,6 +6,9 @@
       }
     },
     "transitory": {
+      "Intake": {
+        "open": true
+      },
       "Shuffleboard": {
         "ArmBase": {
           "open": true

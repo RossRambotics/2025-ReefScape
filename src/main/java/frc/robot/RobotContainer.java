@@ -151,6 +151,7 @@ public class RobotContainer {
                         .andThen(new PrintCommand("Before ScoreL4"))
                         .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
                         .andThen(new PrintCommand("After Score L4 beefore WaitForArm"))
+                        .andThen(new WaitCommand(0.5))
                         .andThen(new WaitForArm())
                         .andThen(new PrintCommand("Before Outtake"))
                         .andThen(RobotContainer.m_intake.getOuttakeCommand())

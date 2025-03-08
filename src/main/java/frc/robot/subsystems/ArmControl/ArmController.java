@@ -230,14 +230,14 @@ public class ArmController extends SubsystemBase {
         RemoveAlgaeHigh = m_armGraph.new GraphCommandNode("RemoveAlgaeHigh",
                 ArmController.getArmCommand(Degrees.of(49.26),
                         Meters.of(-63),
-                        Degrees.of(60))
+                        Degrees.of(57))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("RemoveAlgaeHigh"));
         RemoveAlgaeLow = m_armGraph.new GraphCommandNode("RemoveAlgaeLow",
                 ArmController.getArmCommand(Degrees.of(22.13),
                         Meters.of(-77.3),
-                        Degrees.of(27.7))
+                        Degrees.of(24.7))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("RemoveAlgaeLow"));
@@ -539,7 +539,7 @@ public class ArmController extends SubsystemBase {
     }
 
     public void doProcessorAlgae() {
-        ProcessorAlgae.setNextNode(ProcessorAlgae);
+        Carry.setNextNode(ProcessorAlgae);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
         RobotContainer.m_targeting.setTargetIDRedBlue(3, 16);
     }
