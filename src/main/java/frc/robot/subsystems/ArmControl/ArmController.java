@@ -411,6 +411,8 @@ public class ArmController extends SubsystemBase {
 
     public void doTransition_Back_L4() {
         Carry.setNextNode(Back_L4);
+        Back_L3.setNextNode(Back_L4);
+        Back_L4.setNextNode(BackScore_L4);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kBackward);
     }
 
@@ -422,6 +424,8 @@ public class ArmController extends SubsystemBase {
 
     public void doTransition_Back_L3() {
         Carry.setNextNode(Back_L3);
+        Back_L4.setNextNode(Back_L3);
+        Back_L3.setNextNode(BackScore_L3);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kBackward);
     }
 
@@ -433,6 +437,7 @@ public class ArmController extends SubsystemBase {
 
     public void doTransition_Front_L2() {
         Carry.setNextNode(Front_L2);
+        Front_L1.setNextNode(Front_L2);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
     }
 
@@ -444,6 +449,8 @@ public class ArmController extends SubsystemBase {
 
     public void doTransition_Front_L1() {
         Carry.setNextNode(Front_L1);
+        Front_L2.setNextNode(Front_L1);
+        Front_L1.setNextNode(FrontScore_L1);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
     }
 
@@ -563,6 +570,8 @@ public class ArmController extends SubsystemBase {
 
     public void doRemoveAlgaeHigh() {
         Carry.setNextNode(RemoveAlgaeHigh);
+        RemoveAlgaeLow.setNextNode(RemoveAlgaeHigh);
+        RemoveAlgaeHigh.setNextNode(ProcessorAlgae);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
     }
 
@@ -574,6 +583,8 @@ public class ArmController extends SubsystemBase {
 
     public void doRemoveAlgaeLow() {
         Carry.setNextNode(RemoveAlgaeLow);
+        RemoveAlgaeHigh.setNextNode(RemoveAlgaeLow);
+        RemoveAlgaeLow.setNextNode(ProcessorAlgae);
         RobotContainer.m_targeting.setLineUpOrientation(LineUpOrientation.kForward);
     }
 
