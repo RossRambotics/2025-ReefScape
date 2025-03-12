@@ -36,7 +36,7 @@ public class RunPathToTarget extends Command {
         Command c = null;
 
         // if less than 1 meter away, just drive to the score pose target
-        if (distance > 1.0) {
+        if (distance > 100.0) {
             // Create the constraints to use while pathfinding
             PathConstraints constraints = new PathConstraints(
                     2.0, 2.0,
@@ -51,11 +51,11 @@ public class RunPathToTarget extends Command {
         }
 
         if (c == null) {
-            m_pathFindingCommand = new ReefLineUp3(m_drivetrain, m_drive,
+            m_pathFindingCommand = new ReefLineUp4(m_drivetrain, m_drive,
                     RobotContainer.m_targeting::getScoreTargetPose);
         } else {
             m_pathFindingCommand = c
-                    .andThen(new ReefLineUp3(m_drivetrain, m_drive, RobotContainer.m_targeting::getScoreTargetPose));
+                    .andThen(new ReefLineUp4(m_drivetrain, m_drive, RobotContainer.m_targeting::getScoreTargetPose));
         }
 
         m_pathFindingCommand.schedule();

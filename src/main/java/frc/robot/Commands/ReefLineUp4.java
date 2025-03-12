@@ -13,6 +13,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -69,7 +70,7 @@ public class ReefLineUp4 extends Command {
             m_GE_isAtGoal = Shuffleboard.getTab("ReefLineUp4").add("ReefLineUp_isAtGoal", false).getEntry();
         }
         // Use addRequirements() here to declare subsystem dependencies.
-        // addRequirements(drivetrain);
+        addRequirements(drivetrain);
     }
 
     // Called when the command is initially scheduled.
@@ -83,6 +84,15 @@ public class ReefLineUp4 extends Command {
         m_isFinished = false;
         m_stopTimer.stop();
         m_stopTimer.reset();
+
+        kS = m_GE_PID_kS.getDouble(kS);
+        m_xPID.setP(m_GE_PID_kP.getDouble(kP));
+        m_xPID.setI(m_GE_PID_kI.getDouble(kI));
+        m_xPID.setD(m_GE_PID_kD.getDouble(kD));
+        m_yPID.setP(m_GE_PID_kP.getDouble(kP));
+        m_yPID.setI(m_GE_PID_kI.getDouble(kI));
+        m_yPID.setD(m_GE_PID_kD.getDouble(kD));
+        m_GE_bUpdatePID.setBoolean(false);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -117,17 +127,29 @@ public class ReefLineUp4 extends Command {
             m_stopTimer.stop();
         }
 
-        // prepare static friction
-        double sX = -Math.copySign(kS, distX);
-        double sY = -Math.copySign(kS, distY);
-
         // apply PID control
-        double velX = -m_xPID.calculate(distX) + sX;
-        double velY = -m_yPID.calculate(distY) + sY;
+        double velX = m_xPID.calculate(distX);
+        double velY = m_yPID.calculate(distY);
+
+        // prepare static friction
+        double sX = Math.copySign(kS, velX);
+        double sY = Math.copySign(kS, velY);
+
+        // add static friction
+        velX += sX;
+        velY += sY;
 
         // clamp output
-        velX = MathUtil.clamp(velX, -1.0, 1.0);
-        velY = MathUtil.clamp(velY, -1.0, 1.0);
+        velX = -MathUtil.clamp(velX, -1.0, 1.0);
+        velY = -MathUtil.clamp(velY, -1.0, 1.0);
+
+        if (Math.abs(velX) < kS) {
+            velX = 0;
+        }
+
+        if (Math.abs(velY) < kS) {
+            velY = 0;
+        }
 
         // drive!
         m_drivetrain.setControl(m_drive
@@ -151,8 +173,8 @@ public class ReefLineUp4 extends Command {
             m_GE_bUpdatePID.setBoolean(false);
         }
 
-        // DataLogManager.log("Vel X: " + velX + " Y: " + velY + " Error X: " + distX +
-        // " Y:" + distY);
+        DataLogManager.log("kS: " + kS + " sX: " + sX + " Vel X: " + velX + " Y: " + velY + " Error X: " + distX +
+                " Y:" + distY);
     }
 
     private void stop() {

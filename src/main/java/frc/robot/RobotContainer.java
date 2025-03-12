@@ -62,7 +62,7 @@ import frc.util.SlewRateLimiterWithSupplier;
 
 public class RobotContainer {
     // Subsystems
-    final static public boolean isTuning = false;
+    final static public boolean isTuning = true;
 
     final static public ArmBase m_armBase = new ArmBase();
     final static public ArmExtension m_armExtension = new ArmExtension();
@@ -98,7 +98,7 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     public static SwerveRequest.FieldCentricFacingAngle theTargetDrive = null;
     public final SwerveRequest.FieldCentricFacingAngle targetDrive = new SwerveRequest.FieldCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.01) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
