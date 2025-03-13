@@ -65,7 +65,7 @@ public class VisionForOdometry extends SubsystemBase {
             if (m_LastBackPose.getTranslation().getDistance(llMeasurement.pose.getTranslation()) > 1.0) {
                 m_GE_Back_IgnoredCount.setDouble(m_GE_Back_IgnoredCount.getDouble(0) + 1);
             } else {
-                RobotContainer.drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+                RobotContainer.drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
                 RobotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose,
                         Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
             }

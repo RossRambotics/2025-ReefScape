@@ -36,10 +36,10 @@ public class RunPathToTarget extends Command {
         Command c = null;
 
         // if less than 1 meter away, just drive to the score pose target
-        if (distance > 100.0) {
+        if (distance > 0.5) {
             // Create the constraints to use while pathfinding
             PathConstraints constraints = new PathConstraints(
-                    2.0, 2.0,
+                    3.0, 2.5,
                     Units.degreesToRadians(540), Units.degreesToRadians(720));
 
             // Since AutoBuilder is configured, we can use it to build pathfinding commands
