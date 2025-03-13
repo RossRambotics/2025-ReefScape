@@ -8,6 +8,7 @@ import org.opencv.objdetect.CascadeClassifier;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -122,6 +123,8 @@ public class Targeting extends SubsystemBase {
         m_isReef_6.set(false);
 
         // Shuffleboard.getTab("Targeting").add(this.getTargetLastReefIDCmd());
+        m_aprilTagFieldLayout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+
     }
 
     @Override
