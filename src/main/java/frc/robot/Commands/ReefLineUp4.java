@@ -100,6 +100,8 @@ public class ReefLineUp4 extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        // assume the worst ... ;)
+        RobotContainer.m_LEDs.setIsAligned(false);
 
         // calculate error
         double distX = m_targetPose.getTranslation().getX() - m_drivetrain.getState().Pose.getX();
@@ -117,20 +119,20 @@ public class ReefLineUp4 extends Command {
                 m_stopTimer.start();
             }
 
-            // If we have been stopped long enough end command
+            // If we have been stopped long enough so end command
             if (m_stopTimer.hasElapsed(kStopTime)) {
                 m_GE_isAtGoal.setBoolean(true);
                 m_isFinished = true;
-                return;
             }
+
+            // we are lined up, but waiting for the timer so skip the rest
+            return;
         } else {
             // keep going and stop the timer
             m_GE_isAtGoal.setBoolean(false);
             m_isFinished = false;
             m_stopTimer.stop();
         }
-
-        RobotContainer.m_LEDs.setIsAligned(false);
 
         // apply PID control
         double velX = m_xPID.calculate(distX);
@@ -147,14 +149,6 @@ public class ReefLineUp4 extends Command {
         // clamp output
         velX = -MathUtil.clamp(velX, -1.0, 1.0);
         velY = -MathUtil.clamp(velY, -1.0, 1.0);
-
-        if (Math.abs(velX) < kS) {
-            velX = 0;
-        }
-
-        if (Math.abs(velY) < kS) {
-            velY = 0;
-        }
 
         // drive!
         m_drivetrain.setControl(m_drive
