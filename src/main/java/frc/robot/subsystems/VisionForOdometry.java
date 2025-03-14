@@ -25,6 +25,7 @@ public class VisionForOdometry extends SubsystemBase {
     private Pose2d m_LastBackPose = new Pose2d();
     private NetworkTable m_LL_Back = null;
     private NetworkTableEntry m_throttle = null;
+    private boolean m_isTagFound = false;
 
     /** Creates a new Vision. */
     public VisionForOdometry() {
@@ -59,6 +60,7 @@ public class VisionForOdometry extends SubsystemBase {
 
         // make sure we have a valid measurement and we are not moving too fast
         if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 2.0) {
+            m_isTagFound = true;
             m_GE_Back_TagCount.setDouble(llMeasurement.tagCount);
 
             // Check if pose is with in 1 meter of last pose
@@ -70,6 +72,13 @@ public class VisionForOdometry extends SubsystemBase {
                         Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
             }
             m_LastBackPose = llMeasurement.pose;
+        } else {
+            m_isTagFound = false;
+            m_GE_Back_TagCount.setDouble(0);
         }
+    }
+
+    public boolean isTagFound() {
+        return m_isTagFound;
     }
 }

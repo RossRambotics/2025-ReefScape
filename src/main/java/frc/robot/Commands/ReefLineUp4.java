@@ -93,6 +93,8 @@ public class ReefLineUp4 extends Command {
         m_yPID.setI(m_GE_PID_kI.getDouble(kI));
         m_yPID.setD(m_GE_PID_kD.getDouble(kD));
         m_GE_bUpdatePID.setBoolean(false);
+        m_GE_isAtGoal.setBoolean(false);
+
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -107,6 +109,7 @@ public class ReefLineUp4 extends Command {
 
         if (Math.abs(distX) < kTolerance && Math.abs(distY) < kTolerance) {
             this.stop();
+            RobotContainer.m_LEDs.setIsAligned(true);
 
             // If timer isn't running start it
             if (!m_stopTimer.isRunning()) {
@@ -126,6 +129,8 @@ public class ReefLineUp4 extends Command {
             m_isFinished = false;
             m_stopTimer.stop();
         }
+
+        RobotContainer.m_LEDs.setIsAligned(false);
 
         // apply PID control
         double velX = m_xPID.calculate(distX);
@@ -189,6 +194,7 @@ public class ReefLineUp4 extends Command {
     @Override
     public void end(boolean interrupted) {
         this.stop();
+        RobotContainer.m_LEDs.setIsAligned(false);
     }
 
     // Returns true when the command should end.

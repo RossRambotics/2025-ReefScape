@@ -50,6 +50,7 @@ import frc.robot.subsystems.ArmLocker;
 import frc.robot.subsystems.ButtonBox;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.ManualArmControl;
 import frc.robot.subsystems.RangeFinder;
 import frc.robot.subsystems.SpeedNanny;
@@ -86,6 +87,7 @@ public class RobotContainer {
     final static public SpeedNanny m_speedNanny = new SpeedNanny();
     final static public Targeting m_targeting = new Targeting();
     final static public ButtonBox m_buttonBox = new ButtonBox();
+    final static public LEDs m_LEDs = new LEDs();
     final static public Mechanisms m_mechanisms = new Mechanisms();
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
