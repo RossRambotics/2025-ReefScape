@@ -6,16 +6,7 @@
       }
     },
     "transitory": {
-      "Intake": {
-        "open": true
-      },
       "Shuffleboard": {
-        "ArmBase": {
-          "open": true
-        },
-        "ArmController": {
-          "open": true
-        },
         "Intake": {
           "Intake.IntakeCommand": {
             "open": true
@@ -27,12 +18,12 @@
             "open": true
           }
         },
+        "ReefLineUp4": {
+          "open": true
+        },
         "Targeting": {
           "open": true
         },
-        "open": true
-      },
-      "limelight-back": {
         "open": true
       }
     },
@@ -126,6 +117,8 @@
       "/Shuffleboard/Intake/Intake.OuttakeAlgaeCommand": "Command",
       "/Shuffleboard/Intake/Intake.OuttakeCommand": "Command",
       "/Shuffleboard/Intake/Intake.StopCommand": "Command",
+      "/Shuffleboard/LEDs/PixelOff": "Command",
+      "/Shuffleboard/LEDs/PixelOn": "Command",
       "/Shuffleboard/Targeting/Targeting.TargetLastReefID": "Command",
       "/Shuffleboard/Wrist/Wrist.ZeroAngle": "Command",
       "/SmartDashboard/Alerts": "Alerts",
