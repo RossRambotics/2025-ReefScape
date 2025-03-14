@@ -84,6 +84,11 @@ public class ReefLineUp4 extends Command {
         m_isFinished = false;
         m_stopTimer.stop();
         m_stopTimer.reset();
+        m_GE_isAtGoal.setBoolean(false);
+
+        if (!RobotContainer.isTuning) {
+            return;
+        }
 
         kS = m_GE_PID_kS.getDouble(kS);
         m_xPID.setP(m_GE_PID_kP.getDouble(kP));
@@ -93,7 +98,6 @@ public class ReefLineUp4 extends Command {
         m_yPID.setI(m_GE_PID_kI.getDouble(kI));
         m_yPID.setD(m_GE_PID_kD.getDouble(kD));
         m_GE_bUpdatePID.setBoolean(false);
-        m_GE_isAtGoal.setBoolean(false);
 
     }
 
@@ -156,6 +160,10 @@ public class ReefLineUp4 extends Command {
                 .withVelocityX(velX) // Drive forward with negative Y(forward)
                 .withVelocityY(velY) // Drive left with negative X (left)
                 .withTargetDirection(m_targetPose.getRotation()));
+
+        if (!RobotContainer.isTuning) {
+            return;
+        }
 
         // Check if we should execute this cycle
         if (!m_executionLimiter.shouldExecute()) {
