@@ -13,6 +13,18 @@
         {
           "type": "named",
           "data": {
+            "name": "Arm.Back_L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.PathToTarget"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Reef.2"
           }
         },
@@ -23,22 +35,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Reef 2 Right"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Score.L4"
-                }
-              }
-            ]
+            "name": "Score.L4"
           }
         },
         {
@@ -78,22 +77,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RightSource.Reef3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Score.L4"
-                }
-              }
-            ]
+            "pathName": "RightSource.Reef3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score.L4"
           }
         }
       ]

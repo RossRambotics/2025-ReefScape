@@ -141,10 +141,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reef.LineUp", new ReefLineUp3(drivetrain,
                 targetDrive, RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.0));
         NamedCommands.registerCommand("Arm.Carry", RobotContainer.m_armController.getTransition_Carry());
+        NamedCommands.registerCommand("Reef.PathToTarget", new RunPathToTarget(drivetrain, targetDrive));
 
         NamedCommands.registerCommand("Score.L4",
                 new WaitCommand(0.1)
-                        .andThen(RobotContainer.m_armController.getTransition_Back_L4())
+                        // .andThen(RobotContainer.m_armController.getTransition_Back_L4())
                         .andThen(new ReefLineUp3(drivetrain,
                                 targetDrive,
                                 RobotContainer.m_targeting::getScoreTargetPose).withTimeout(5.01))
@@ -225,8 +226,9 @@ public class RobotContainer {
                 ));
 
         // snaps the robot to target angle
-        targetDrive.HeadingController = new PhoenixPIDController(7.0, 0.0, 0.20);
+        targetDrive.HeadingController = new PhoenixPIDController(20.0, 0.0, 0.0);
         targetDrive.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+        targetDrive.HeadingController.setIZone(5.0);
 
         joystick.leftBumper().whileTrue(
                 drivetrain.applyRequest(() -> targetDrive
