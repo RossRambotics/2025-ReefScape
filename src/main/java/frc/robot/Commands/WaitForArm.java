@@ -46,7 +46,7 @@ public class WaitForArm extends Command {
                 && m_wrist.isStationary()
                 && m_armExtension.isStationary()) {
             // If all subsystems are stationary, check the timer
-            if (m_timer.hasElapsed(0.1)) {
+            if (m_timer.hasElapsed(0.2)) {
                 // If they have been stationary for X seconds, the command can finish
                 m_finished = true;
             }
