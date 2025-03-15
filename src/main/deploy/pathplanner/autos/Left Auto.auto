@@ -53,15 +53,12 @@
           }
         },
         {
-<<<<<<< HEAD
           "type": "named",
           "data": {
             "name": "Intake.Stop"
           }
         },
         {
-=======
->>>>>>> cc83b32 (autochanges)
           "type": "named",
           "data": {
             "name": "Reef.3"
