@@ -19,12 +19,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Reef.PathToTarget"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Reef.2"
           }
         },
@@ -32,6 +26,12 @@
           "type": "named",
           "data": {
             "name": "Reef.Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.PathToTarget"
           }
         },
         {
