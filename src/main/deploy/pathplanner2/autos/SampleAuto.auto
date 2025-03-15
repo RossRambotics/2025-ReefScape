@@ -1,0 +1,187 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Reef.1.Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.LineUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.Back_L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.WaitForArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.BackScore_L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.WaitForArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.OutTake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.Stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.Carry"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.HumanPlayer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Reef.1.Right.Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.InTake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.Stop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightSource.Reef3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reef.LineUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.Back_L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.WaitForArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.BackScore_L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.WaitForArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.OutTake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake.Stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.Carry"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
