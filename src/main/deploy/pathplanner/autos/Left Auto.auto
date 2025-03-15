@@ -29,9 +29,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Reef.PathToTarget"
+            "pathName": "Reef 2 Right"
           }
         },
         {
@@ -74,6 +74,12 @@
           "type": "named",
           "data": {
             "name": "Reef.Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm.Back_L4"
           }
         },
         {

@@ -41,6 +41,7 @@ import frc.robot.Commands.AutoCreepIntake;
 import frc.robot.Commands.ReefLineUp;
 import frc.robot.Commands.ReefLineUp2;
 import frc.robot.Commands.ReefLineUp3;
+import frc.robot.Commands.ReefLineUp4;
 import frc.robot.Commands.RunPathToTarget;
 import frc.robot.Commands.WaitForArm;
 import frc.robot.generated.TunerConstants;
@@ -123,7 +124,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Arm.Calibrate", m_armExtension.getCalibrateAndZero().withTimeout(0.5)
                 .andThen(RobotContainer.m_armController.getTransition_Start()));
         NamedCommands.registerCommand("Arm.WaitForArm", new WaitForArm());
-        NamedCommands.registerCommand("Arm.Back_L4", RobotContainer.m_armController.getTransition_Back_L4());
+        NamedCommands.registerCommand("Arm.Back_L4", RobotContainer.m_armController.getAutoTransition_Back_L4());
         NamedCommands.registerCommand("Arm.HumanPlayer",
                 RobotContainer.m_armController.getTransition_HumanPlayerCoral());
         NamedCommands.registerCommand("Arm.BackScore_L4", RobotContainer.m_armController.getTransition_BackScore_L4());
@@ -146,7 +147,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Score.L4",
                 new WaitCommand(0.1)
                         // .andThen(RobotContainer.m_armController.getTransition_Back_L4())
-                        .andThen(new ReefLineUp3(drivetrain,
+                        .andThen(new ReefLineUp4(drivetrain,
                                 targetDrive,
                                 RobotContainer.m_targeting::getScoreTargetPose).withTimeout(5.01))
                         // .andThen(RobotContainer.m_armController.getTransition_Back_L4())

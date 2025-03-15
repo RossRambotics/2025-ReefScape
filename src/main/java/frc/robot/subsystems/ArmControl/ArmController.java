@@ -403,6 +403,12 @@ public class ArmController extends SubsystemBase {
         return c;
     }
 
+    public Command getAutoTransition_Back_L4() {
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(Back_L4));
+        c.setName("Back_L4");
+        return c;
+    }
+
     public Command getTransition_Back_L4() {
         Command c = Commands.runOnce(() -> doTransition_Back_L4());
         c.setName("Back_L4");
