@@ -42,7 +42,7 @@ import static edu.wpi.first.units.Units.*;
 
 public class Intake extends SubsystemBase {
     // Intake States
-    // private CANrange m_CoralSensor = new CANrange(99);
+    private CANrange m_CoralSensor = new CANrange(22);
     private int m_CurrentState = 0;
     final private int m_kIdle = 0;
     final private int m_kIntake = 1;
@@ -151,9 +151,9 @@ public class Intake extends SubsystemBase {
         Shuffleboard.getTab("Intake").add(this.getOuttakeAlgaeCommand());
         Shuffleboard.getTab("Intake").add(this.getIdleCommand());
 
-        // var cfgcs = m_CoralSensor.getConfigurator();
+        var cfgcs = m_CoralSensor.getConfigurator();
         var prox = new ProximityParamsConfigs()
-                .withProximityThreshold(0.05)
+                .withProximityThreshold(0.02)
                 .withProximityHysteresis(0.01);
         var fov = new FovParamsConfigs()
                 .withFOVRangeX(6.75) // 6.75 is the minimum FOV value
@@ -162,9 +162,9 @@ public class Intake extends SubsystemBase {
                 .withUpdateMode(UpdateModeValue.ShortRangeUserFreq)
                 .withUpdateFrequency(50);
 
-        // cfgcs.apply(prox);
-        // cfgcs.apply(fov);
-        // cfgcs.apply(tof);
+        cfgcs.apply(prox);
+        cfgcs.apply(fov);
+        cfgcs.apply(tof);
 
         Trigger coralSensorTrigger = new Trigger(this::isCoralSensorDetected);
         coralSensorTrigger.onTrue(this.getStopCommand());
@@ -209,9 +209,9 @@ public class Intake extends SubsystemBase {
 
     // Method to check if the m_CoralSensor is detected
     public boolean isCoralSensorDetected() {
-        // return m_CoralSensor.getIsDetected().getValue(); // Replace with the actual
+        return m_CoralSensor.getIsDetected().getValue(); // Replace with the actual
         // method to check sensor state
-        return false;
+        // return false;
     }
 
     private void setGoal(double leftVelocityRPS, double rightVelocityRPS) {
