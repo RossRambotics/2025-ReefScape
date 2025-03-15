@@ -53,18 +53,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.Stop"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Reef.5"

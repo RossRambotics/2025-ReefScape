@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Commands.AutoCreepIntake;
+import frc.robot.Commands.EatCoralPlayerStation;
 import frc.robot.Commands.ReefLineUp;
 import frc.robot.Commands.ReefLineUp2;
 import frc.robot.Commands.ReefLineUp3;
@@ -137,7 +138,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reef.Left", RobotContainer.m_buttonBox.getLeftReefCmd());
         NamedCommands.registerCommand("Reef.Right", RobotContainer.m_buttonBox.getRightReefCmd());
         NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand().withTimeout(0.5));
-        NamedCommands.registerCommand("Intake.InTake", RobotContainer.m_intake.getIntakeCommand().withTimeout(0.5));
+        NamedCommands.registerCommand("Intake.InTake", new EatCoralPlayerStation(m_intake));
         NamedCommands.registerCommand("Intake.Stop", RobotContainer.m_intake.getStopCommand());
         NamedCommands.registerCommand("Reef.LineUp", new ReefLineUp3(drivetrain,
                 targetDrive, RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.0));
