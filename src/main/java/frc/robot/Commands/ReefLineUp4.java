@@ -32,7 +32,7 @@ public class ReefLineUp4 extends Command {
     private final double kD = 0.1;
     private double kS = 0.15;
     private final double kTolerance = 0.02;
-    private final double kStopTime = 0.2;
+    private final double kStopTime = 0.02;
     private final PIDController m_xPID = new PIDController(kP, kI, kD);
     private final PIDController m_yPID = new PIDController(kP, kI, kD);
     private static GenericEntry m_GE_PID_kS = null;

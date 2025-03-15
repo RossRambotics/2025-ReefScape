@@ -64,6 +64,9 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(4).onTrue(RobotContainer.m_armLocker.getArmLockCmd());
         joystick1.button(5).onTrue(RobotContainer.m_armLocker.getArmUnlockCmd());
 
+        Shuffleboard.getTab("ButtonBox").add(RobotContainer.m_armLocker.getArmLockCmd().withName("ClimbLock"));
+        Shuffleboard.getTab("ButtonBox").add(RobotContainer.m_armLocker.getArmUnlockCmd().withName("ClimbUnlock"));
+
         joystick2.button(9).onTrue(Commands.runOnce(() -> doL1()));
         joystick2.button(10).onTrue(Commands.runOnce(() -> doL2()));
         joystick2.button(11).onTrue(Commands.runOnce(() -> doL3()));
@@ -95,12 +98,12 @@ public class ButtonBox extends SubsystemBase {
         joystick1.button(8).onTrue(this.getReef6Cmd());
 
         // toggle Coral Mode
-        joystick1.axisLessThan(0, 0.5).onTrue(Commands.runOnce(() -> {
+        joystick1.axisGreaterThan(0, 0.5).onTrue(Commands.runOnce(() -> {
             m_isCoralMode = false;
             RobotContainer.m_wrist.algaeMode();
         }));
 
-        joystick1.axisGreaterThan(0, 0.5).onTrue(Commands.runOnce(() -> {
+        joystick1.axisLessThan(0, 0.5).onTrue(Commands.runOnce(() -> {
             m_isCoralMode = true;
             RobotContainer.m_wrist.coralMode();
         }));

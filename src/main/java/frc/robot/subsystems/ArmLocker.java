@@ -29,7 +29,7 @@ public class ArmLocker extends SubsystemBase {
      */
     public void lock() {
         m_servo.setAngle(23); // Adjust the angle as needed for the lock position
-        RobotContainer.m_armBase.climbMode();
+        // RobotContainer.m_armBase.climbMode();
     }
 
     /**
@@ -37,7 +37,7 @@ public class ArmLocker extends SubsystemBase {
      */
     public void unlock() {
         m_servo.setAngle(80); // Adjust the angle as needed for the unlock position
-        RobotContainer.m_armBase.normalMode();
+        // RobotContainer.m_armBase.normalMode();
     }
 
     Command getArmLockCmd() {
