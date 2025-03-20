@@ -6,25 +6,19 @@
       }
     },
     "transitory": {
+      "Intake": {
+        "open": true
+      },
       "Shuffleboard": {
         "Intake": {
-          "Intake.IntakeCommand": {
-            "open": true
-          },
-          "Intake.OuttakeCommand": {
-            "open": true
-          },
-          "Intake.StopCommand": {
-            "open": true
-          }
+          "open": true
         },
         "ReefLineUp4": {
           "open": true
         },
         "Targeting": {
           "open": true
-        },
-        "open": true
+        }
       }
     },
     "types": {
@@ -82,6 +76,8 @@
       "/Shuffleboard/ButtonBox/Calibrate Arm": "Command",
       "/Shuffleboard/ButtonBox/Climb": "Command",
       "/Shuffleboard/ButtonBox/Climb Arm": "Command",
+      "/Shuffleboard/ButtonBox/ClimbLock": "Command",
+      "/Shuffleboard/ButtonBox/ClimbUnlock": "Command",
       "/Shuffleboard/ButtonBox/Forward Orientation": "Command",
       "/Shuffleboard/ButtonBox/High": "Command",
       "/Shuffleboard/ButtonBox/High Arm": "Command",
@@ -237,6 +233,16 @@
           "visible": true
         }
       },
+      "/Shuffleboard/Intake/Intake.IntakeCommand": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Intake/Intake.StopCommand": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Auto Mode": {
         "window": {
           "visible": true
@@ -245,6 +251,12 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "glass@2": {
+      "open": true
+    },
     "visible": true
   },
   "NetworkTables Settings": {

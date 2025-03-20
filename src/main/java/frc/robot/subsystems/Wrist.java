@@ -66,7 +66,7 @@ public class Wrist extends SubsystemBase {
         CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
         cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
         cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        cc_cfg.MagnetSensor.withMagnetOffset(Rotations.of(0.11));
+        cc_cfg.MagnetSensor.withMagnetOffset(Rotations.of(0.11 + .334));
         m_wristCANcoder.getConfigurator().apply(cc_cfg);
 
         // TalonFX configuration
