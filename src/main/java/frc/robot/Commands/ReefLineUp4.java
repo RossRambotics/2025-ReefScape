@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.util.RandomExecutionLimiter;
@@ -46,6 +48,7 @@ public class ReefLineUp4 extends Command {
     private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
     private boolean m_isFinished = false;
     private Timer m_stopTimer = new Timer();
+    private Command m_resetIsAlignedCmd = null;
 
     /** Creates a new ReefLineUp. */
     public ReefLineUp4(CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentricFacingAngle drive,
@@ -71,6 +74,10 @@ public class ReefLineUp4 extends Command {
         }
         // Use addRequirements() here to declare subsystem dependencies.
         // addRequirements(drivetrain);
+
+        m_resetIsAlignedCmd = new WaitCommand(0.25).andThen(Commands.runOnce(() -> {
+            RobotContainer.m_LEDs.setIsAligned(false);
+        }));
     }
 
     // Called when the command is initially scheduled.
@@ -98,6 +105,11 @@ public class ReefLineUp4 extends Command {
         m_yPID.setI(m_GE_PID_kI.getDouble(kI));
         m_yPID.setD(m_GE_PID_kD.getDouble(kD));
         m_GE_bUpdatePID.setBoolean(false);
+
+        // Reset the is aligned delay for the LEDs
+        if (m_resetIsAlignedCmd.isScheduled()) {
+            m_resetIsAlignedCmd.cancel();
+        }
 
     }
 
@@ -196,7 +208,10 @@ public class ReefLineUp4 extends Command {
     @Override
     public void end(boolean interrupted) {
         this.stop();
-        RobotContainer.m_LEDs.setIsAligned(false);
+
+        if (m_isFinished) {
+            m_resetIsAlignedCmd.schedule();
+        }
     }
 
     // Returns true when the command should end.
