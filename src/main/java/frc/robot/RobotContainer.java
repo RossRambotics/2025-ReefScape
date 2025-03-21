@@ -51,6 +51,7 @@ import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmLocker;
 import frc.robot.subsystems.ButtonBox;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CoralTracking;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.ManualArmControl;
@@ -75,6 +76,7 @@ public class RobotContainer {
     final static public VisionForOdometry m_visionForOdometry = new VisionForOdometry();
     final static public ManualArmControl m_manualArmControl = new ManualArmControl();
     final static public ArmLocker m_armLocker = new ArmLocker();
+    final static public CoralTracking m_coralTracking = new CoralTracking();
 
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
 
@@ -238,6 +240,16 @@ public class RobotContainer {
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative Y(forward)
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
                         .withTargetDirection(m_targeting.getTargetAngle())));
+
+        // uncomment to enable coral tracking
+        // joystick.leftBumper()
+        // .whileTrue(drivetrain
+        // .applyRequest(() -> robotDrive
+        // .withVelocityX(m_coralTracking.getGamePiece_VelocityX() / 2)
+        // .withVelocityY(m_coralTracking.getGamePiece_VelocityY() / 2)
+        // .withRotationalRate(m_coralTracking
+        // .getGamePiece_RotationalRate() / 2))
+        // .alongWith(m_coralTracking.NoteTrackingMode()));
 
         double nudge = 0.5;
         joystick.pov(0)

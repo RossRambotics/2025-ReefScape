@@ -44,6 +44,7 @@ public class LEDs extends SubsystemBase {
     private boolean m_isPanelDisabled = false;
     private boolean m_isAligned = false;
     private GenericEntry m_pixel = null;
+    boolean m_isCoralTrackingMode = false;
 
     Animation m_police = null;
 
@@ -83,7 +84,7 @@ public class LEDs extends SubsystemBase {
     @Override
     public void periodic() {
         // limit to 10x a second
-        if (m_Timer.advanceIfElapsed(0.05)) {
+        if (m_Timer.advanceIfElapsed(0.1)) {
             // Only run if not disabled
             m_even = !m_even;
             m_once = true;
@@ -96,6 +97,12 @@ public class LEDs extends SubsystemBase {
                     m_once = false;
                     m_candle.clearAnimation(0);
                 }
+                // if coral tracking mode enabled skip reef lights
+                if (m_isCoralTrackingMode) {
+                    return;
+                }
+
+                // do reef alignment lights
                 if (m_isAligned) {
                     this.showGreen();
                 } else if (RobotContainer.m_visionForOdometry.isTagFound()) {
@@ -135,8 +142,8 @@ public class LEDs extends SubsystemBase {
         m_candle.setLEDs(0, 225, 0, 0, kSTRIP_START + 0, kSTRIP_LENGTH);
     }
 
-    public void showOrange() {
-        m_candle.setLEDs(225, 40, 0, 40, kSTRIP_START + 0, kSTRIP_LENGTH);
+    public void showWhite() {
+        m_candle.setLEDs(0, 0, 0, 80, kSTRIP_START + 0, kSTRIP_LENGTH);
     }
 
     public Void showPoliceLights() {
@@ -171,10 +178,10 @@ public class LEDs extends SubsystemBase {
         m_Timer.hasElapsed(0.2);
         if (m_even) {
             // System.out.println("green");
-            m_candle.setLEDs(0, 255, 0, 0, kSTRIP_START + 0, 24);
+            m_candle.setLEDs(0, 255, 0, 0, kSTRIP_START + 0, kSTRIP_LENGTH);
         } else {
             // System.out.println("yellow");
-            m_candle.setLEDs(225, 225, 0, 0, kSTRIP_START + 0, 24);
+            m_candle.setLEDs(225, 225, 0, 0, kSTRIP_START + 0, kSTRIP_LENGTH);
         }
         return null;
     }
@@ -366,4 +373,28 @@ public class LEDs extends SubsystemBase {
 
     }
 
+    public void coralTrackingMode() {
+        m_isCoralTrackingMode = true;
+
+        // if we have a note go orange
+        if (RobotContainer.m_intake.isCoralSensorDetected()) {
+            this.showWhite();
+            return;
+        }
+        if (RobotContainer.m_coralTracking.isGamePieceFound()) {
+            this.showTrackingLights();
+        } else {
+            this.showRed();
+        }
+    }
+
+    public void noTrackingMode() {
+        m_isCoralTrackingMode = false;
+
+        if (RobotContainer.m_intake.isCoralSensorDetected()) {
+            this.showWhite();
+        } else {
+            this.showBlack();
+        }
+    }
 }
