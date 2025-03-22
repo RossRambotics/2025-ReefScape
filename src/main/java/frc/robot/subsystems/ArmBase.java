@@ -373,8 +373,8 @@ public class ArmBase extends SubsystemBase {
 
         if (newGoal.in(Degrees) > 120) {
             newGoal = Degrees.of(120);
-        } else if (newGoal.in(Degrees) < -30) {
-            newGoal = Degrees.of(-30);
+        } else if (newGoal.in(Degrees) < -35) {
+            newGoal = Degrees.of(-35);
         }
 
         setGoal(newGoal);

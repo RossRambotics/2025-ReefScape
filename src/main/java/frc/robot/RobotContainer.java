@@ -138,7 +138,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reef.Left", RobotContainer.m_buttonBox.getLeftReefCmd());
         NamedCommands.registerCommand("Reef.Right", RobotContainer.m_buttonBox.getRightReefCmd());
         NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand().withTimeout(0.5));
-        NamedCommands.registerCommand("Intake.InTake", new EatCoralPlayerStation(m_intake));
+        // NamedCommands.registerCommand("Intake.InTake", new
+        // EatCoralPlayerStation(m_intake));
+        NamedCommands.registerCommand("Intake.InTake", RobotContainer.m_intake.getIntakeCommand().withTimeout(0.5));
         NamedCommands.registerCommand("Intake.Stop", RobotContainer.m_intake.getStopCommand());
         NamedCommands.registerCommand("Reef.LineUp", new ReefLineUp3(drivetrain,
                 targetDrive, RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.0));
@@ -168,6 +170,10 @@ public class RobotContainer {
 
         new EventTrigger("Event.CoralStation").onTrue(
                 RobotContainer.m_armController.getTransition_HumanPlayerCoral());
+
+        new EventTrigger("Event.GroundCoral").onTrue(
+                RobotContainer.m_armController.getTransition_GroundCoral()
+                        .andThen(RobotContainer.m_intake.getIntakeCommand()));
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -345,6 +351,8 @@ public class RobotContainer {
         joystick.a().onFalse(m_intake.getStopCommand());
         joystick.b().onTrue(m_intake.getOuttakeCommand());
         joystick.b().onFalse(m_intake.getStopCommand());
+
+        joystick.leftStick().onTrue(m_armController.getTransition_GroundCoral());
 
     }
 

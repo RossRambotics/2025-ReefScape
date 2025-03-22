@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.587852112676056,
-        "y": 5.172975352112676
+        "x": 3.672887323943661,
+        "y": 5.3713908450704215
       },
       "prevControl": {
-        "x": 2.902187161952684,
-        "y": 5.778733727212678
+        "x": 2.987222373220289,
+        "y": 5.977149220170424
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Reef5Right"
     }
   ],
   "rotationTargets": [],

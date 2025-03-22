@@ -19,49 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Reef.2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Reef.Right"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Reef 2 Right"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score.L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Reef.3.Right.Right.Source"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.InTake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.Stop"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Reef.3"
+            "name": "Reef.6"
           }
         },
         {
@@ -71,15 +29,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Arm.Back_L4"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "RightSource.Reef3"
+            "pathName": "Reef 6 Left"
           }
         },
         {
@@ -91,13 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Reef 3 Left Right Source"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake.InTake"
+            "pathName": "Reef 6 Left Ground 1"
           }
         },
         {
@@ -109,13 +55,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Arm.Back_L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Reef.3"
+            "name": "Reef.5"
           }
         },
         {
@@ -125,15 +65,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Arm.Back_L4"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Right Source Reef 3 Right"
+            "pathName": "Ground 1 Reef 5 Right"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Score.L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Reef 5 Right Left Source"
           }
         }
       ]

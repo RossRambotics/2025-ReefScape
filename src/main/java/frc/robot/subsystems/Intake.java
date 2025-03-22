@@ -76,7 +76,7 @@ public class Intake extends SubsystemBase {
         // Configure stator current limits
         CurrentLimitsConfigs statorCurrentLimit = new CurrentLimitsConfigs();
         statorCurrentLimit.StatorCurrentLimitEnable = true;
-        statorCurrentLimit.StatorCurrentLimit = 40; // Current limit in amps
+        statorCurrentLimit.StatorCurrentLimit = 80; // Current limit in amps
         cfg.CurrentLimits = statorCurrentLimit;
 
         /* Configure gear ratio */
@@ -217,11 +217,12 @@ public class Intake extends SubsystemBase {
     }
 
     private void setGoal(double leftVelocityRPS, double rightVelocityRPS) {
-        m_LeftMotor.setControl(m_velocityVoltage.withVelocity(leftVelocityRPS));
-        m_Goal_Left_RPS.set(leftVelocityRPS);
+        // m_LeftMotor.setControl(m_velocityVoltage.withVelocity(leftVelocityRPS));
+        // m_Goal_Left_RPS.set(leftVelocityRPS);
 
-        m_RightMotor.setControl(m_velocityVoltage.withVelocity(-rightVelocityRPS));
-        m_Goal_Right_RPS.set(rightVelocityRPS);
+        // m_RightMotor.setControl(m_velocityVoltage.withVelocity(-rightVelocityRPS));
+        // m_Goal_Right_RPS.set(rightVelocityRPS);
+        m_LeftMotor.setVoltage(leftVelocityRPS / 8.3);
     }
 
     public Command getSetGoalCommand(double leftVelocityRPS, double rightVelocityRPS) {
@@ -233,11 +234,12 @@ public class Intake extends SubsystemBase {
     }
 
     private void doStop() {
-        if (RobotContainer.m_buttonBox.isCoralMode()) {
-            setGoal(0, 0);
-        } else {
-            setGoal(5, 5);
-        }
+        m_LeftMotor.stopMotor();
+        // if (RobotContainer.m_buttonBox.isCoralMode()) {
+        // setGoal(0, 0);
+        // } else {
+        // setGoal(5, 5);
+        // }
     }
 
     public Command getIdleCommand() {
@@ -250,7 +252,7 @@ public class Intake extends SubsystemBase {
 
     private void doIntake() {
         if (RobotContainer.m_buttonBox.isCoralMode()) {
-            setGoal(20, 12);
+            setGoal(75, 40);
         } else {
             setGoal(10, 10);
         }
@@ -262,7 +264,7 @@ public class Intake extends SubsystemBase {
 
     private void doOuttake() {
         if (RobotContainer.m_buttonBox.isCoralMode()) {
-            setGoal(-10, -10);
+            setGoal(-50, -10);
         } else {
             setGoal(-50, -50);
         }
