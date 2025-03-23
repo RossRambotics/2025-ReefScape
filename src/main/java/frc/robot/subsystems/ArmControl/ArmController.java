@@ -102,7 +102,7 @@ public class ArmController extends SubsystemBase {
         GroundCoral = m_armGraph.new GraphCommandNode("GroundCoral",
                 ArmController.getArmCommand(Degrees.of(-23.89),
                         Meters.of(-67.95),
-                        Degrees.of(-20.62))
+                        Degrees.of(-27.62))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("GroundCoral"));
