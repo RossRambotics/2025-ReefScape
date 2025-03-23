@@ -76,7 +76,7 @@ public class RobotContainer {
     final static public VisionForOdometry m_visionForOdometry = new VisionForOdometry();
     final static public ManualArmControl m_manualArmControl = new ManualArmControl();
     final static public ArmLocker m_armLocker = new ArmLocker();
-    final static public CoralTracking m_coralTracking = new CoralTracking();
+    // final static public CoralTracking m_coralTracking = new CoralTracking();
 
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
 
