@@ -24,6 +24,8 @@ public class VisionForOdometry extends SubsystemBase {
     private GenericEntry m_GE_Back_IgnoredCount = null;
     private Pose2d m_LastBackPose = new Pose2d();
     private NetworkTable m_LL_Back = null;
+    private NetworkTable m_LL_Front = null;
+
     private NetworkTableEntry m_throttle = null;
     private boolean m_isTagFound = false;
 
@@ -35,6 +37,8 @@ public class VisionForOdometry extends SubsystemBase {
         m_GE_Back_TagCount.setDouble(0);
 
         m_LL_Back = NetworkTableInstance.getDefault().getTable("limelight-back");
+        m_LL_Front = NetworkTableInstance.getDefault().getTable("limelight-front");
+
         m_throttle = m_LL_Back.getEntry("throttle_set");
 
     }
@@ -56,25 +60,44 @@ public class VisionForOdometry extends SubsystemBase {
         double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
         LimelightHelpers.SetRobotOrientation("limelight-back", headingDeg, 0, 0, 0, 0, 0);
-        var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+        LimelightHelpers.SetRobotOrientation("limelight-front", headingDeg, 0, 0, 0, 0, 0);
+
+        var llMeasurementBack = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+        m_isTagFound = false;
+        m_GE_Back_TagCount.setDouble(0);
 
         // make sure we have a valid measurement and we are not moving too fast
-        if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 2.0) {
+        if (llMeasurementBack != null && llMeasurementBack.tagCount > 0 && omegaRps < 2.0) {
             m_isTagFound = true;
-            m_GE_Back_TagCount.setDouble(llMeasurement.tagCount);
+            m_GE_Back_TagCount.setDouble(llMeasurementBack.tagCount);
 
             // Check if pose is with in 1 meter of last pose
-            if (m_LastBackPose.getTranslation().getDistance(llMeasurement.pose.getTranslation()) > 1.0) {
+            if (m_LastBackPose.getTranslation().getDistance(llMeasurementBack.pose.getTranslation()) > 1.0) {
                 m_GE_Back_IgnoredCount.setDouble(m_GE_Back_IgnoredCount.getDouble(0) + 1);
             } else {
                 RobotContainer.drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
-                RobotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose,
-                        Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
+                RobotContainer.drivetrain.addVisionMeasurement(llMeasurementBack.pose,
+                        Utils.fpgaToCurrentTime(llMeasurementBack.timestampSeconds));
             }
-            m_LastBackPose = llMeasurement.pose;
-        } else {
-            m_isTagFound = false;
-            m_GE_Back_TagCount.setDouble(0);
+            m_LastBackPose = llMeasurementBack.pose;
+        }
+
+        var llMeasurementFront = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+
+        // make sure we have a valid measurement and we are not moving too fast
+        if (llMeasurementFront != null && llMeasurementFront.tagCount > 0 && omegaRps < 2.0) {
+            m_isTagFound = true;
+            m_GE_Back_TagCount.setDouble(llMeasurementFront.tagCount);
+
+            // Check if pose is with in 1 meter of last pose
+            if (m_LastBackPose.getTranslation().getDistance(llMeasurementFront.pose.getTranslation()) > 1.0) {
+                m_GE_Back_IgnoredCount.setDouble(m_GE_Back_IgnoredCount.getDouble(0) + 1);
+            } else {
+                RobotContainer.drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
+                RobotContainer.drivetrain.addVisionMeasurement(llMeasurementFront.pose,
+                        Utils.fpgaToCurrentTime(llMeasurementFront.timestampSeconds));
+            }
+            m_LastBackPose = llMeasurementFront.pose;
         }
     }
 

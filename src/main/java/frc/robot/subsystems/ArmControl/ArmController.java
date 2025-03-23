@@ -35,7 +35,7 @@ public class ArmController extends SubsystemBase {
     private GraphCommandNode BackScore_L4, BackScore_L3, Back_L4, Back_L3,
             BackAligment, Carry, FrontAligment, HPCarry, S1, Start, FrontScore_L2, FrontScore_L1,
             Front_L2, Front_L1, HumanPlayerCoral, GroundCoral, GroundAlgae, ProcessorAlgae, NetAlgae, RemoveAlgaeHigh,
-            RemoveAlgaeLow, Climb, ClimbReady, ClimbLockOn, NetAlgaeAlignment1, NetAlgaeAlignment2, AlgaeCarry;
+            RemoveAlgaeLow, Climb, ClimbReady, ClimbLockOn, NetAlgaeAlignment1, NetAlgaeAlignment2, AlgaeCarry, L4_Down;
 
     /** Creates a new ArmController. */
     public ArmController() {
@@ -102,7 +102,7 @@ public class ArmController extends SubsystemBase {
         GroundCoral = m_armGraph.new GraphCommandNode("GroundCoral",
                 ArmController.getArmCommand(Degrees.of(-23.89),
                         Meters.of(-67.95),
-                        Degrees.of(-27.62))
+                        Degrees.of(-25.73))
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("GroundCoral"));
@@ -154,6 +154,15 @@ public class ArmController extends SubsystemBase {
                         .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0))),
                 null,
                 new PrintCommand("Carry"));
+
+        L4_Down = m_armGraph.new GraphCommandNode("L4_Down",
+                ArmController.getArmCommand(Degrees.of(50),
+                        Meters.of(-50),
+                        Degrees.of(-115))
+                        .andThen(RobotContainer.m_armBase.getWaitUntilErrorLessThanCmd(Degrees.of(70.0)))
+                        .andThen(RobotContainer.m_armExtension.getWaitUntilErrorLessThanCmd(Meters.of(10.0))),
+                null,
+                new PrintCommand("L4_Down"));
         HPCarry = m_armGraph.new GraphCommandNode("HPCarry",
                 ArmController.getArmCommand(Degrees.of(-20),
                         Meters.of(-77.3),
@@ -251,17 +260,21 @@ public class ArmController extends SubsystemBase {
 
         S1.AddNode(Start, 1, true);
         Start.AddNode(BackAligment, 1);
-        BackAligment.AddNode(Back_L4, 1);
+        // Carry.AddNode(Back_L4, 1);
         BackAligment.AddNode(Back_L3, 1);
         BackAligment.AddNode(Front_L2, 1);
         BackAligment.AddNode(Front_L1, 1);
-        BackAligment.AddNode(Carry, 1);
         Carry.AddNode(ClimbReady, 1);
+        Carry.AddNode(Back_L4, 1.1, true);
         ClimbReady.AddNode(ClimbLockOn, 1);
         ClimbReady.setNextNode(ClimbLockOn);
         ClimbLockOn.AddNode(Climb, 1);
         ClimbLockOn.setNextNode(Climb);
         Back_L4.AddNode(BackScore_L4, 1);
+        Back_L4.AddNode(Back_L3, 1);
+        Back_L4.AddNode(L4_Down, 1);
+        L4_Down.AddNode(GroundCoral, 1);
+        BackAligment.AddNode(Carry, 1);
         Back_L4.setNextNode(BackScore_L4);
         BackScore_L4.setNextNode(Back_L4);
         Back_L3.AddNode(BackScore_L3, 1);
@@ -309,6 +322,7 @@ public class ArmController extends SubsystemBase {
         Shuffleboard.getTab("ArmController").add(this.getTransition_Start());
         Shuffleboard.getTab("ArmController").add(this.getTransition_BackAligment());
         // Shuffleboard.getTab("ArmController").add(this.getTransition_BackAligmentBack());
+        Shuffleboard.getTab("ArmController").add(this.getTransition_L4_Down());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L4());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Back_L3());
         Shuffleboard.getTab("ArmController").add(this.getTransition_Front_L2());
@@ -412,6 +426,12 @@ public class ArmController extends SubsystemBase {
     public Command getTransition_Back_L4() {
         Command c = Commands.runOnce(() -> doTransition_Back_L4());
         c.setName("Back_L4");
+        return c;
+    }
+
+    public Command getTransition_L4_Down() {
+        Command c = Commands.runOnce(() -> m_armGraph.setTargetNode(L4_Down));
+        c.setName("L4_Down");
         return c;
     }
 

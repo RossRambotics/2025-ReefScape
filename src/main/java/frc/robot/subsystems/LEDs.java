@@ -88,7 +88,7 @@ public class LEDs extends SubsystemBase {
             m_even = !m_even;
             m_once = true;
 
-            if (DriverStation.isDisabled()) {
+            if (false) {
                 // Turn panel to black
                 m_candle.animate(animation, 0);
             } else {
