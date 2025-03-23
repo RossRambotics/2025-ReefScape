@@ -381,11 +381,11 @@ public class LEDs extends SubsystemBase {
             this.showWhite();
             return;
         }
-        if (RobotContainer.m_coralTracking.isGamePieceFound()) {
-            this.showTrackingLights();
-        } else {
-            this.showRed();
-        }
+        // if (RobotContainer.m_coralTracking.isGamePieceFound()) {
+        // this.showTrackingLights();
+        // } else {
+        // this.showRed();
+        // }
     }
 
     public void noTrackingMode() {
