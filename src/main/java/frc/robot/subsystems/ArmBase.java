@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
 
 import frc.robot.Robot;
@@ -38,9 +39,9 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import static edu.wpi.first.units.Units.*;
 
 public class ArmBase extends SubsystemBase {
-    final TalonFX m_LeftMotor = new TalonFX(30, "rio");
-    final TalonFX m_RightMotor = new TalonFX(31, "rio");
-    final CANcoder m_armBaseCANcoder = new CANcoder(12, "rio");
+    final TalonFX m_LeftMotor = new TalonFX(30, "Default Name");
+    final TalonFX m_RightMotor = new TalonFX(31, "Default Name");
+    final CANcoder m_armBaseCANcoder = new CANcoder(12, "Default Name");
 
     private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
     private final double m_kGoalTolerance = 2.0; // 2 degree tolerance
@@ -58,6 +59,10 @@ public class ArmBase extends SubsystemBase {
     private Timer m_timer = new Timer();
     private GenericPublisher m_GE_Timer;
     private RandomExecutionLimiter m_executionLimiter = new RandomExecutionLimiter();
+
+    final DynamicMotionMagicVoltage m_request = new DynamicMotionMagicVoltage(0, 3, 10, 20);
+    // final DynamicMotionMagicVoltage m_requestAlgae = new
+    // DynamicMotionMagicVoltage(0, 0.5, 2, 5);
 
     /** Creates a new ArmPivot. */
     public ArmBase() {
@@ -89,10 +94,10 @@ public class ArmBase extends SubsystemBase {
         }
 
         /* Configure Motion Magic */
-        MotionMagicConfigs mm = fx_cfg.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
-                .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
-                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
+        // MotionMagicConfigs mm = fx_cfg.MotionMagic;
+        // mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
+        // .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
+        // .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
 
         // enable brake mode
         fx_cfg.MotorOutput = new MotorOutputConfigs()
@@ -124,7 +129,7 @@ public class ArmBase extends SubsystemBase {
         swLimits.ForwardSoftLimitEnable = true;
         swLimits.ForwardSoftLimitThreshold = Degrees.of(120).in(Rotations);
         swLimits.ReverseSoftLimitEnable = true;
-        swLimits.ReverseSoftLimitThreshold = Degrees.of(-30).in(Rotations);
+        swLimits.ReverseSoftLimitThreshold = Degrees.of(-35).in(Rotations);
         // fx_cfg.SoftwareLimitSwitch = swLimits;
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -145,14 +150,65 @@ public class ArmBase extends SubsystemBase {
         Shuffleboard.getTab("ArmBase").add(this.getTestArmUpCmd());
         Shuffleboard.getTab("ArmBase").add(this.getStopArmCmd());
         Shuffleboard.getTab("ArmBase").add(this.getTestAngleCommand());
+
+        m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), true));
+
     }
+
+    // public void coralMode() {
+    // TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
+
+    // MotionMagicConfigs mm = fx_cfg.MotionMagic;
+    // mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3.0))
+    // .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10.0))
+    // .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(20));
+
+    // // m_LeftMotor.getConfigurator().apply(mm);
+    // StatusCode status = StatusCode.StatusCodeNotInitialized;
+    // for (int i = 0; i < 5; ++i) {
+    // status = m_LeftMotor.getConfigurator().apply(fx_cfg);
+    // if (status.isOK())
+    // break;
+    // }
+    // }
+
+    // public void algaeMode() {
+    // TalonFXConfiguration fx_cfg = new TalonFXConfiguration();
+
+    // MotionMagicConfigs mm = fx_cfg.MotionMagic;
+    // mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1.0))
+    // .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(1.0))
+    // .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(1.0));
+
+    // // m_LeftMotor.getConfigurator().apply(mm);
+    // StatusCode status = StatusCode.StatusCodeNotInitialized;
+    // for (int i = 0; i < 5; ++i) {
+    // status = m_LeftMotor.getConfigurator().apply(fx_cfg);
+    // if (status.isOK())
+    // break;
+    // }
+    // }
 
     private void setGoal(Angle angle) {
         if (angle.baseUnitMagnitude() != m_goal.baseUnitMagnitude()) {
             m_timer.reset();
             m_timer.start();
         }
-        m_LeftMotor.setControl(m_mmReq.withPosition(angle.in(Rotations)).withSlot(0));
+        if (RobotContainer.m_buttonBox.isCoralMode()) {
+            m_request.Velocity = 3; // rps
+            m_request.Acceleration = 10; // rot/s^2
+            m_request.Jerk = 20; // rot/s^3
+            m_LeftMotor.setControl(m_request.withPosition(angle.in(Rotations)));
+            m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), true));
+
+        } else {
+            m_request.Velocity = 3; // rps
+            m_request.Acceleration = 10; // rot/s^2
+            m_request.Jerk = 20; // rot/s^3
+            m_LeftMotor.setControl(m_request.withPosition(angle.in(Rotations)));
+            m_RightMotor.setControl(new Follower(m_LeftMotor.getDeviceID(), true));
+
+        }
         m_GE_Goal.setDouble(angle.in(Degrees));
         m_goal = angle;
     }
@@ -215,9 +271,14 @@ public class ArmBase extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (!RobotContainer.isTuning) {
+            return;
+        }
+
         if (this.getError().in(Degree) <= m_kGoalTolerance) {
             m_timer.stop();
         }
+
         // Check if we should execute this cycle
         if (!m_executionLimiter.shouldExecute()) {
             return;
@@ -243,6 +304,22 @@ public class ArmBase extends SubsystemBase {
         m_GE_Position.setDouble(m_LeftMotor.getPosition().getValue().in(Degree));
         m_GE_Timer.setDouble(m_timer.get());
 
+    }
+
+    public void climbMode() {
+        Slot0Configs slot0 = new Slot0Configs();
+        m_LeftMotor.getConfigurator().refresh(slot0);
+        m_GE_PID_kI.setDouble(40);
+        slot0.kI = 40;
+        m_LeftMotor.getConfigurator().apply(slot0);
+    }
+
+    public void normalMode() {
+        Slot0Configs slot0 = new Slot0Configs();
+        m_LeftMotor.getConfigurator().refresh(slot0);
+        m_GE_PID_kI.setDouble(0);
+        slot0.kI = 0;
+        m_LeftMotor.getConfigurator().apply(slot0);
     }
 
     public Command getUpCommand() {
@@ -281,12 +358,13 @@ public class ArmBase extends SubsystemBase {
         return c;
     }
 
-    private Command getStopArmCmd() {
+    public Command getStopArmCmd() {
         Command c = this.runOnce(() -> {
             m_LeftMotor.stopMotor();
             m_RightMotor.stopMotor();
         });
         c.setName("ArmBase.Stop");
+
         return c;
     }
 
@@ -303,8 +381,8 @@ public class ArmBase extends SubsystemBase {
 
         if (newGoal.in(Degrees) > 120) {
             newGoal = Degrees.of(120);
-        } else if (newGoal.in(Degrees) < -30) {
-            newGoal = Degrees.of(-30);
+        } else if (newGoal.in(Degrees) < -35) {
+            newGoal = Degrees.of(-35);
         }
 
         setGoal(newGoal);

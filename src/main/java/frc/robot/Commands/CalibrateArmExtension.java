@@ -10,6 +10,7 @@ import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmExtension;
 
@@ -34,6 +35,8 @@ public class CalibrateArmExtension extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_motor.stopMotor();
+
         // Retrieve the current motor configuration
         TalonFXConfiguration currentConfig = new TalonFXConfiguration();
         m_motor.getConfigurator().refresh(currentConfig);
@@ -49,6 +52,10 @@ public class CalibrateArmExtension extends Command {
         m_motor.setControl(request);
         m_stallTimer.reset();
         m_isFinished = false;
+
+        if (Robot.isSimulation()) {
+            m_isFinished = true;
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.

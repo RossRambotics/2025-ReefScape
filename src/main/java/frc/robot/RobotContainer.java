@@ -37,17 +37,23 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import frc.robot.Commands.AutoCreepIntake;
+import frc.robot.Commands.EatCoralPlayerStation;
 import frc.robot.Commands.ReefLineUp;
 import frc.robot.Commands.ReefLineUp2;
 import frc.robot.Commands.ReefLineUp3;
+import frc.robot.Commands.ReefLineUp4;
 import frc.robot.Commands.RunPathToTarget;
 import frc.robot.Commands.WaitForArm;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmBase;
 import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmLocker;
 import frc.robot.subsystems.ButtonBox;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CoralTracking;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.ManualArmControl;
 import frc.robot.subsystems.RangeFinder;
 import frc.robot.subsystems.SpeedNanny;
@@ -60,6 +66,7 @@ import frc.util.SlewRateLimiterWithSupplier;
 
 public class RobotContainer {
     // Subsystems
+    final static public boolean isTuning = true;
 
     final static public ArmBase m_armBase = new ArmBase();
     final static public ArmExtension m_armExtension = new ArmExtension();
@@ -68,6 +75,8 @@ public class RobotContainer {
     final static public ArmController m_armController = new ArmController();
     final static public VisionForOdometry m_visionForOdometry = new VisionForOdometry();
     final static public ManualArmControl m_manualArmControl = new ManualArmControl();
+    final static public ArmLocker m_armLocker = new ArmLocker();
+    // final static public CoralTracking m_coralTracking = new CoralTracking();
 
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
 
@@ -82,6 +91,7 @@ public class RobotContainer {
     final static public SpeedNanny m_speedNanny = new SpeedNanny();
     final static public Targeting m_targeting = new Targeting();
     final static public ButtonBox m_buttonBox = new ButtonBox();
+    final static public LEDs m_LEDs = new LEDs();
     final static public Mechanisms m_mechanisms = new Mechanisms();
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -94,13 +104,13 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     public static SwerveRequest.FieldCentricFacingAngle theTargetDrive = null;
     public final SwerveRequest.FieldCentricFacingAngle targetDrive = new SwerveRequest.FieldCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.01) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-    private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric();
+    public static SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -117,7 +127,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Arm.Calibrate", m_armExtension.getCalibrateAndZero().withTimeout(0.5)
                 .andThen(RobotContainer.m_armController.getTransition_Start()));
         NamedCommands.registerCommand("Arm.WaitForArm", new WaitForArm());
-        NamedCommands.registerCommand("Arm.Back_L4", RobotContainer.m_armController.getTransition_Back_L4());
+        NamedCommands.registerCommand("Arm.Back_L4", RobotContainer.m_armController.getAutoTransition_Back_L4());
         NamedCommands.registerCommand("Arm.HumanPlayer",
                 RobotContainer.m_armController.getTransition_HumanPlayerCoral());
         NamedCommands.registerCommand("Arm.BackScore_L4", RobotContainer.m_armController.getTransition_BackScore_L4());
@@ -128,34 +138,44 @@ public class RobotContainer {
         NamedCommands.registerCommand("Reef.5", RobotContainer.m_buttonBox.getReef5Cmd());
         NamedCommands.registerCommand("Reef.6", RobotContainer.m_buttonBox.getReef6Cmd());
         NamedCommands.registerCommand("Reef.Left", RobotContainer.m_buttonBox.getLeftReefCmd());
+        NamedCommands.registerCommand("Reef.Right", RobotContainer.m_buttonBox.getRightReefCmd());
         NamedCommands.registerCommand("Intake.OutTake", RobotContainer.m_intake.getOuttakeCommand().withTimeout(0.5));
+        // NamedCommands.registerCommand("Intake.InTake", new
+        // EatCoralPlayerStation(m_intake));
         NamedCommands.registerCommand("Intake.InTake", RobotContainer.m_intake.getIntakeCommand().withTimeout(0.5));
         NamedCommands.registerCommand("Intake.Stop", RobotContainer.m_intake.getStopCommand());
         NamedCommands.registerCommand("Reef.LineUp", new ReefLineUp3(drivetrain,
                 targetDrive, RobotContainer.m_targeting::getScoreTargetPose).withTimeout(1.0));
         NamedCommands.registerCommand("Arm.Carry", RobotContainer.m_armController.getTransition_Carry());
+        NamedCommands.registerCommand("Reef.PathToTarget", new RunPathToTarget(drivetrain, targetDrive));
 
         NamedCommands.registerCommand("Score.L4",
-                // new ReefLineUp3(drivetrain,
-                // targetDrive,
-                // RobotContainer.m_targeting::getScoreTargetPose).withTimeout(0.01)
                 new WaitCommand(0.1)
-                        .andThen(RobotContainer.m_armController.getTransition_Back_L4()
-                                .andThen(new WaitCommand(1.0))
-                                .andThen(new PrintCommand("Before ScoreL4"))
-                                .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
-                                .andThen(new PrintCommand("After Score L4 beefore WaitForArm"))
-                                .andThen(new WaitForArm())
-                                .andThen(new PrintCommand("Before Outtake"))
-                                .andThen(RobotContainer.m_intake.getOuttakeCommand())
-                                .andThen(new PrintCommand("After Outtake"))
-                                .andThen(RobotContainer.m_armController.getTransition_Carry())
-                                .andThen(new WaitCommand(0.5))
+                        // .andThen(RobotContainer.m_armController.getTransition_Back_L4())
+                        .andThen(new ReefLineUp4(drivetrain,
+                                targetDrive,
+                                RobotContainer.m_targeting::getScoreTargetPose).withTimeout(5.01))
+                        // .andThen(RobotContainer.m_armController.getTransition_Back_L4())
+                        // .andThen(new WaitCommand(1.0))
+                        .andThen(new PrintCommand("Before ScoreL4"))
+                        .andThen(RobotContainer.m_armController.getTransition_BackScore_L4())
+                        .andThen(new PrintCommand("After Score L4 beefore WaitForArm"))
+                        .andThen(new WaitCommand(0.01))
+                        .andThen(new WaitForArm())
+                        .andThen(new PrintCommand("Before Outtake"))
+                        .andThen(RobotContainer.m_intake.getOuttakeCommand())
+                        .andThen(new PrintCommand("After Outtake"))
+                        .andThen(RobotContainer.m_armController.getTransition_Carry())
+                        .andThen(new WaitCommand(0.01))
 
-                        ));
+        );
 
         new EventTrigger("Event.CoralStation").onTrue(
                 RobotContainer.m_armController.getTransition_HumanPlayerCoral());
+
+        new EventTrigger("Event.GroundCoral").onTrue(
+                RobotContainer.m_armController.getTransition_GroundCoral()
+                        .andThen(RobotContainer.m_intake.getIntakeCommand()));
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -216,8 +236,9 @@ public class RobotContainer {
                 ));
 
         // snaps the robot to target angle
-        targetDrive.HeadingController = new PhoenixPIDController(7.0, 0.0, 0.20);
+        targetDrive.HeadingController = new PhoenixPIDController(20.0, 0.0, 0.0);
         targetDrive.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+        targetDrive.HeadingController.setIZone(5.0);
 
         joystick.leftBumper().whileTrue(
                 drivetrain.applyRequest(() -> targetDrive
@@ -225,6 +246,16 @@ public class RobotContainer {
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative Y(forward)
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
                         .withTargetDirection(m_targeting.getTargetAngle())));
+
+        // uncomment to enable coral tracking
+        // joystick.leftBumper()
+        // .whileTrue(drivetrain
+        // .applyRequest(() -> robotDrive
+        // .withVelocityX(m_coralTracking.getGamePiece_VelocityX() / 2)
+        // .withVelocityY(m_coralTracking.getGamePiece_VelocityY() / 2)
+        // .withRotationalRate(m_coralTracking
+        // .getGamePiece_RotationalRate() / 2))
+        // .alongWith(m_coralTracking.NoteTrackingMode()));
 
         double nudge = 0.5;
         joystick.pov(0)
@@ -289,6 +320,8 @@ public class RobotContainer {
         // reset the field-centric heading on back press
         joystick.back().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
+        joystick.start().whileTrue(new AutoCreepIntake());
+
         drivetrain.registerTelemetry(logger::telemeterize);
 
         // String pathName = "Tag.18.Left";
@@ -330,6 +363,8 @@ public class RobotContainer {
         joystick.a().onFalse(m_intake.getStopCommand());
         joystick.b().onTrue(m_intake.getOuttakeCommand());
         joystick.b().onFalse(m_intake.getStopCommand());
+
+        joystick.leftStick().onTrue(m_armController.getTransition_GroundCoral());
 
     }
 

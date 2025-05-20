@@ -1,0 +1,87 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+<<<<<<< HEAD
+        "x": 5.534,
+        "y": 5.467
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.919830479452054,
+        "y": 5.748108009357514
+=======
+        "x": 5.522,
+        "y": 5.398
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.907830479452055,
+        "y": 5.679108009357514
+>>>>>>> cc83b32 (autochanges)
+      },
+      "isLocked": false,
+      "linkedName": "Reef6Left"
+    },
+    {
+      "anchor": {
+        "x": 4.0980633802816895,
+        "y": 5.966637323943662
+      },
+      "prevControl": {
+        "x": 4.829811013589727,
+        "y": 5.722721446174319
+      },
+      "nextControl": {
+        "x": 3.8429577464788722,
+        "y": 6.051672535211266
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.433626760563379,
+        "y": 7.07
+      },
+      "prevControl": {
+        "x": 2.112764084507041,
+        "y": 6.8382218309859155
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Left Source"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Event.CoralStation",
+      "waypointRelativePos": 1.1095238095238074,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 124.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "useDefaultConstraints": false
+}

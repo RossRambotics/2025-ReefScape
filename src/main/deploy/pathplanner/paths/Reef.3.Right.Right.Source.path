@@ -1,0 +1,82 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.573,
+        "y": 2.658
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.310350300603452,
+        "y": 2.5088560061053777
+      },
+      "isLocked": false,
+      "linkedName": "Reef2Right"
+    },
+    {
+      "anchor": {
+        "x": 4.466549295774647,
+        "y": 2.352640845070421
+      },
+      "prevControl": {
+        "x": 4.692416514900346,
+        "y": 2.4598042685152857
+      },
+      "nextControl": {
+        "x": 4.180650880565503,
+        "y": 2.2169954289278393
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.0668236301369864,
+        "y": 1.132555650684932
+      },
+      "prevControl": {
+        "x": 1.9398694047848721,
+        "y": 1.3781542422342263
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Right Source"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.2,
+      "rotationDegrees": -59.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Event.CoralStation",
+      "waypointRelativePos": 0.65,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -124.87259899216205
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "useDefaultConstraints": false
+}

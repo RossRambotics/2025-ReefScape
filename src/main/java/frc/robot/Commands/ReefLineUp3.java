@@ -66,7 +66,7 @@ public class ReefLineUp3 extends Command {
             m_GE_isAtGoal = Shuffleboard.getTab("ReefLineUp3").add("ReefLineUp_isAtGoal", false).getEntry();
         }
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(drivetrain);
+        // addRequirements(drivetrain);
     }
 
     // Called when the command is initially scheduled.
