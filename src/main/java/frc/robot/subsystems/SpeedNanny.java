@@ -40,6 +40,9 @@ public class SpeedNanny extends SubsystemBase {
         } else if (angle > 30.0) {
             m_speedLimit = m_kMaxSpeed * 0.25;
             m_angularRateLimit = m_kMaxAngularRate * 0.25;
+        } else if (angle < -23.0) {
+            m_speedLimit = m_kMaxSpeed * 0.35;
+            m_angularRateLimit = m_kMaxAngularRate * 0.35;
         }
 
     }

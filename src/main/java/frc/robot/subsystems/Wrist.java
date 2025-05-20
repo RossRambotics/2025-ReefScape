@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -65,7 +66,7 @@ public class Wrist extends SubsystemBase {
         CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
         cc_cfg.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Degrees.of(160));
         cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        cc_cfg.MagnetSensor.withMagnetOffset(Degrees.of(156 - 180 - 178));
+        cc_cfg.MagnetSensor.withMagnetOffset(Rotations.of(0.11 + .334));
         m_wristCANcoder.getConfigurator().apply(cc_cfg);
 
         // TalonFX configuration
@@ -174,6 +175,10 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (!RobotContainer.isTuning) {
+            return;
+        }
+
         if (this.getError().in(Degree) <= m_kGoalTolerance) {
             m_timer.stop();
         }
@@ -211,6 +216,22 @@ public class Wrist extends SubsystemBase {
         Shuffleboard.getTab("Wrist").add(this.getOpenCommand());
         Shuffleboard.getTab("Wrist").add(this.getCloseCommand());
 
+    }
+
+    public void coralMode() {
+        Slot0Configs slot0 = new Slot0Configs();
+        m_LeftMotor.getConfigurator().refresh(slot0);
+        m_GE_PID_kP.setDouble(50);
+        slot0.kP = 50;
+        m_LeftMotor.getConfigurator().apply(slot0);
+    }
+
+    public void algaeMode() {
+        Slot0Configs slot0 = new Slot0Configs();
+        m_LeftMotor.getConfigurator().refresh(slot0);
+        m_GE_PID_kP.setDouble(50);
+        slot0.kP = 50;
+        m_LeftMotor.getConfigurator().apply(slot0);
     }
 
     public Command getZeroWristAngleCmd() {

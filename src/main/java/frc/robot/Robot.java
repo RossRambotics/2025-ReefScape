@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,6 +32,8 @@ public class Robot extends TimedRobot {
     private final boolean kUseLimelight = true;
 
     public Robot() {
+        RobotController.setBrownoutVoltage(6);
+
         m_robotContainer = new RobotContainer();
     }
 
@@ -75,6 +78,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        m_robotContainer.m_visionForOdometry.idle();
     }
 
     @Override
@@ -83,6 +87,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledExit() {
+        m_robotContainer.m_visionForOdometry.fullSpeed();
+
     }
 
     @Override
