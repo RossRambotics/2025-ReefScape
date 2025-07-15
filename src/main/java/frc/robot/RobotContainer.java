@@ -53,6 +53,7 @@ import frc.robot.subsystems.ArmLocker;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 // import frc.robot.subsystems.CoralTracking;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PizzaIntake;
 // import frc.robot.subsystems.LEDs;
 // import frc.robot.subsystems.ManualArmControl;
 import frc.robot.subsystems.RangeFinder;
@@ -86,6 +87,8 @@ public class RobotContainer {
     // final static public ArmExtension m_armExtension = null;// new ArmExtension();
     // final static public Wrist m_wrist = null;// new Wrist();
     // final static public Intake m_intake = null;// new Intake();
+    final static public PizzaIntake m_intake = new PizzaIntake();
+
     // final static public ArmController m_armController = null;// new
     // ArmController();
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
@@ -381,8 +384,8 @@ public class RobotContainer {
         // joystick.x().onTrue(m_targeting.getTargetLastReefIDCmd()
         // .andThen(RobotContainer.m_armController.getTransition_Carry()));
 
-        // joystick.a().onTrue(m_intake.getIntakeCommand());
-        // joystick.a().onFalse(m_intake.getStopCommand());
+        joystick.a().onTrue(m_intake.getStartCommand());
+        joystick.a().onFalse(m_intake.getStopCommand());
         // joystick.b().onTrue(m_intake.getOuttakeCommand());
         // joystick.b().onFalse(m_intake.getStopCommand());
 
