@@ -191,17 +191,17 @@ public class ArmBase extends SubsystemBase {
             m_timer.reset();
             m_timer.start();
         }
-        if (RobotContainer.m_buttonBox.isCoralMode()) {
-            m_request.Velocity = 3; // rps
-            m_request.Acceleration = 10; // rot/s^2
-            m_request.Jerk = 20; // rot/s^3
-            m_LeftMotor.setControl(m_request.withPosition(angle.in(Rotations)));
-        } else {
-            m_request.Velocity = 0.5; // rps
-            m_request.Acceleration = 0.5; // rot/s^2
-            m_request.Jerk = 0.5; // rot/s^3
-            m_LeftMotor.setControl(m_request.withPosition(angle.in(Rotations)));
-        }
+        // if (RobotContainer.m_buttonBox.isCoralMode()) {
+        // m_request.Velocity = 3; // rps
+        // m_request.Acceleration = 10; // rot/s^2
+        // m_request.Jerk = 20; // rot/s^3
+        // m_LeftMotor.setControl(m_request.withPosition(angle.in(Rotations)));
+        // } else {
+        // m_request.Velocity = 0.5; // rps
+        // m_request.Acceleration = 0.5; // rot/s^2
+        // m_request.Jerk = 0.5; // rot/s^3
+        // m_LeftMotor.setControl(m_request.withPosition(angle.in(Rotations)));
+        // }
         m_GE_Goal.setDouble(angle.in(Degrees));
         m_goal = angle;
     }

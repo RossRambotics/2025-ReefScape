@@ -32,7 +32,8 @@ public class SpeedNanny extends SubsystemBase {
         m_angularRateLimit = m_kMaxAngularRate;
         m_accelerationLimit = m_kMaxAcceleration;
 
-        double angle = RobotContainer.m_armBase.getCurrentAngle().in(Degrees);
+        // double angle = RobotContainer.m_armBase.getCurrentAngle().in(Degrees);
+        double angle = 0.0;
 
         if (angle > 0.0 && angle <= 30.0) {
             m_speedLimit = m_kMaxSpeed * 0.5;

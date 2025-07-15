@@ -285,7 +285,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                 ? kRedAlliancePerspectiveRotation
                                 : kBlueAlliancePerspectiveRotation);
                 m_hasAppliedOperatorPerspective = true;
-                RobotContainer.m_targeting.setAlliance(allianceColor);
+                // RobotContainer.m_targeting.setAlliance(allianceColor);
             });
         }
     }

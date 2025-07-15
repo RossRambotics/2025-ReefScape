@@ -23,7 +23,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.UpdateModeValue;
 
 import frc.robot.RobotContainer;
-import frc.robot.Commands.EatCoralPlayerStation;
+//import frc.robot.Commands.EatCoralPlayerStation;
 import frc.robot.sim.PhysicsSim;
 import frc.util.RandomExecutionLimiter;
 import edu.wpi.first.networktables.BooleanEntry;
@@ -152,7 +152,8 @@ public class Intake extends SubsystemBase {
         Shuffleboard.getTab("Intake").add(this.getOuttakeCommand());
         Shuffleboard.getTab("Intake").add(this.getOuttakeAlgaeCommand());
         Shuffleboard.getTab("Intake").add(this.getIdleCommand());
-        Shuffleboard.getTab("Intake").add(new EatCoralPlayerStation(this).withName("Eat Coral"));
+        // Shuffleboard.getTab("Intake").add(new
+        // EatCoralPlayerStation(this).withName("Eat Coral"));
 
         // var cfgcs = m_CoralSensor.getConfigurator();
         // var prox = new ProximityParamsConfigs()
@@ -252,11 +253,11 @@ public class Intake extends SubsystemBase {
     }
 
     private void doIntake() {
-        if (RobotContainer.m_buttonBox.isCoralMode()) {
-            setGoal(75, 40);
-        } else {
-            setGoal(10, 10);
-        }
+        // if (RobotContainer.m_buttonBox.isCoralMode()) {
+        // setGoal(75, 40);
+        // } else {
+        // setGoal(10, 10);
+        // }
     }
 
     public Command getOuttakeCommand() {
@@ -264,11 +265,11 @@ public class Intake extends SubsystemBase {
     }
 
     private void doOuttake() {
-        if (RobotContainer.m_buttonBox.isCoralMode()) {
-            setGoal(-50, -10);
-        } else {
-            setGoal(-50, -50);
-        }
+        // if (RobotContainer.m_buttonBox.isCoralMode()) {
+        // setGoal(-50, -10);
+        // } else {
+        // setGoal(-50, -50);
+        // }
     }
 
     public Command getUnclogCommand() {
