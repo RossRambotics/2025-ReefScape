@@ -121,6 +121,8 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
+    private final CommandXboxController gamepad = new CommandXboxController(1);
+
     public static CommandSwerveDrivetrain drivetrain;// = TunerConstants.createDrivetrain();
 
     /* Path follower */
@@ -128,6 +130,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         drivetrain = TunerConstants.createDrivetrain();
+
+        NamedCommands.registerCommand("Spit.Coral", m_intake.getStartCommand());
 
         // NamedCommands.registerCommand("Arm.Calibrate",
         // m_armExtension.getCalibrateAndZero().withTimeout(0.5)
@@ -386,6 +390,10 @@ public class RobotContainer {
 
         joystick.a().onTrue(m_intake.getStartCommand());
         joystick.a().onFalse(m_intake.getStopCommand());
+
+        gamepad.a().onTrue(m_intake.getBackCommand());
+        gamepad.a().onFalse(m_intake.getStopCommand());
+
         // joystick.b().onTrue(m_intake.getOuttakeCommand());
         // joystick.b().onFalse(m_intake.getStopCommand());
 

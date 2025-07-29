@@ -138,17 +138,7 @@
           "visible": true
         }
       },
-      "/Shuffleboard/ArmBase/ArmBase.Zero": {
-        "window": {
-          "visible": true
-        }
-      },
       "/Shuffleboard/ArmBase/ArmBaseZeroEncoder": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/BackAligment": {
         "window": {
           "visible": true
         }
@@ -158,27 +148,7 @@
           "visible": true
         }
       },
-      "/Shuffleboard/ArmController/BackScore_L3": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/BackScore_L4": {
-        "window": {
-          "visible": true
-        }
-      },
       "/Shuffleboard/ArmController/Back_L2": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/Back_L3": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/Back_L4": {
         "window": {
           "visible": true
         }
@@ -193,47 +163,12 @@
           "visible": true
         }
       },
-      "/Shuffleboard/ArmController/ClimbReady": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/FrontAligment": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/FrontScore_L1": {
-        "window": {
-          "visible": true
-        }
-      },
       "/Shuffleboard/ArmController/Front_L1": {
         "window": {
           "visible": true
         }
       },
-      "/Shuffleboard/ArmController/HumanPlayerCoral": {
-        "window": {
-          "visible": true
-        }
-      },
       "/Shuffleboard/ArmController/RemoveAlgaeHigh": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmExt/ArmExt.Calibrate & Zero": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmExt/ArmExt.Zero": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/Intake/Intake.IntakeCommand": {
         "window": {
           "visible": true
         }
@@ -263,6 +198,9 @@
     "mode": "Client (NT4)",
     "serverTeam": "3201"
   },
+  "NetworkTables View": {
+    "visible": false
+  },
   "Plots": {
     "Plot <0>": {
       "plots": [
@@ -273,7 +211,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 249,
+          "height": 0,
           "series": [
             {
               "color": [
