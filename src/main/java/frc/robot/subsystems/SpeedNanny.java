@@ -17,7 +17,7 @@ public class SpeedNanny extends SubsystemBase {
     // max angular velocity
 
     private double m_speedLimit = m_kMaxSpeed;
-    private double m_accelerationLimit = 15.0;
+    private double m_accelerationLimit = 30;
     private double m_angularRateLimit = m_kMaxAngularRate;
 
     /** Creates a new SpeedNanny. */

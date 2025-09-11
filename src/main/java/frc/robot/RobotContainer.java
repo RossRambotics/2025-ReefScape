@@ -94,7 +94,7 @@ public class RobotContainer {
     // final static public RangeFinder m_rangeFinder = new RangeFinder();
 
     final static public SpeedNanny m_speedNanny = new SpeedNanny();
-    // final static public Targeting m_targeting = new Targeting();
+    final static public Targeting m_targeting = new Targeting();
     // final static public ButtonBox m_buttonBox = new ButtonBox();
     // final static public LEDs m_LEDs = new LEDs();
     final static public Mechanisms m_mechanisms = new Mechanisms();
@@ -378,6 +378,13 @@ public class RobotContainer {
         // .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
         // .withTargetDirection(m_targeting.getTargetAngle())));
 
+        joystick.leftBumper().whileTrue(
+                drivetrain.applyRequest(() -> targetDrive
+                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
+                        .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
+                        .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
+                        .withTargetDirection(new Rotation2d())));
+
         // joystick.rightBumper().onTrue(m_armController.getTransition_Carry());
         // joystick.rightTrigger().onTrue(m_armController.getNextNodeCmd());
 
@@ -390,6 +397,9 @@ public class RobotContainer {
 
         joystick.a().onTrue(m_intake.getStartCommand());
         joystick.a().onFalse(m_intake.getStopCommand());
+
+        joystick.b().onTrue(m_intake.getFastCommand());
+        joystick.b().onFalse(m_intake.getStopCommand());
 
         gamepad.a().onTrue(m_intake.getBackCommand());
         gamepad.a().onFalse(m_intake.getStopCommand());

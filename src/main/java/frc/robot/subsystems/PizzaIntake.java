@@ -55,6 +55,10 @@ public class PizzaIntake extends SubsystemBase {
         m_LeftMotor.set(-0.65);
     }
 
+    public void doFast() {
+        m_LeftMotor.set(-1.0);
+    }
+
     public void doBack() {
         m_LeftMotor.set(0.1);
     }
@@ -69,6 +73,10 @@ public class PizzaIntake extends SubsystemBase {
 
     public Command getStartCommand() {
         return Commands.runOnce(() -> doStart()).withName("PizzaIntake.StartCommand");
+    }
+
+    public Command getFastCommand() {
+        return Commands.runOnce(() -> doFast()).withName("PizzaIntake.FastCommand");
     }
 
     public Command getBackCommand() {
