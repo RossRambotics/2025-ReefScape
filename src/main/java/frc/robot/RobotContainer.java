@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.Set;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
@@ -378,7 +379,7 @@ public class RobotContainer {
         // Y(forward)
         // .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
         // .withTargetDirection(m_targeting.getTargetAngle())));
-        Angle a = Degrees.of(90);
+
         joystick.leftBumper().whileTrue(
                 drivetrain.applyRequest(() -> targetDrive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
@@ -386,20 +387,26 @@ public class RobotContainer {
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
                         .withTargetDirection(new Rotation2d(Degrees.of(90)))));
 
-        a = Degrees.of(0);
         gamepad.a().whileTrue(
                 drivetrain.applyRequest(() -> targetDrive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
                         .withTargetDirection(new Rotation2d(Degrees.of(0)))));
-        a = Degrees.of(300);
+
         gamepad.b().whileTrue(
                 drivetrain.applyRequest(() -> targetDrive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
                         .withTargetDirection(new Rotation2d(Degrees.of(300)))));
+
+        gamepad.button(3).whileTrue(
+                drivetrain.applyRequest(() -> targetDrive
+                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
+                        .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
+                        .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
+                        .withTargetDirection((getAlignAngleRot()))));
         // joystick.rightBumper().onTrue(m_armController.getTransition_Carry());
         // joystick.rightTrigger().onTrue(m_armController.getNextNodeCmd());
 
@@ -431,5 +438,19 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
         return autoChooser.getSelected();
+    }
+
+    private Angle m_alignAngle;
+
+    private Angle getAlignAngle() {
+        return Degrees.of(90);
+    }
+
+    private Rotation2d getAlignAngleRot() {
+        return new Rotation2d(m_alignAngle);
+    }
+
+    private void setalignAngle() {
+        m_alignAngle = getAlignAngle();
     }
 }
