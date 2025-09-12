@@ -25,6 +25,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -262,7 +263,7 @@ public class RobotContainer {
                 ));
 
         // snaps the robot to target angle
-        targetDrive.HeadingController = new PhoenixPIDController(20.0, 0.0, 0.0);
+        targetDrive.HeadingController = new PhoenixPIDController(20.0, 0.0, 1.0);
         targetDrive.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         targetDrive.HeadingController.setIZone(5.0);
 
@@ -377,14 +378,28 @@ public class RobotContainer {
         // Y(forward)
         // .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
         // .withTargetDirection(m_targeting.getTargetAngle())));
-
+        Angle a = Degrees.of(90);
         joystick.leftBumper().whileTrue(
                 drivetrain.applyRequest(() -> targetDrive
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withTargetDirection(new Rotation2d())));
+                        .withTargetDirection(new Rotation2d(Degrees.of(90)))));
 
+        a = Degrees.of(0);
+        gamepad.a().whileTrue(
+                drivetrain.applyRequest(() -> targetDrive
+                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
+                        .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
+                        .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
+                        .withTargetDirection(new Rotation2d(Degrees.of(0)))));
+        a = Degrees.of(300);
+        gamepad.b().whileTrue(
+                drivetrain.applyRequest(() -> targetDrive
+                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
+                        .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
+                        .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
+                        .withTargetDirection(new Rotation2d(Degrees.of(300)))));
         // joystick.rightBumper().onTrue(m_armController.getTransition_Carry());
         // joystick.rightTrigger().onTrue(m_armController.getNextNodeCmd());
 
@@ -401,8 +416,10 @@ public class RobotContainer {
         joystick.b().onTrue(m_intake.getFastCommand());
         joystick.b().onFalse(m_intake.getStopCommand());
 
-        gamepad.a().onTrue(m_intake.getBackCommand());
-        gamepad.a().onFalse(m_intake.getStopCommand());
+        // gamepad.a().onTrue(Command.runOnce( ()-> {a = Degrees.of(90);}));
+
+        // gamepad.a().onTrue(m_intake.getBackCommand());
+        // gamepad.a().onFalse(m_intake.getStopCommand());
 
         // joystick.b().onTrue(m_intake.getOuttakeCommand());
         // joystick.b().onFalse(m_intake.getStopCommand());

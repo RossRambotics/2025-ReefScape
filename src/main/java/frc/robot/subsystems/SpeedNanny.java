@@ -10,14 +10,14 @@ import frc.robot.generated.TunerConstants;
 import static edu.wpi.first.units.Units.*;
 
 public class SpeedNanny extends SubsystemBase {
-    private final double m_kMaxAcceleration = 15.0;
+    private final double m_kMaxAcceleration = 8.0;
     private final double m_kMaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired
                                                                                            // top speed
     private double m_kMaxAngularRate = RotationsPerSecond.of(0.85).in(RadiansPerSecond); // 3/4 of a rotation per second
     // max angular velocity
 
     private double m_speedLimit = m_kMaxSpeed;
-    private double m_accelerationLimit = 30;
+    private double m_accelerationLimit = 15.0;
     private double m_angularRateLimit = m_kMaxAngularRate;
 
     /** Creates a new SpeedNanny. */
