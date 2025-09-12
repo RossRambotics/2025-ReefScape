@@ -450,7 +450,7 @@ public class RobotContainer {
         return new Rotation2d(m_alignAngle);
     }
 
-    private void setalignAngle() {
+    private void setAlignAngle() {
         m_alignAngle = getAlignAngle();
     }
 }
