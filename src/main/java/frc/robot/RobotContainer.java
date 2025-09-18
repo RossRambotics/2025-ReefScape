@@ -385,28 +385,14 @@ public class RobotContainer {
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withTargetDirection(new Rotation2d(Degrees.of(90)))));
+                        .withTargetDirection(this.getAlignAngleRot())));
 
-        gamepad.a().whileTrue(
-                drivetrain.applyRequest(() -> targetDrive
-                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
-                        .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
-                        .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withTargetDirection(new Rotation2d(Degrees.of(0)))));
-
-        gamepad.b().whileTrue(
-                drivetrain.applyRequest(() -> targetDrive
-                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
-                        .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
-                        .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withTargetDirection(new Rotation2d(Degrees.of(300)))));
-
-        gamepad.button(3).whileTrue(
-                drivetrain.applyRequest(() -> targetDrive
-                        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
-                        .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
-                        .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withTargetDirection((getAlignAngleRot()))));
+        gamepad.button(1).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(0))));
+        gamepad.button(4).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(60))));
+        gamepad.button(3).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(120))));
+        gamepad.button(2).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(180))));
+        gamepad.button(8).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(240))));
+        gamepad.button(7).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(300))));
         // joystick.rightBumper().onTrue(m_armController.getTransition_Carry());
         // joystick.rightTrigger().onTrue(m_armController.getNextNodeCmd());
 
@@ -450,7 +436,7 @@ public class RobotContainer {
         return new Rotation2d(m_alignAngle);
     }
 
-    private void setAlignAngle() {
-        m_alignAngle = getAlignAngle();
+    private void setAlignAngle(Angle a) {
+        m_alignAngle = a;
     }
 }
