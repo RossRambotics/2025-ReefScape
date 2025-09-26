@@ -53,6 +53,7 @@ import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmLocker;
 // import frc.robot.subsystems.ButtonBox;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Dashboard;
 // import frc.robot.subsystems.CoralTracking;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PizzaIntake;
@@ -100,6 +101,7 @@ public class RobotContainer {
     // final static public ButtonBox m_buttonBox = new ButtonBox();
     // final static public LEDs m_LEDs = new LEDs();
     final static public Mechanisms m_mechanisms = new Mechanisms();
+    final static public Dashboard m_dashboard = new Dashboard();
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
@@ -385,14 +387,20 @@ public class RobotContainer {
                         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
                         .withVelocityX(-getDriverYVelocity()) // Drive forward with negative
                         .withVelocityY(-getDriverXVelocity()) // Drive left with negative X (left)
-                        .withTargetDirection(this.getAlignAngleRot())));
+                        .withTargetDirection(m_dashboard.getAlignAngleRot())));
 
-        gamepad.button(1).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(0))));
-        gamepad.button(4).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(60))));
-        gamepad.button(3).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(120))));
-        gamepad.button(2).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(180))));
-        gamepad.button(8).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(240))));
-        gamepad.button(7).onTrue(Commands.runOnce(() -> setAlignAngle(Degrees.of(300))));
+        // gamepad.button(1).onTrue(Commands.runOnce(() ->
+        // setAlignAngle(Degrees.of(0))));
+        // gamepad.button(4).onTrue(Commands.runOnce(() ->
+        // setAlignAngle(Degrees.of(60))));
+        // gamepad.button(3).onTrue(Commands.runOnce(() ->
+        // setAlignAngle(Degrees.of(120))));
+        // gamepad.button(2).onTrue(Commands.runOnce(() ->
+        // setAlignAngle(Degrees.of(180))));
+        // gamepad.button(8).onTrue(Commands.runOnce(() ->
+        // setAlignAngle(Degrees.of(240))));
+        // gamepad.button(7).onTrue(Commands.runOnce(() ->
+        // setAlignAngle(Degrees.of(300))));
         // joystick.rightBumper().onTrue(m_armController.getTransition_Carry());
         // joystick.rightTrigger().onTrue(m_armController.getNextNodeCmd());
 
@@ -426,17 +434,4 @@ public class RobotContainer {
         return autoChooser.getSelected();
     }
 
-    private Angle m_alignAngle;
-
-    private Angle getAlignAngle() {
-        return Degrees.of(90);
-    }
-
-    private Rotation2d getAlignAngleRot() {
-        return new Rotation2d(m_alignAngle);
-    }
-
-    private void setAlignAngle(Angle a) {
-        m_alignAngle = a;
-    }
 }

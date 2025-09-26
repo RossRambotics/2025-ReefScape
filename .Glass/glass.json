@@ -108,6 +108,12 @@
       "/Shuffleboard/ButtonBox/Travel To Processor": "Command",
       "/Shuffleboard/ButtonBox/Travel To Reef": "Command",
       "/Shuffleboard/ButtonBox/Trough": "Command",
+      "/Shuffleboard/Dashboard/setAngle0": "Command",
+      "/Shuffleboard/Dashboard/setAngle060": "Command",
+      "/Shuffleboard/Dashboard/setAngle120": "Command",
+      "/Shuffleboard/Dashboard/setAngle180": "Command",
+      "/Shuffleboard/Dashboard/setAngle240": "Command",
+      "/Shuffleboard/Dashboard/setAngle300": "Command",
       "/Shuffleboard/Intake/Eat Coral": "Command",
       "/Shuffleboard/Intake/Intake.IdleCommand": "Command",
       "/Shuffleboard/Intake/Intake.IntakeCommand": "Command",
@@ -169,6 +175,36 @@
         }
       },
       "/Shuffleboard/ArmController/RemoveAlgaeHigh": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Dashboard/setAngle0": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Dashboard/setAngle060": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Dashboard/setAngle120": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Dashboard/setAngle180": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Dashboard/setAngle240": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Dashboard/setAngle300": {
         "window": {
           "visible": true
         }
