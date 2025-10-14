@@ -228,7 +228,7 @@ public class RobotContainer {
             m_speedNanny::getAccelerationLimit);
 
     private double getDriverXVelocity() {
-        double driverLeftX = modifyAxis(joystick.getLeftX());
+        double driverLeftX = modifyAxis(joystick.getLeftX() / 1.3);
         double slew = m_slewDriverX.calculate(driverLeftX * m_speedNanny.getSpeedLimit());
 
         return slew;
@@ -239,7 +239,7 @@ public class RobotContainer {
     private double m_kNudgeRate = 0.25;
 
     private double getDriverYVelocity() {
-        double driverLeftY = modifyAxis(joystick.getLeftY());
+        double driverLeftY = modifyAxis(joystick.getLeftY() / 1.3);
         double slew = m_slewDriverY.calculate(driverLeftY * m_speedNanny.getSpeedLimit());
 
         return slew;

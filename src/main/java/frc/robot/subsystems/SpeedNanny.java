@@ -16,7 +16,7 @@ public class SpeedNanny extends SubsystemBase {
     private double m_kMaxAngularRate = RotationsPerSecond.of(0.85).in(RadiansPerSecond); // 3/4 of a rotation per second
     // max angular velocity
 
-    private double m_speedLimit = m_kMaxSpeed;
+    private double m_speedLimit = m_kMaxSpeed / 3.0;
     private double m_accelerationLimit = 15.0;
     private double m_angularRateLimit = m_kMaxAngularRate;
 

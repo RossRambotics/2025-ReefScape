@@ -144,37 +144,12 @@
           "visible": true
         }
       },
-      "/Shuffleboard/ArmBase/ArmBaseZeroEncoder": {
-        "window": {
-          "visible": true
-        }
-      },
       "/Shuffleboard/ArmController/BackScore_L2": {
         "window": {
           "visible": true
         }
       },
-      "/Shuffleboard/ArmController/Back_L2": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/Climb": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/ClimbLockOn": {
-        "window": {
-          "visible": true
-        }
-      },
       "/Shuffleboard/ArmController/Front_L1": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/ArmController/RemoveAlgaeHigh": {
         "window": {
           "visible": true
         }
@@ -232,7 +207,7 @@
   },
   "NetworkTables Settings": {
     "mode": "Client (NT4)",
-    "serverTeam": "3201"
+    "serverTeam": "9998"
   },
   "NetworkTables View": {
     "visible": false
@@ -260,7 +235,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }
